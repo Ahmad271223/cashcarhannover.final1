@@ -1,0 +1,203 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "AutoVerkauf Pro",
+      "tone": "Seriös, Modern, Efficient, Trustworthy",
+      "archetype": "Swiss & High-Contrast",
+      "principles": [
+        "Fusion over Imitation: Mix Automotive Precision with SaaS Cleanliness",
+        "Emotion First: Trust and Ease of Use",
+        "Content is King: Data clarity for cars, emotional imagery for people",
+        "Zoom In: Focus on car details and clear typography",
+        "Negative Space: Generous padding to reduce cognitive load in forms"
+      ]
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Manrope, sans-serif",
+        "body": "Inter, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "usage": {
+        "h1": "text-5xl md:text-6xl font-bold tracking-tight leading-none",
+        "h2": "text-3xl md:text-4xl font-semibold tracking-tight",
+        "h3": "text-2xl font-semibold tracking-tight",
+        "body": "text-base leading-relaxed text-slate-600 dark:text-slate-300",
+        "caption": "text-sm text-slate-500 uppercase tracking-wider font-medium",
+        "mono": "font-mono text-sm text-slate-700 dark:text-slate-400"
+      },
+      "imports": [
+        "@fontsource/manrope",
+        "@fontsource/inter",
+        "@fontsource/jetbrains-mono"
+      ]
+    },
+    "colors": {
+      "palette": {
+        "primary": {
+          "name": "Midnight Navy",
+          "hex": "#0F172A",
+          "tailwind": "bg-slate-900 text-white"
+        },
+        "secondary": {
+          "name": "Slate Mist",
+          "hex": "#F1F5F9",
+          "tailwind": "bg-slate-100 text-slate-900"
+        },
+        "accent": {
+          "name": "Signal Orange",
+          "hex": "#F97316",
+          "tailwind": "bg-orange-500 hover:bg-orange-600 text-white"
+        },
+        "success": {
+          "name": "Emerald",
+          "hex": "#10B981",
+          "tailwind": "text-emerald-600 bg-emerald-50 border-emerald-200"
+        },
+        "error": {
+          "name": "Rose",
+          "hex": "#E11D48",
+          "tailwind": "text-rose-600 bg-rose-50 border-rose-200"
+        },
+        "background": {
+          "light": "#FFFFFF",
+          "dark": "#020617"
+        }
+      },
+      "rules": [
+        "Never use pure black (#000000). Use Slate-950 (#020617).",
+        "Primary Blue is for Structure (Headers, Footers).",
+        "Orange is STRICTLY for Primary Actions (Submit, Sell Now).",
+        "Dashboards must use white cards on light gray background (#F8FAFC)."
+      ]
+    },
+    "layout": {
+      "spacing": {
+        "container_padding": "p-6 md:p-12 lg:p-24",
+        "section_gap": "gap-16 md:gap-32",
+        "element_gap": "gap-4 md:gap-8"
+      },
+      "grids": {
+        "marketing": "grid-cols-1 md:grid-cols-12 gap-8 (Tetris Grid)",
+        "dashboard": "grid-cols-1 md:grid-cols-4 gap-6 (Control Room)",
+        "form": "max-w-2xl mx-auto flex flex-col gap-8"
+      },
+      "radius": {
+        "default": "rounded-xl",
+        "button": "rounded-lg",
+        "card": "rounded-2xl"
+      }
+    },
+    "components": {
+      "buttons": {
+        "primary": "bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-lg shadow-lg hover:shadow-orange-500/20 transition-all active:scale-95",
+        "secondary": "bg-white border border-slate-200 text-slate-900 hover:bg-slate-50 font-medium px-6 py-3 rounded-lg transition-all",
+        "ghost": "text-slate-600 hover:text-slate-900 hover:bg-slate-100 px-4 py-2 rounded-md"
+      },
+      "cards": {
+        "feature": "bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-1",
+        "dashboard": "bg-white p-6 rounded-xl border border-slate-200 shadow-sm",
+        "form_step": "bg-white p-8 rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/50"
+      },
+      "inputs": {
+        "default": "h-12 px-4 rounded-lg border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all bg-slate-50 focus:bg-white"
+      }
+    },
+    "visual_enhancers": {
+      "shadows": {
+        "soft": "shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
+        "glow": "shadow-[0_0_20px_rgba(249,115,22,0.3)]"
+      },
+      "textures": {
+        "noise": "bg-[url('/noise.png')] opacity-5 mix-blend-overlay",
+        "dots": "bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"
+      },
+      "glassmorphism": {
+        "header": "bg-white/80 backdrop-blur-md border-b border-slate-200/50"
+      }
+    },
+    "motion": {
+      "transitions": "transition-all duration-300 ease-out",
+      "hover": "hover:-translate-y-1 hover:shadow-lg",
+      "page_load": "animate-in fade-in slide-in-from-bottom-4 duration-700",
+      "libraries": ["framer-motion"]
+    }
+  },
+  "assets": {
+    "images": [
+      {
+        "category": "Hero",
+        "url": "https://images.unsplash.com/photo-1760713164476-7eb5063b3d07?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBjYXIlMjBzaWRlJTIwcHJvZmlsZSUyMHN0dWRpbyUyMGxpZ2h0aW5nfGVufDB8fHx8MTc2Nzk2NTg4OXww&ixlib=rb-4.1.0&q=85",
+        "description": "Dark premium SUV side profile for Hero Section background or split layout",
+        "usage": "Landing Page Hero"
+      },
+      {
+        "category": "Trust/Success",
+        "url": "https://images.pexels.com/photos/7144213/pexels-photo-7144213.jpeg",
+        "description": "Happy person holding car keys, signifying successful sale",
+        "usage": "Success Page or 'Why Choose Us' section"
+      },
+      {
+        "category": "Inspection",
+        "url": "https://images.unsplash.com/photo-1708745427274-d5de5122fd57?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwxfHxtZWNoYW5pYyUyMGluc3BlY3RpbmclMjBjYXIlMjBlbmdpbmV8ZW58MHx8fHwxNzY3OTY1ODkyfDA&ixlib=rb-4.1.0&q=85",
+        "description": "Mechanic inspecting engine, signifying professional check",
+        "usage": "Features section (Professional Inspection)"
+      },
+      {
+        "category": "Interior",
+        "url": "https://images.pexels.com/photos/326259/pexels-photo-326259.jpeg",
+        "description": "Clean modern car interior",
+        "usage": "Background for 'Car Details' form step"
+      }
+    ],
+    "icons": {
+      "library": "lucide-react",
+      "preferred": ["Car", "CheckCircle", "ShieldCheck", "Banknote", "Calendar", "MapPin", "Upload", "FileText", "User", "Settings"]
+    }
+  },
+  "implementation_plan": {
+    "phases": [
+      {
+        "name": "Setup",
+        "tasks": [
+          "Install fonts: @fontsource/manrope, @fontsource/inter, @fontsource/jetbrains-mono",
+          "Configure Tailwind colors and fonts in tailwind.config.js",
+          "Install framer-motion, sonner, lucide-react"
+        ]
+      },
+      {
+        "name": "Components",
+        "tasks": [
+          "Customize Shadcn Button (Orange primary)",
+          "Customize Shadcn Input (Taller, more padding)",
+          "Create 'StepCard' component for the form wizard",
+          "Create 'FileUpload' component with drag-and-drop visual"
+        ]
+      },
+      {
+        "name": "Pages",
+        "tasks": [
+          "Landing Page: Hero -> Features -> How it Works -> Trust -> CTA",
+          "Form: Multi-step wizard (Vehicle -> Details -> Photos -> Contact -> Review)",
+          "Admin: Dashboard Layout -> Data Table -> Detail View"
+        ]
+      }
+    ]
+  },
+  "universal_guidelines": {
+    "do_not": [
+      "Do not use 'Inter' for Headings.",
+      "Do not use Teal (#1B93A4) for dashboards.",
+      "Do not use generic gradients.",
+      "Do not center everything.",
+      "Do not use default scrollbars."
+    ],
+    "must_do": [
+      "Use 'Manrope' for all Headings.",
+      "Use 'JetBrains Mono' for VIN and technical data.",
+      "Ensure all interactive elements have hover states.",
+      "Use 'sonner' for all notifications.",
+      "Add data-testid to all inputs and buttons."
+    ]
+  }
+}
