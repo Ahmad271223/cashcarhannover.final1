@@ -13,7 +13,10 @@ import {
   ChevronRight,
   Phone,
   Mail,
-  Lightbulb
+  Lightbulb,
+  Building,
+  MapPin,
+  User
 } from "lucide-react";
 
 const LandingPage = () => {
@@ -462,6 +465,115 @@ const LandingPage = () => {
               </Button>
             </Link>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Dealer Partner Section */}
+      <section className="py-20 px-6 bg-slate-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1758599543152-a73184816eba?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwyfHxoYW5kc2hha2UlMjBidXNpbmVzcyUyMGRlYWwlMjBwcm9mZXNzaW9uYWx8ZW58MHx8fHwxNzY4MDQ4MzM2fDA&ixlib=rb-4.1.0&q=85"
+            alt="Business Partnership"
+            className="w-full h-full object-cover opacity-10"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900"></div>
+        </div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="inline-flex items-center gap-2 bg-orange-500/20 text-orange-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                <Handshake className="w-4 h-4" />
+                Für Händler
+              </div>
+              <h2 className="font-heading text-3xl md:text-4xl font-semibold tracking-tight mb-6">
+                Sie sind Autohändler? Werden Sie Partner!
+              </h2>
+              <p className="text-slate-300 text-lg leading-relaxed mb-6">
+                Wir arbeiten aktuell mit über <span className="text-orange-400 font-semibold">1.000 Händlern</span> deutschlandweit zusammen. 
+                Profitieren Sie von unserem Netzwerk und erhalten Sie exklusiven Zugang zu geprüften Fahrzeugen von Privatverkäufern.
+              </p>
+              <ul className="space-y-3 text-slate-300">
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-emerald-400" />
+                  <span>Zugang zu vorgeprüften Fahrzeugen</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-emerald-400" />
+                  <span>Faire Provisionskonditionen</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-emerald-400" />
+                  <span>Professionelle Abwicklung</span>
+                </li>
+              </ul>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
+            >
+              <h3 className="font-heading text-xl font-semibold mb-6">Jetzt Partner werden</h3>
+              <p className="text-slate-300 text-sm mb-6">
+                Senden Sie uns eine E-Mail mit folgenden Angaben:
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center shrink-0">
+                    <Building className="w-4 h-4 text-orange-400" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-white">Unternehmensname</p>
+                    <p className="text-sm text-slate-400">Name Ihres Autohauses</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center shrink-0">
+                    <User className="w-4 h-4 text-orange-400" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-white">Ansprechpartner</p>
+                    <p className="text-sm text-slate-400">Vor- und Nachname</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center shrink-0">
+                    <MapPin className="w-4 h-4 text-orange-400" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-white">Standort & Adresse</p>
+                    <p className="text-sm text-slate-400">Vollständige Geschäftsadresse</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center shrink-0">
+                    <Phone className="w-4 h-4 text-orange-400" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-white">Telefon & E-Mail</p>
+                    <p className="text-sm text-slate-400">Ihre Kontaktdaten</p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-8 pt-6 border-t border-white/10">
+                <a 
+                  href="mailto:partner@autoverkauf-pro.de?subject=Händler-Partnerschaft%20Anfrage"
+                  className="flex items-center justify-center gap-2 w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-4 rounded-lg transition-all"
+                >
+                  <Mail className="w-5 h-5" />
+                  partner@autoverkauf-pro.de
+                </a>
+                <p className="text-center text-slate-400 text-xs mt-3">
+                  Wir melden uns innerhalb von 48 Stunden
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
