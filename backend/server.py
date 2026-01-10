@@ -23,6 +23,8 @@ import asyncio
 
 import hashlib
 import time
+import random
+import string
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -85,7 +87,7 @@ class PriceInfo(BaseModel):
     competitor_source: Optional[str] = None
 
 class CarSubmission(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    id: str = ""  # Will be set by generate_car_id()
     brand: str
     model: str
     variant: Optional[str] = None
@@ -158,6 +160,22 @@ class AdminLogin(BaseModel):
 class AdminPasswordChange(BaseModel):
     current_password: str
     new_password: str
+
+# ==================== ID GENERATOR ====================
+
+async def generate_car_id() -> str:
+    """Generate a unique car ID: 6 numbers + 4 letters (e.g., 123456ABCD)"""
+    while True:
+        # Generate 6 random numbers
+        numbers = ''.join(random.choices(string.digits, k=6))
+        # Generate 4 random uppercase letters
+        letters = ''.join(random.choices(string.ascii_uppercase, k=4))
+        car_id = f"{numbers}{letters}"
+        
+        # Check if ID already exists
+        existing = await db.cars.find_one({"id": car_id})
+        if not existing:
+            return car_id
 
 # ==================== CAPTCHA FUNCTIONS ====================
 
@@ -409,8 +427,12 @@ async def submit_car(request: Request, car_data: CarSubmissionCreate):
             logger.warning(f"Invalid form token from {get_remote_address(request)}")
             raise HTTPException(status_code=400, detail="Sicherheitsvalidierung fehlgeschlagen. Bitte laden Sie die Seite neu.")
         
+        # Generate unique car ID (6 numbers + 4 letters)
+        car_id = await generate_car_id()
+        
         car = CarSubmission(**{k: v for k, v in car_data.model_dump().items() 
                                if k not in ['honeypot', 'form_token', 'captcha_answer']})
+        car.id = car_id
         
         doc = car.model_dump()
         doc['created_at'] = doc['created_at'].isoformat()
