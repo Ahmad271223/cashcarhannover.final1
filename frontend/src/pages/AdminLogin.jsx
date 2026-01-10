@@ -113,7 +113,7 @@ const AdminLogin = () => {
 
           <div className="mt-6 pt-6 border-t border-slate-200 text-center">
             <p className="text-sm text-slate-500">
-              Standard-Login: <code className="bg-slate-100 px-2 py-1 rounded">admin / admin123</code>
+              Geschützter Admin-Bereich
             </p>
           </div>
         </div>
@@ -123,6 +123,10 @@ const AdminLogin = () => {
             ← Zurück zur Startseite
           </Link>
         </div>
+
+        <p className="text-center text-slate-600 text-xs mt-4">
+          Geschützter Bereich
+        </p>
       </motion.div>
     </div>
   );
