@@ -562,7 +562,7 @@ const LandingPage = () => {
               </div>
               <div className="mt-8 pt-6 border-t border-white/10">
                 <a 
-                  href="mailto:partner@autoverkauf-pro.de?subject=Händler-Partnerschaft%20Anfrage"
+                  href="mailto:partner@autoverkauf-pro.de?subject=Händler-Partnerschaft%20Anfrage&body=Unternehmensname:%20%0A%0AAnsprechpartner%20(Vor-%20und%20Nachname):%20%0A%0AStandort%20%26%20Adresse:%20%0A%0ATelefon:%20%0A%0AE-Mail:%20%0A%0AWeitere%20Informationen:%20"
                   className="flex items-center justify-center gap-2 w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-4 rounded-lg transition-all"
                 >
                   <Mail className="w-5 h-5" />
