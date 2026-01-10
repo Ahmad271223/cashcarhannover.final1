@@ -4,7 +4,9 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
   Car, 
   LogOut, 
@@ -16,7 +18,9 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  TrendingUp
+  TrendingUp,
+  Settings,
+  Lock
 } from "lucide-react";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -41,6 +45,9 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("Alle");
   const [search, setSearch] = useState("");
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [passwordData, setPasswordData] = useState({ current: "", new: "", confirm: "" });
+  const [changingPassword, setChangingPassword] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("admin_token");
@@ -86,6 +93,33 @@ const AdminDashboard = () => {
     navigate("/admin");
   };
 
+  const handlePasswordChange = async () => {
+    if (passwordData.new !== passwordData.confirm) {
+      toast.error("Passwörter stimmen nicht überein");
+      return;
+    }
+    if (passwordData.new.length < 8) {
+      toast.error("Passwort muss mindestens 8 Zeichen haben");
+      return;
+    }
+
+    setChangingPassword(true);
+    try {
+      await axios.post(`${API}/admin/change-password`, {
+        current_password: passwordData.current,
+        new_password: passwordData.new
+      }, { headers: getAuthHeaders() });
+      
+      toast.success("Passwort erfolgreich geändert");
+      setShowPasswordDialog(false);
+      setPasswordData({ current: "", new: "", confirm: "" });
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Fehler beim Ändern des Passworts");
+    } finally {
+      setChangingPassword(false);
+    }
+  };
+
   const handleDelete = async (carId, e) => {
     e.stopPropagation();
     if (!window.confirm("Fahrzeug wirklich löschen?")) return;
@@ -126,15 +160,77 @@ const AdminDashboard = () => {
               Admin Dashboard
             </span>
           </div>
-          <Button 
-            variant="ghost" 
-            onClick={handleLogout}
-            className="text-slate-300 hover:text-white hover:bg-slate-800"
-            data-testid="logout-btn"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Abmelden
-          </Button>
+          <div className="flex items-center gap-2">
+            <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
+              <DialogTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  className="text-slate-300 hover:text-white hover:bg-slate-800"
+                  data-testid="settings-btn"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Einstellungen
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Lock className="w-5 h-5" />
+                    Passwort ändern
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="current">Aktuelles Passwort</Label>
+                    <Input
+                      id="current"
+                      type="password"
+                      value={passwordData.current}
+                      onChange={(e) => setPasswordData(p => ({ ...p, current: e.target.value }))}
+                      data-testid="current-password-input"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="new">Neues Passwort</Label>
+                    <Input
+                      id="new"
+                      type="password"
+                      value={passwordData.new}
+                      onChange={(e) => setPasswordData(p => ({ ...p, new: e.target.value }))}
+                      data-testid="new-password-input"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirm">Passwort bestätigen</Label>
+                    <Input
+                      id="confirm"
+                      type="password"
+                      value={passwordData.confirm}
+                      onChange={(e) => setPasswordData(p => ({ ...p, confirm: e.target.value }))}
+                      data-testid="confirm-password-input"
+                    />
+                  </div>
+                  <Button 
+                    onClick={handlePasswordChange}
+                    disabled={changingPassword}
+                    className="w-full bg-orange-500 hover:bg-orange-600"
+                    data-testid="change-password-btn"
+                  >
+                    {changingPassword ? "Wird geändert..." : "Passwort ändern"}
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+            <Button 
+              variant="ghost" 
+              onClick={handleLogout}
+              className="text-slate-300 hover:text-white hover:bg-slate-800"
+              data-testid="logout-btn"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Abmelden
+            </Button>
+          </div>
         </div>
       </header>
 
