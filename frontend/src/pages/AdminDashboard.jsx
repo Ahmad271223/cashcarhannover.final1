@@ -371,7 +371,12 @@ const AdminDashboard = () => {
                             </div>
                           )}
                           <div>
-                            <p className="font-semibold text-slate-900">{car.brand} {car.model}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="font-semibold text-slate-900">{car.brand} {car.model}</p>
+                              <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs font-mono rounded">
+                                #{car.id}
+                              </span>
+                            </div>
                             <p className="text-sm text-slate-500">
                               {car.first_registration} · {parseInt(car.mileage).toLocaleString('de-DE')} km
                             </p>
