@@ -11,6 +11,9 @@ import Impressum from "@/pages/Impressum";
 import Datenschutz from "@/pages/Datenschutz";
 import AGB from "@/pages/AGB";
 
+// Secret admin path - change this to your own secret!
+const ADMIN_PATH = "verwaltung-x7k9m2";
+
 function App() {
   return (
     <div className="App min-h-screen bg-slate-50">
@@ -20,12 +23,14 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/verkaufen" element={<CarSubmissionForm />} />
           <Route path="/erfolg" element={<SuccessPage />} />
-          <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/cars/:id" element={<AdminCarDetail />} />
+          <Route path={`/${ADMIN_PATH}`} element={<AdminLogin />} />
+          <Route path={`/${ADMIN_PATH}/dashboard`} element={<AdminDashboard />} />
+          <Route path={`/${ADMIN_PATH}/cars/:id`} element={<AdminCarDetail />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/datenschutz" element={<Datenschutz />} />
           <Route path="/agb" element={<AGB />} />
+          {/* Redirect old /admin to 404 */}
+          <Route path="/admin/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
