@@ -85,8 +85,17 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-6 relative overflow-hidden">
-        <div className="absolute inset-0 hero-pattern opacity-50"></div>
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1668692753736-a3a203aaabec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHw0fHxjYXIlMjBkZWFsZXJzaGlwJTIwc2hvd3Jvb20lMjBsdXh1cnklMjBwcm9mZXNzaW9uYWx8ZW58MHx8fHwxNzY4MDQ4MzMzfDA&ixlib=rb-4.1.0&q=85"
+            alt="Showroom Background"
+            className="w-full h-full object-cover opacity-10"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-white via-white/95 to-slate-50"></div>
+        </div>
+        <div className="absolute inset-0 hero-pattern opacity-30 z-0"></div>
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -126,7 +135,7 @@ const LandingPage = () => {
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-emerald-500" />
-                <span>Keine versteckten Gebühren</span>
+                <span>1.000+ Partner-Händler</span>
               </div>
             </div>
           </motion.div>
@@ -150,8 +159,8 @@ const LandingPage = () => {
                   <CheckCircle className="w-6 h-6 text-emerald-600" />
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-900">500+ Fahrzeuge</p>
-                  <p className="text-sm text-slate-500">erfolgreich verkauft</p>
+                  <p className="font-semibold text-slate-900">1.000+ Händler</p>
+                  <p className="text-sm text-slate-500">deutschlandweit</p>
                 </div>
               </div>
             </div>
