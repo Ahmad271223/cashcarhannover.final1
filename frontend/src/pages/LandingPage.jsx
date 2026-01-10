@@ -68,7 +68,7 @@ const LandingPage = () => {
             <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
               <Car className="w-6 h-6 text-white" />
             </div>
-            <span className="font-heading font-bold text-xl text-slate-900">AutoVerkauf Pro</span>
+            <span className="font-heading font-bold text-xl text-slate-900">CashCar</span>
           </Link>
           <nav className="hidden md:flex items-center gap-8">
             <a href="#vorteile" className="text-slate-600 hover:text-slate-900 transition-colors">Vorteile</a>
@@ -561,11 +561,11 @@ const LandingPage = () => {
               </div>
               <div className="mt-8 pt-6 border-t border-white/10">
                 <a 
-                  href="mailto:partner@autoverkauf-pro.de?subject=Händler-Partnerschaft%20Anfrage&body=Unternehmensname:%20%0A%0AAnsprechpartner%20(Vor-%20und%20Nachname):%20%0A%0AStandort%20%26%20Adresse:%20%0A%0ATelefon:%20%0A%0AE-Mail:%20%0A%0AWeitere%20Informationen:%20"
+                  href="mailto:partner@cashcar.de?subject=Händler-Partnerschaft%20Anfrage&body=Unternehmensname:%20%0A%0AAnsprechpartner%20(Vor-%20und%20Nachname):%20%0A%0AStandort%20%26%20Adresse:%20%0A%0ATelefon:%20%0A%0AE-Mail:%20%0A%0AWeitere%20Informationen:%20"
                   className="flex items-center justify-center gap-2 w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-4 rounded-lg transition-all"
                 >
                   <Mail className="w-5 h-5" />
-                  partner@autoverkauf-pro.de
+                  partner@cashcar.de
                 </a>
                 <p className="text-center text-slate-400 text-xs mt-3">
                   Wir melden uns innerhalb von 48 Stunden
@@ -585,7 +585,7 @@ const LandingPage = () => {
                 <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
                   <Car className="w-6 h-6 text-slate-900" />
                 </div>
-                <span className="font-heading font-bold text-xl">AutoVerkauf Pro</span>
+                <span className="font-heading font-bold text-xl">CashCar</span>
               </div>
               <p className="text-slate-400 text-sm">
                 Ihr Partner für den stressfreien Autoverkauf im Kundenauftrag.
@@ -596,11 +596,11 @@ const LandingPage = () => {
               <div className="space-y-2 text-slate-400 text-sm">
                 <p className="flex items-center gap-2">
                   <Phone className="w-4 h-4" />
-                  +49 123 456 789
+                  +49 178 3563025
                 </p>
                 <p className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
-                  info@autoverkauf-pro.de
+                  info@cashcar.de
                 </p>
               </div>
             </div>
@@ -622,7 +622,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="border-t border-slate-800 mt-12 pt-8 text-center text-slate-500 text-sm">
-            <p>&copy; {new Date().getFullYear()} AutoVerkauf Pro. Alle Rechte vorbehalten.</p>
+            <p>&copy; {new Date().getFullYear()} CashCar UG. Alle Rechte vorbehalten.</p>
           </div>
         </div>
       </footer>
