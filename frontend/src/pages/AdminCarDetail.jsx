@@ -32,6 +32,7 @@ import {
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const STATUSES = ["Neu", "In Bearbeitung", "Inseriert", "Verkauft", "Abgelehnt"];
+const ADMIN_PATH = "verwaltung-x7k9m2";
 
 const AdminCarDetail = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const AdminCarDetail = () => {
   useEffect(() => {
     const token = localStorage.getItem("admin_token");
     if (!token) {
-      navigate("/admin");
+      navigate(`/${ADMIN_PATH}`);
       return;
     }
     fetchCar();
@@ -66,10 +67,10 @@ const AdminCarDetail = () => {
     } catch (error) {
       if (error.response?.status === 401) {
         toast.error("Sitzung abgelaufen");
-        navigate("/admin");
+        navigate(`/${ADMIN_PATH}`);
       } else if (error.response?.status === 404) {
         toast.error("Fahrzeug nicht gefunden");
-        navigate("/admin/dashboard");
+        navigate(`/${ADMIN_PATH}/dashboard`);
       } else {
         toast.error("Fehler beim Laden");
       }
@@ -129,7 +130,7 @@ const AdminCarDetail = () => {
       <header className="bg-slate-900 text-white">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link to="/admin/dashboard" className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
+            <Link to={`/${ADMIN_PATH}/dashboard`} className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
               <ArrowLeft className="w-5 h-5" />
               <span className="hidden md:inline">Zurück zur Übersicht</span>
             </Link>
