@@ -277,46 +277,67 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
         raise HTTPException(status_code=401, detail="Ungültiger Token")
 
 async def send_notification_email(car: CarSubmission):
-    """Send email notification for new car submission (background task)"""
-    sendgrid_key = os.environ.get('SENDGRID_API_KEY')
+    """Send email notification for new car submission using Resend"""
+    resend_key = os.environ.get('RESEND_API_KEY')
     admin_email = os.environ.get('ADMIN_EMAIL')
-    sender_email = os.environ.get('SENDER_EMAIL')
+    sender_email = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
     
-    if not all([sendgrid_key, admin_email, sender_email]):
-        logger.warning("SendGrid not configured, skipping email notification")
+    if not all([resend_key, admin_email]):
+        logger.warning("Resend not configured, skipping email notification")
         return
     
     try:
-        from sendgrid import SendGridAPIClient
-        from sendgrid.helpers.mail import Mail
+        import resend
+        resend.api_key = resend_key
         
         html_content = f"""
-        <h2>Neue Fahrzeug-Einreichung!</h2>
-        <p><strong>Fahrzeug:</strong> {car.brand} {car.model} ({car.first_registration})</p>
-        <p><strong>Kilometerstand:</strong> {car.mileage:,} km</p>
-        <p><strong>Wunschpreis:</strong> {car.pricing.desired_price:,.0f} €</p>
-        <p><strong>Mindestpreis:</strong> {car.pricing.minimum_price:,.0f} €</p>
-        <hr>
-        <p><strong>Kontakt:</strong></p>
-        <p>{car.contact.first_name} {car.contact.last_name}</p>
-        <p>Tel: {car.contact.phone}</p>
-        <p>E-Mail: {car.contact.email}</p>
-        <p>Stadt: {car.contact.city}</p>
-        <hr>
-        <p><strong>FIN:</strong> <code>{car.vin}</code></p>
-        <p><strong>Fotos:</strong> {len(car.photos)} Bilder hochgeladen</p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: #1e293b; color: white; padding: 20px; border-radius: 10px 10px 0 0;">
+                <h2 style="margin: 0;">🚗 Neue Fahrzeug-Einreichung!</h2>
+                <p style="margin: 5px 0 0 0; opacity: 0.8;">ID: #{car.id}</p>
+            </div>
+            <div style="background: #f8fafc; padding: 20px; border: 1px solid #e2e8f0;">
+                <h3 style="color: #1e293b; margin-top: 0;">Fahrzeug</h3>
+                <p><strong>{car.brand} {car.model}</strong> ({car.first_registration})</p>
+                <p>Kilometerstand: {car.mileage:,} km</p>
+                <p>Kraftstoff: {car.fuel_type} | Getriebe: {car.transmission}</p>
+                <p>FIN: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">{car.vin}</code></p>
+                
+                <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+                
+                <h3 style="color: #1e293b;">Preisvorstellung</h3>
+                <p style="font-size: 24px; margin: 5px 0;"><strong style="color: #f97316;">Wunschpreis: {car.pricing.desired_price:,.0f} €</strong></p>
+                <p style="font-size: 18px; margin: 5px 0;">Mindestpreis: {car.pricing.minimum_price:,.0f} €</p>
+                
+                <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+                
+                <h3 style="color: #1e293b;">Kontakt</h3>
+                <p><strong>{car.contact.first_name} {car.contact.last_name}</strong></p>
+                <p>📞 <a href="tel:{car.contact.phone}">{car.contact.phone}</a></p>
+                <p>✉️ <a href="mailto:{car.contact.email}">{car.contact.email}</a></p>
+                <p>📍 {car.contact.city}</p>
+                
+                <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+                
+                <p style="color: #64748b; font-size: 14px;">
+                    📷 {len(car.photos)} Fotos hochgeladen<br>
+                    📄 {len(car.documents)} Dokumente hochgeladen
+                </p>
+            </div>
+            <div style="background: #1e293b; color: white; padding: 15px; border-radius: 0 0 10px 10px; text-align: center;">
+                <p style="margin: 0; font-size: 14px;">CashCar UG - Fahrzeugvermittlung</p>
+            </div>
+        </div>
         """
         
-        message = Mail(
-            from_email=sender_email,
-            to_emails=admin_email,
-            subject=f"Neue Fahrzeug-Einreichung: {car.brand} {car.model}",
-            html_content=html_content
-        )
+        resend.Emails.send({
+            "from": f"CashCar <{sender_email}>",
+            "to": [admin_email],
+            "subject": f"🚗 Neue Anfrage: {car.brand} {car.model} - #{car.id}",
+            "html": html_content
+        })
         
-        sg = SendGridAPIClient(sendgrid_key)
-        sg.send(message)
-        logger.info(f"Email notification sent for car {car.id}")
+        logger.info(f"Email notification sent for car {car.id} to {admin_email}")
     except Exception as e:
         logger.error(f"Failed to send email: {e}")
 
