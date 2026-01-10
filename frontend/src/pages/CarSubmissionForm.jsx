@@ -90,10 +90,16 @@ const CarSubmissionForm = () => {
     competitor_source: "",
     // Terms
     terms_accepted: false,
+    // Anti-spam
+    honeypot: "",
+    captcha_answer: "",
   });
+
+  const [captchaData, setCaptchaData] = useState({ question: "", form_token: "", answer_token: "", timestamp: 0 });
 
   useEffect(() => {
     fetchBrands();
+    fetchCaptcha();
   }, []);
 
   const fetchBrands = async () => {
@@ -102,6 +108,15 @@ const CarSubmissionForm = () => {
       setBrands(response.data.brands);
     } catch (error) {
       console.error("Error fetching brands:", error);
+    }
+  };
+
+  const fetchCaptcha = async () => {
+    try {
+      const response = await axios.get(`${API}/captcha`);
+      setCaptchaData(response.data);
+    } catch (error) {
+      console.error("Error fetching captcha:", error);
     }
   };
 
@@ -195,6 +210,10 @@ const CarSubmissionForm = () => {
           toast.error("Bitte akzeptieren Sie die Konditionen");
           return false;
         }
+        if (!formData.captcha_answer) {
+          toast.error("Bitte lösen Sie die Rechenaufgabe");
+          return false;
+        }
         break;
       default:
         return true;
@@ -213,6 +232,8 @@ const CarSubmissionForm = () => {
   };
 
   const handleSubmit = async () => {
+    if (!validateStep()) return;
+    
     setIsSubmitting(true);
     try {
       const submitData = {
@@ -252,13 +273,23 @@ const CarSubmissionForm = () => {
         },
         features: formData.features,
         description: formData.description || null,
+        // Anti-spam fields
+        honeypot: formData.honeypot,
+        form_token: captchaData.form_token,
+        captcha_answer: parseInt(formData.captcha_answer),
       };
 
       await axios.post(`${API}/cars`, submitData);
       navigate("/erfolg");
     } catch (error) {
       console.error("Submit error:", error);
-      toast.error("Fehler beim Einreichen. Bitte versuchen Sie es erneut.");
+      if (error.response?.data?.detail) {
+        toast.error(error.response.data.detail);
+        // Refresh captcha on error
+        fetchCaptcha();
+      } else {
+        toast.error("Fehler beim Einreichen. Bitte versuchen Sie es erneut.");
+      }
     } finally {
       setIsSubmitting(false);
     }
