@@ -1,9 +1,13 @@
-from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, Depends, Form
+from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, Depends, Form, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 import os
 import logging
 from pathlib import Path
@@ -14,26 +18,39 @@ from datetime import datetime, timezone
 import jwt
 import bcrypt
 import aiofiles
-import shutil
+import asyncio
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
+# MongoDB connection with connection pooling
 mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
+client = AsyncIOMotorClient(
+    mongo_url,
+    maxPoolSize=100,
+    minPoolSize=10,
+    maxIdleTimeMS=30000,
+    serverSelectionTimeoutMS=5000,
+    connectTimeoutMS=10000,
+)
 db = client[os.environ['DB_NAME']]
 
-# JWT Settings
-JWT_SECRET = os.environ.get('JWT_SECRET', 'autoverkauf-pro-secret-key-2024')
+# JWT Settings from environment
+JWT_SECRET = os.environ.get('JWT_SECRET', 'change-this-in-production')
 JWT_ALGORITHM = 'HS256'
 
-# Upload directory
+# Upload settings
 UPLOAD_DIR = ROOT_DIR / 'uploads'
 UPLOAD_DIR.mkdir(exist_ok=True)
+MAX_UPLOAD_SIZE = int(os.environ.get('MAX_UPLOAD_SIZE_MB', 10)) * 1024 * 1024  # Default 10MB
+
+# Rate limiter
+limiter = Limiter(key_func=get_remote_address)
 
 # Create the main app
 app = FastAPI(title="AutoVerkauf Pro API")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
@@ -41,7 +58,10 @@ api_router = APIRouter(prefix="/api")
 security = HTTPBearer()
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 # ==================== MODELS ====================
@@ -61,42 +81,32 @@ class PriceInfo(BaseModel):
 
 class CarSubmission(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    # Basic Info
     brand: str
     model: str
     variant: Optional[str] = None
-    first_registration: str  # Format: MM/YYYY
+    first_registration: str
     mileage: int
-    # Technical
-    fuel_type: str  # Benzin, Diesel, Hybrid, Elektro, Gas
-    transmission: str  # Schaltgetriebe, Automatik
+    fuel_type: str
+    transmission: str
     power_hp: Optional[int] = None
     power_kw: Optional[int] = None
-    engine_size: Optional[int] = None  # ccm
-    # Body
-    body_type: str  # Limousine, Kombi, SUV, Cabrio, Coupe, Van, Transporter
-    doors: str  # 2/3, 4/5
+    engine_size: Optional[int] = None
+    body_type: str
+    doors: str
     color: str
     interior_color: Optional[str] = None
-    # Condition
-    tuv_until: Optional[str] = None  # Format: MM/YYYY
+    tuv_until: Optional[str] = None
     previous_owners: int
     accident_free: bool = True
     service_history: bool = False
-    # Identifiers
-    vin: str  # Fahrzeug-Identifizierungsnummer (FIN)
-    # Media
+    vin: str
     photos: List[str] = []
     documents: List[str] = []
-    # Contact
     contact: ContactInfo
-    # Pricing
     pricing: PriceInfo
-    # Features
     features: List[str] = []
     description: Optional[str] = None
-    # Status
-    status: str = "Neu"  # Neu, In Bearbeitung, Inseriert, Verkauft, Abgelehnt
+    status: str = "Neu"
     admin_notes: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -136,11 +146,9 @@ class AdminLogin(BaseModel):
     username: str
     password: str
 
-class AdminUser(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    username: str
-    password_hash: str
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+class AdminPasswordChange(BaseModel):
+    current_password: str
+    new_password: str
 
 # ==================== HELPER FUNCTIONS ====================
 
@@ -148,7 +156,7 @@ def create_token(user_id: str, username: str) -> str:
     payload = {
         'user_id': user_id,
         'username': username,
-        'exp': datetime.now(timezone.utc).timestamp() + 86400  # 24h
+        'exp': datetime.now(timezone.utc).timestamp() + 86400
     }
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
@@ -162,7 +170,7 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
         raise HTTPException(status_code=401, detail="Ungültiger Token")
 
 async def send_notification_email(car: CarSubmission):
-    """Send email notification for new car submission"""
+    """Send email notification for new car submission (background task)"""
     sendgrid_key = os.environ.get('SENDGRID_API_KEY')
     admin_email = os.environ.get('ADMIN_EMAIL')
     sender_email = os.environ.get('SENDER_EMAIL')
@@ -220,9 +228,39 @@ async def init_admin():
         })
         logger.info("Default admin created: admin / admin123")
 
+# Create indexes for better performance
+async def create_indexes():
+    """Create MongoDB indexes for better query performance"""
+    try:
+        await db.cars.create_index("id", unique=True)
+        await db.cars.create_index("status")
+        await db.cars.create_index("created_at")
+        await db.cars.create_index([("brand", 1), ("model", 1)])
+        await db.cars.create_index([
+            ("brand", "text"),
+            ("model", "text"),
+            ("vin", "text"),
+            ("contact.last_name", "text"),
+            ("contact.email", "text")
+        ])
+        logger.info("MongoDB indexes created")
+    except Exception as e:
+        logger.warning(f"Index creation warning: {e}")
+
 @app.on_event("startup")
 async def startup():
     await init_admin()
+    await create_indexes()
+
+# ==================== ERROR HANDLERS ====================
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Unhandled error: {exc}")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."}
+    )
 
 # ==================== PUBLIC ROUTES ====================
 
@@ -232,42 +270,62 @@ async def root():
 
 @api_router.get("/health")
 async def health():
-    return {"status": "healthy"}
+    try:
+        await db.command("ping")
+        return {"status": "healthy", "database": "connected"}
+    except Exception:
+        return JSONResponse(status_code=503, content={"status": "unhealthy", "database": "disconnected"})
 
 @api_router.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
-    """Upload a single file (photo or document)"""
+@limiter.limit("30/minute")
+async def upload_file(request: Request, file: UploadFile = File(...)):
+    """Upload a single file (photo or document) with size validation"""
     file_ext = Path(file.filename).suffix.lower()
     allowed_exts = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.pdf', '.doc', '.docx']
     
     if file_ext not in allowed_exts:
         raise HTTPException(status_code=400, detail="Dateityp nicht erlaubt")
     
+    # Check file size
+    content = await file.read()
+    if len(content) > MAX_UPLOAD_SIZE:
+        raise HTTPException(status_code=400, detail=f"Datei zu groß. Maximum: {MAX_UPLOAD_SIZE // (1024*1024)}MB")
+    
     file_id = str(uuid.uuid4())
     filename = f"{file_id}{file_ext}"
     filepath = UPLOAD_DIR / filename
     
-    async with aiofiles.open(filepath, 'wb') as f:
-        content = await file.read()
-        await f.write(content)
-    
-    return {"filename": filename, "url": f"/api/uploads/{filename}"}
+    try:
+        async with aiofiles.open(filepath, 'wb') as f:
+            await f.write(content)
+        
+        return {"filename": filename, "url": f"/api/uploads/{filename}"}
+    except Exception as e:
+        logger.error(f"File upload error: {e}")
+        raise HTTPException(status_code=500, detail="Fehler beim Hochladen der Datei")
 
 @api_router.post("/cars", response_model=dict)
-async def submit_car(car_data: CarSubmissionCreate):
-    """Submit a new car for sale"""
-    car = CarSubmission(**car_data.model_dump())
+@limiter.limit("10/minute")
+async def submit_car(request: Request, car_data: CarSubmissionCreate):
+    """Submit a new car for sale with rate limiting"""
+    try:
+        car = CarSubmission(**car_data.model_dump())
+        
+        doc = car.model_dump()
+        doc['created_at'] = doc['created_at'].isoformat()
+        doc['updated_at'] = doc['updated_at'].isoformat()
+        
+        await db.cars.insert_one(doc)
+        
+        # Send email notification in background (non-blocking)
+        asyncio.create_task(send_notification_email(car))
+        
+        logger.info(f"New car submission: {car.brand} {car.model} (ID: {car.id})")
+        return {"success": True, "id": car.id, "message": "Fahrzeug erfolgreich eingereicht"}
     
-    doc = car.model_dump()
-    doc['created_at'] = doc['created_at'].isoformat()
-    doc['updated_at'] = doc['updated_at'].isoformat()
-    
-    await db.cars.insert_one(doc)
-    
-    # Send email notification
-    await send_notification_email(car)
-    
-    return {"success": True, "id": car.id, "message": "Fahrzeug erfolgreich eingereicht"}
+    except Exception as e:
+        logger.error(f"Car submission error: {e}")
+        raise HTTPException(status_code=500, detail="Fehler beim Einreichen des Fahrzeugs")
 
 @api_router.get("/brands")
 async def get_brands():
@@ -285,8 +343,9 @@ async def get_brands():
 # ==================== ADMIN ROUTES ====================
 
 @api_router.post("/admin/login")
-async def admin_login(credentials: AdminLogin):
-    """Admin login"""
+@limiter.limit("5/minute")
+async def admin_login(request: Request, credentials: AdminLogin):
+    """Admin login with rate limiting to prevent brute force"""
     admin = await db.admins.find_one({"username": credentials.username}, {"_id": 0})
     
     if not admin:
@@ -296,15 +355,45 @@ async def admin_login(credentials: AdminLogin):
         raise HTTPException(status_code=401, detail="Ungültige Anmeldedaten")
     
     token = create_token(admin['id'], admin['username'])
+    logger.info(f"Admin login successful: {admin['username']}")
     return {"token": token, "username": admin['username']}
+
+@api_router.post("/admin/change-password")
+async def change_admin_password(
+    password_data: AdminPasswordChange,
+    payload: dict = Depends(verify_token)
+):
+    """Change admin password"""
+    admin = await db.admins.find_one({"username": payload['username']}, {"_id": 0})
+    
+    if not admin:
+        raise HTTPException(status_code=404, detail="Admin nicht gefunden")
+    
+    if not bcrypt.checkpw(password_data.current_password.encode(), admin['password_hash'].encode()):
+        raise HTTPException(status_code=401, detail="Aktuelles Passwort ist falsch")
+    
+    if len(password_data.new_password) < 8:
+        raise HTTPException(status_code=400, detail="Neues Passwort muss mindestens 8 Zeichen haben")
+    
+    new_hash = bcrypt.hashpw(password_data.new_password.encode(), bcrypt.gensalt()).decode()
+    
+    await db.admins.update_one(
+        {"username": payload['username']},
+        {"$set": {"password_hash": new_hash}}
+    )
+    
+    logger.info(f"Password changed for admin: {payload['username']}")
+    return {"success": True, "message": "Passwort erfolgreich geändert"}
 
 @api_router.get("/admin/cars")
 async def get_all_cars(
     status: Optional[str] = None,
     search: Optional[str] = None,
+    page: int = 1,
+    limit: int = 50,
     payload: dict = Depends(verify_token)
 ):
-    """Get all car submissions (admin only)"""
+    """Get all car submissions with pagination (admin only)"""
     query = {}
     
     if status and status != "Alle":
@@ -319,16 +408,23 @@ async def get_all_cars(
             {"contact.email": {"$regex": search, "$options": "i"}}
         ]
     
-    cars = await db.cars.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    skip = (page - 1) * limit
     
-    # Parse dates
+    total = await db.cars.count_documents(query)
+    cars = await db.cars.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    
     for car in cars:
         if isinstance(car.get('created_at'), str):
             car['created_at'] = datetime.fromisoformat(car['created_at'])
         if isinstance(car.get('updated_at'), str):
             car['updated_at'] = datetime.fromisoformat(car['updated_at'])
     
-    return {"cars": cars, "total": len(cars)}
+    return {
+        "cars": cars,
+        "total": total,
+        "page": page,
+        "pages": (total + limit - 1) // limit
+    }
 
 @api_router.get("/admin/cars/{car_id}")
 async def get_car_detail(car_id: str, payload: dict = Depends(verify_token)):
@@ -359,6 +455,7 @@ async def update_car_status(
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Fahrzeug nicht gefunden")
     
+    logger.info(f"Car status updated: {car_id} -> {update.status}")
     return {"success": True, "message": "Status aktualisiert"}
 
 @api_router.get("/admin/stats")
@@ -381,16 +478,39 @@ async def get_stats(payload: dict = Depends(verify_token)):
 @api_router.delete("/admin/cars/{car_id}")
 async def delete_car(car_id: str, payload: dict = Depends(verify_token)):
     """Delete a car submission (admin only)"""
+    # Get car to delete associated files
+    car = await db.cars.find_one({"id": car_id}, {"_id": 0})
+    
+    if not car:
+        raise HTTPException(status_code=404, detail="Fahrzeug nicht gefunden")
+    
+    # Delete associated files
+    for photo in car.get('photos', []):
+        try:
+            filepath = UPLOAD_DIR / photo
+            if filepath.exists():
+                filepath.unlink()
+        except Exception as e:
+            logger.warning(f"Could not delete photo {photo}: {e}")
+    
+    for doc in car.get('documents', []):
+        try:
+            filepath = UPLOAD_DIR / doc
+            if filepath.exists():
+                filepath.unlink()
+        except Exception as e:
+            logger.warning(f"Could not delete document {doc}: {e}")
+    
     result = await db.cars.delete_one({"id": car_id})
     
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Fahrzeug nicht gefunden")
     
+    logger.info(f"Car deleted: {car_id}")
     return {"success": True, "message": "Fahrzeug gelöscht"}
 
 # ==================== STATIC FILES ====================
 
-# Serve uploaded files
 app.mount("/api/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 # Include the router in the main app
