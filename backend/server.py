@@ -21,6 +21,9 @@ import bcrypt
 import aiofiles
 import asyncio
 
+import hashlib
+import time
+
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
@@ -139,6 +142,10 @@ class CarSubmissionCreate(BaseModel):
     pricing: PriceInfo
     features: List[str] = []
     description: Optional[str] = None
+    # Anti-spam fields
+    honeypot: Optional[str] = None  # Should be empty
+    form_token: Optional[str] = None  # Time-based token
+    captcha_answer: Optional[int] = None  # Math captcha answer
 
 class CarStatusUpdate(BaseModel):
     status: str
@@ -151,6 +158,86 @@ class AdminLogin(BaseModel):
 class AdminPasswordChange(BaseModel):
     current_password: str
     new_password: str
+
+# ==================== CAPTCHA FUNCTIONS ====================
+
+def generate_captcha_token(timestamp: int) -> str:
+    """Generate a token based on timestamp for form validation"""
+    secret = JWT_SECRET + str(timestamp)
+    return hashlib.sha256(secret.encode()).hexdigest()[:16]
+
+def verify_captcha_token(token: str, min_seconds: int = 10) -> bool:
+    """Verify the token is valid and form took at least min_seconds"""
+    if not token or len(token) < 20:
+        return False
+    
+    try:
+        # Token format: timestamp_hash
+        parts = token.split('_')
+        if len(parts) != 2:
+            return False
+        
+        timestamp = int(parts[0])
+        provided_hash = parts[1]
+        
+        # Check if enough time has passed
+        current_time = int(time.time())
+        if current_time - timestamp < min_seconds:
+            logger.warning(f"Form submitted too fast: {current_time - timestamp} seconds")
+            return False
+        
+        # Verify hash
+        expected_hash = generate_captcha_token(timestamp)
+        if provided_hash != expected_hash:
+            return False
+        
+        # Token should not be older than 1 hour
+        if current_time - timestamp > 3600:
+            return False
+        
+        return True
+    except Exception as e:
+        logger.warning(f"Token verification failed: {e}")
+        return False
+
+@api_router.get("/captcha")
+async def get_captcha():
+    """Generate a math captcha and form token"""
+    import random
+    
+    num1 = random.randint(1, 10)
+    num2 = random.randint(1, 10)
+    operation = random.choice(['+', '-'])
+    
+    if operation == '+':
+        answer = num1 + num2
+    else:
+        # Ensure positive result
+        if num1 < num2:
+            num1, num2 = num2, num1
+        answer = num1 - num2
+    
+    question = f"{num1} {operation} {num2} = ?"
+    
+    # Create time-based token
+    timestamp = int(time.time())
+    token_hash = generate_captcha_token(timestamp)
+    form_token = f"{timestamp}_{token_hash}"
+    
+    # Store answer encrypted in token (simple approach)
+    answer_hash = hashlib.sha256(f"{JWT_SECRET}{answer}{timestamp}".encode()).hexdigest()[:8]
+    
+    return {
+        "question": question,
+        "form_token": form_token,
+        "answer_token": answer_hash,
+        "timestamp": timestamp
+    }
+
+def verify_captcha_answer(answer: int, answer_token: str, timestamp: int) -> bool:
+    """Verify the captcha answer"""
+    expected_hash = hashlib.sha256(f"{JWT_SECRET}{answer}{timestamp}".encode()).hexdigest()[:8]
+    return expected_hash == answer_token
 
 # ==================== HELPER FUNCTIONS ====================
 
@@ -309,9 +396,21 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
 @api_router.post("/cars", response_model=dict)
 @limiter.limit("10/minute")
 async def submit_car(request: Request, car_data: CarSubmissionCreate):
-    """Submit a new car for sale with rate limiting"""
+    """Submit a new car for sale with rate limiting and captcha"""
     try:
-        car = CarSubmission(**car_data.model_dump())
+        # Anti-spam check 1: Honeypot field should be empty
+        if car_data.honeypot:
+            logger.warning(f"Honeypot triggered from {get_remote_address(request)}")
+            # Return success to not reveal detection (but don't save)
+            return {"success": True, "id": str(uuid.uuid4()), "message": "Fahrzeug erfolgreich eingereicht"}
+        
+        # Anti-spam check 2: Form token validation (time-based)
+        if not car_data.form_token or not verify_captcha_token(car_data.form_token, min_seconds=10):
+            logger.warning(f"Invalid form token from {get_remote_address(request)}")
+            raise HTTPException(status_code=400, detail="Sicherheitsvalidierung fehlgeschlagen. Bitte laden Sie die Seite neu.")
+        
+        car = CarSubmission(**{k: v for k, v in car_data.model_dump().items() 
+                               if k not in ['honeypot', 'form_token', 'captcha_answer']})
         
         doc = car.model_dump()
         doc['created_at'] = doc['created_at'].isoformat()
@@ -325,6 +424,8 @@ async def submit_car(request: Request, car_data: CarSubmissionCreate):
         logger.info(f"New car submission: {car.brand} {car.model} (ID: {car.id})")
         return {"success": True, "id": car.id, "message": "Fahrzeug erfolgreich eingereicht"}
     
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Car submission error: {e}")
         raise HTTPException(status_code=500, detail="Fehler beim Einreichen des Fahrzeugs")
