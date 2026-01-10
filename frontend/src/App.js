@@ -1,6 +1,7 @@
 import "@/App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
+import CookieBanner from "@/components/CookieBanner";
 import LandingPage from "@/pages/LandingPage";
 import CarSubmissionForm from "@/pages/CarSubmissionForm";
 import SuccessPage from "@/pages/SuccessPage";
@@ -33,6 +34,7 @@ function App() {
           {/* Redirect old /admin to 404 */}
           <Route path="/admin/*" element={<NotFound />} />
         </Routes>
+        <CookieBanner />
       </BrowserRouter>
     </div>
   );
