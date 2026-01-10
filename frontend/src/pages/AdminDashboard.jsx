@@ -26,6 +26,7 @@ import {
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const STATUSES = ["Alle", "Neu", "In Bearbeitung", "Inseriert", "Verkauft", "Abgelehnt"];
+const ADMIN_PATH = "verwaltung-x7k9m2";
 
 const getStatusBadge = (status) => {
   const styles = {
@@ -52,7 +53,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const token = localStorage.getItem("admin_token");
     if (!token) {
-      navigate("/admin");
+      navigate(`/${ADMIN_PATH}`);
       return;
     }
     fetchData();
@@ -78,7 +79,7 @@ const AdminDashboard = () => {
       if (error.response?.status === 401) {
         toast.error("Sitzung abgelaufen");
         localStorage.removeItem("admin_token");
-        navigate("/admin");
+        navigate(`/${ADMIN_PATH}`);
       } else {
         toast.error("Fehler beim Laden der Daten");
       }
@@ -90,7 +91,7 @@ const AdminDashboard = () => {
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
     localStorage.removeItem("admin_username");
-    navigate("/admin");
+    navigate(`/${ADMIN_PATH}`);
   };
 
   const handlePasswordChange = async () => {
@@ -354,7 +355,7 @@ const AdminDashboard = () => {
                     <tr 
                       key={car.id} 
                       className="table-row-hover"
-                      onClick={() => navigate(`/admin/cars/${car.id}`)}
+                      onClick={() => navigate(`/${ADMIN_PATH}/cars/${car.id}`)}
                       data-testid={`car-row-${car.id}`}
                     >
                       <td className="px-6 py-4">
@@ -404,7 +405,7 @@ const AdminDashboard = () => {
                             size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              navigate(`/admin/cars/${car.id}`);
+                              navigate(`/${ADMIN_PATH}/cars/${car.id}`);
                             }}
                             data-testid={`view-btn-${car.id}`}
                           >
