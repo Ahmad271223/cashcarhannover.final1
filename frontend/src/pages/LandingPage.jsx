@@ -105,9 +105,8 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="font-heading text-5xl md:text-6xl font-bold tracking-tight leading-none text-slate-900 mb-6">
-              Ihr Auto verkaufen.
-              <span className="text-orange-500"> Stressfrei.</span>
-              <span className="block text-orange-500 mt-2">Zum besten Preis.</span>
+              Ihr Auto zum besten Preis verkaufen
+              <span className="block text-orange-500 mt-2">& das Stressfrei nur bei uns.</span>
             </h1>
             <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-xl">
               Wir verkaufen Ihr Fahrzeug im Kundenauftrag. Professionell inseriert, 
