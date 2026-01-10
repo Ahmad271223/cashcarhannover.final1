@@ -291,7 +291,7 @@ const CarSubmissionForm = () => {
       };
 
       await axios.post(`${API}/cars`, submitData);
-      navigate("/erfolg");
+      navigate("/erfolg", { state: { carId: submitData.form_token ? null : null } });
     } catch (error) {
       console.error("Submit error:", error);
       if (error.response?.data?.detail) {
