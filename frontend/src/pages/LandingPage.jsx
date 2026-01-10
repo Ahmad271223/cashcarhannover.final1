@@ -12,7 +12,8 @@ import {
   Handshake,
   ChevronRight,
   Phone,
-  Mail
+  Mail,
+  Lightbulb
 } from "lucide-react";
 
 const LandingPage = () => {
@@ -155,6 +156,29 @@ const LandingPage = () => {
               </div>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Pro Tip Section */}
+      <section className="py-12 px-6 bg-gradient-to-r from-slate-900 to-slate-800">
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shrink-0">
+                <Banknote className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-heading text-xl font-semibold text-white mb-3">
+                  Unser Tipp: Holen Sie sich zuerst ein Vergleichsangebot
+                </h3>
+                <p className="text-slate-300 leading-relaxed">
+                  Lassen Sie Ihr Fahrzeug kostenlos bei Ihrem lokalen Autohändler bewerten oder holen Sie sich ein 
+                  Inzahlungnahme-Angebot bei Ankaufsunternehmen wie <span className="text-orange-400 font-medium">wirkaufendeinauto.de</span>. 
+                  Kommen Sie dann mit diesem Preis zu uns – wir helfen Ihnen, einen <span className="text-orange-400 font-medium">besseren Preis zu erzielen</span>.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -303,8 +327,109 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Pricing Transparency Section */}
       <section className="py-20 px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <p className="text-sm text-orange-500 uppercase tracking-wider font-medium mb-4">Transparent & Fair</p>
+            <h2 className="font-heading text-3xl md:text-4xl font-semibold tracking-tight text-slate-900">
+              Unsere Konditionen
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center"
+            >
+              <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-7 h-7 text-emerald-600" />
+              </div>
+              <h3 className="font-heading text-lg font-semibold text-slate-900 mb-2">Einreichen kostenlos</h3>
+              <p className="text-slate-600 text-sm">Das Einreichen Ihres Fahrzeugs ist komplett kostenlos und unverbindlich.</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center"
+            >
+              <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-7 h-7 text-emerald-600" />
+              </div>
+              <h3 className="font-heading text-lg font-semibold text-slate-900 mb-2">Kein Verkaufszwang</h3>
+              <p className="text-slate-600 text-sm">Kein Käufer gefunden? Kostet nichts. Nicht verkaufen wollen? Auch kostenlos.</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="bg-orange-50 border border-orange-200 rounded-2xl p-6 text-center"
+            >
+              <div className="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Banknote className="w-7 h-7 text-orange-600" />
+              </div>
+              <h3 className="font-heading text-lg font-semibold text-slate-900 mb-2">Nur bei Erfolg</h3>
+              <p className="text-slate-600 text-sm">Provision nur bei erfolgreichem Verkauf – fair geteilt zwischen Käufer & Verkäufer.</p>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-slate-50 rounded-2xl p-8 border border-slate-200"
+          >
+            <h3 className="font-heading text-xl font-semibold text-slate-900 mb-6 text-center">Provisionsmodell</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white rounded-xl p-6 border border-slate-200">
+                <div className="text-center mb-4">
+                  <span className="text-sm text-slate-500">Verkaufspreis ab</span>
+                  <p className="font-heading text-2xl font-bold text-slate-900">7.500 €</p>
+                </div>
+                <div className="bg-orange-50 rounded-lg p-4 text-center">
+                  <span className="text-3xl font-bold text-orange-500">2,8%</span>
+                  <p className="text-sm text-slate-600 mt-1">vom Verkaufspreis</p>
+                </div>
+                <p className="text-sm text-slate-500 mt-4 text-center">
+                  Käufer & Verkäufer zahlen je <span className="font-semibold text-slate-700">1,4%</span>
+                </p>
+              </div>
+              
+              <div className="bg-white rounded-xl p-6 border border-slate-200">
+                <div className="text-center mb-4">
+                  <span className="text-sm text-slate-500">Verkaufspreis bis</span>
+                  <p className="font-heading text-2xl font-bold text-slate-900">7.499 €</p>
+                </div>
+                <div className="bg-slate-100 rounded-lg p-4 text-center">
+                  <span className="text-3xl font-bold text-slate-700">200 €</span>
+                  <p className="text-sm text-slate-600 mt-1">Pauschale</p>
+                </div>
+                <p className="text-sm text-slate-500 mt-4 text-center">
+                  Käufer & Verkäufer zahlen je <span className="font-semibold text-slate-700">100 €</span>
+                </p>
+              </div>
+            </div>
+            <p className="text-center text-sm text-slate-500 mt-6">
+              Die Provision wird erst fällig, wenn ein Verkauf erfolgreich zustande kommt. Sie entscheiden immer selbst, ob Sie verkaufen möchten.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-6 bg-slate-100">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -316,7 +441,7 @@ const LandingPage = () => {
             </h2>
             <p className="text-lg text-slate-600 mb-8">
               Tragen Sie jetzt Ihr Fahrzeug ein und lassen Sie uns die Arbeit machen. 
-              Kostenlos und unverbindlich.
+              Kostenlos und unverbindlich – Sie zahlen nur bei erfolgreichem Verkauf.
             </p>
             <Link to="/verkaufen">
               <Button 
