@@ -12,7 +12,7 @@ from datetime import datetime
 from io import BytesIO
 
 class AutoVerkaufAPITester:
-    def __init__(self, base_url="https://auto-express-1.preview.emergentagent.com/api"):
+    def __init__(self, base_url="https://info-protector-3.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.token = None
         self.tests_run = 0
