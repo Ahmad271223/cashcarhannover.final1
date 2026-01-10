@@ -20,7 +20,8 @@ import {
   Banknote,
   CheckCircle,
   Loader2,
-  Info
+  Info,
+  Shield
 } from "lucide-react";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -96,6 +97,16 @@ const CarSubmissionForm = () => {
   });
 
   const [captchaData, setCaptchaData] = useState({ question: "", form_token: "", answer_token: "", timestamp: 0 });
+  
+  // Hidden honeypot field ref
+  const honeypotRef = useCallback((node) => {
+    if (node) {
+      node.style.position = 'absolute';
+      node.style.left = '-9999px';
+      node.setAttribute('tabindex', '-1');
+      node.setAttribute('autocomplete', 'off');
+    }
+  }, []);
 
   useEffect(() => {
     fetchBrands();
@@ -1046,6 +1057,40 @@ const CarSubmissionForm = () => {
                             </Label>
                           </div>
                         </div>
+
+                        {/* Math CAPTCHA */}
+                        <div className="mt-6 pt-4 border-t border-slate-700">
+                          <div className="bg-slate-800 rounded-lg p-4">
+                            <Label className="text-white text-sm font-medium mb-3 flex items-center gap-2">
+                              <Shield className="w-4 h-4 text-orange-400" />
+                              Sicherheitsfrage
+                            </Label>
+                            <p className="text-slate-400 text-sm mb-3">Bitte lösen Sie diese einfache Rechenaufgabe:</p>
+                            <div className="flex items-center gap-4">
+                              <span className="text-xl font-mono font-bold text-white bg-slate-700 px-4 py-2 rounded-lg">
+                                {captchaData.question || "Laden..."}
+                              </span>
+                              <Input
+                                data-testid="captcha-input"
+                                type="number"
+                                value={formData.captcha_answer}
+                                onChange={(e) => updateField("captcha_answer", e.target.value)}
+                                placeholder="Antwort"
+                                className="w-24 h-12 text-center text-lg font-bold bg-white text-slate-900"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Hidden honeypot field */}
+                        <input
+                          ref={honeypotRef}
+                          type="text"
+                          name="website"
+                          value={formData.honeypot}
+                          onChange={(e) => updateField("honeypot", e.target.value)}
+                          aria-hidden="true"
+                        />
                       </div>
                     </div>
                   </div>
