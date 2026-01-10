@@ -88,6 +88,8 @@ const CarSubmissionForm = () => {
     minimum_price: "",
     competitor_price: "",
     competitor_source: "",
+    // Terms
+    terms_accepted: false,
   });
 
   useEffect(() => {
@@ -185,6 +187,12 @@ const CarSubmissionForm = () => {
         }
         if (parseFloat(formData.minimum_price) > parseFloat(formData.desired_price)) {
           toast.error("Der Mindestpreis kann nicht höher als der Wunschpreis sein");
+          return false;
+        }
+        break;
+      case 7:
+        if (!formData.terms_accepted) {
+          toast.error("Bitte akzeptieren Sie die Konditionen");
           return false;
         }
         break;
@@ -958,6 +966,55 @@ const CarSubmissionForm = () => {
                             <p className="font-medium">{parseFloat(formData.competitor_price).toLocaleString('de-DE')} € ({formData.competitor_source})</p>
                           </div>
                         )}
+                      </div>
+
+                      {/* Terms & Conditions */}
+                      <div className="bg-slate-900 text-white rounded-xl p-6">
+                        <h3 className="font-semibold mb-4 flex items-center gap-2">
+                          <Info className="w-5 h-5 text-orange-400" />
+                          Konditionen & Provision
+                        </h3>
+                        <div className="space-y-3 text-sm text-slate-300">
+                          <p className="flex items-start gap-2">
+                            <CheckCircle className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                            <span>Das Einreichen ist <strong className="text-white">kostenlos und unverbindlich</strong>.</span>
+                          </p>
+                          <p className="flex items-start gap-2">
+                            <CheckCircle className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                            <span>Finden wir keinen Käufer, entstehen Ihnen <strong className="text-white">keine Kosten</strong>.</span>
+                          </p>
+                          <p className="flex items-start gap-2">
+                            <CheckCircle className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                            <span>Sie haben <strong className="text-white">keinerlei Verkaufszwang</strong> – Sie entscheiden, ob Sie verkaufen.</span>
+                          </p>
+                          <div className="border-t border-slate-700 my-4"></div>
+                          <p className="text-slate-400">Bei erfolgreichem Verkauf:</p>
+                          <p className="flex items-start gap-2">
+                            <Banknote className="w-4 h-4 text-orange-400 mt-0.5 shrink-0" />
+                            <span>Ab <strong className="text-white">7.500 €</strong> Verkaufspreis: <strong className="text-orange-400">2,8% Provision</strong> (je 1,4% für Käufer & Verkäufer)</span>
+                          </p>
+                          <p className="flex items-start gap-2">
+                            <Banknote className="w-4 h-4 text-orange-400 mt-0.5 shrink-0" />
+                            <span>Bis <strong className="text-white">7.499 €</strong> Verkaufspreis: <strong className="text-orange-400">200 € Pauschale</strong> (je 100 € für Käufer & Verkäufer)</span>
+                          </p>
+                        </div>
+
+                        <div className="mt-6 pt-4 border-t border-slate-700">
+                          <div className="flex items-start space-x-3">
+                            <Checkbox 
+                              data-testid="terms-checkbox"
+                              id="terms_accepted" 
+                              checked={formData.terms_accepted}
+                              onCheckedChange={(checked) => updateField("terms_accepted", checked)}
+                              className="mt-1 border-slate-500 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+                            />
+                            <Label htmlFor="terms_accepted" className="cursor-pointer text-sm text-slate-300 leading-relaxed">
+                              Ich habe die Konditionen gelesen und akzeptiere, dass bei einem erfolgreichen Verkauf 
+                              die oben genannte Provision anfällt. Mir ist bewusst, dass ich <strong className="text-white">nicht zum Verkauf verpflichtet</strong> bin 
+                              und <strong className="text-white">keine Kosten</strong> entstehen, wenn kein Verkauf zustande kommt.
+                            </Label>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
