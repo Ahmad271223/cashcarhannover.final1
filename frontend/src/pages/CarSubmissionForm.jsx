@@ -290,8 +290,8 @@ const CarSubmissionForm = () => {
         captcha_answer: parseInt(formData.captcha_answer),
       };
 
-      await axios.post(`${API}/cars`, submitData);
-      navigate("/erfolg", { state: { carId: submitData.form_token ? null : null } });
+      const response = await axios.post(`${API}/cars`, submitData);
+      navigate("/erfolg", { state: { carId: response.data.id } });
     } catch (error) {
       console.error("Submit error:", error);
       if (error.response?.data?.detail) {
