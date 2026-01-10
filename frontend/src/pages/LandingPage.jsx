@@ -288,15 +288,15 @@ const LandingPage = () => {
             <div className="grid grid-cols-3 gap-8">
               <div>
                 <p className="font-heading text-4xl font-bold text-orange-500">500+</p>
-                <p className="text-slate-400">Verkaufte Autos</p>
+                <p className="text-slate-400">Autos im 1. Monat</p>
               </div>
               <div>
                 <p className="font-heading text-4xl font-bold text-orange-500">98%</p>
                 <p className="text-slate-400">Zufriedenheit</p>
               </div>
               <div>
-                <p className="font-heading text-4xl font-bold text-orange-500">12%</p>
-                <p className="text-slate-400">Mehr Erlös</p>
+                <p className="font-heading text-4xl font-bold text-orange-500">23%</p>
+                <p className="text-slate-400">Mehr Erlös möglich</p>
               </div>
             </div>
           </motion.div>
@@ -370,9 +370,9 @@ const LandingPage = () => {
             <div>
               <h4 className="font-semibold mb-4">Rechtliches</h4>
               <ul className="space-y-2 text-slate-400 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">Impressum</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Datenschutz</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">AGB</a></li>
+                <li><Link to="/impressum" className="hover:text-white transition-colors">Impressum</Link></li>
+                <li><Link to="/datenschutz" className="hover:text-white transition-colors">Datenschutz</Link></li>
+                <li><Link to="/agb" className="hover:text-white transition-colors">AGB</Link></li>
               </ul>
             </div>
           </div>

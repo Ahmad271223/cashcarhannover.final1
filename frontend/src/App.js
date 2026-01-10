@@ -7,6 +7,9 @@ import SuccessPage from "@/pages/SuccessPage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminCarDetail from "@/pages/AdminCarDetail";
+import Impressum from "@/pages/Impressum";
+import Datenschutz from "@/pages/Datenschutz";
+import AGB from "@/pages/AGB";
 
 function App() {
   return (
@@ -20,6 +23,9 @@ function App() {
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/cars/:id" element={<AdminCarDetail />} />
+          <Route path="/impressum" element={<Impressum />} />
+          <Route path="/datenschutz" element={<Datenschutz />} />
+          <Route path="/agb" element={<AGB />} />
         </Routes>
       </BrowserRouter>
     </div>
