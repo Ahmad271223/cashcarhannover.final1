@@ -89,7 +89,7 @@ const SuccessPage = () => {
           <div className="flex flex-col gap-3 text-sm text-slate-500 mb-8">
             <div className="flex items-center justify-center gap-2">
               <Phone className="w-4 h-4" />
-              <span>+49 123 456 789</span>
+              <span>+49 178 3563025</span>
             </div>
             <div className="flex items-center justify-center gap-2">
               <Mail className="w-4 h-4" />
