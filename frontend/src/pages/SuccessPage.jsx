@@ -1,9 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Car, Phone, Mail, ArrowRight } from "lucide-react";
+import { CheckCircle, Car, Phone, Mail, ArrowRight, Copy } from "lucide-react";
+import { toast } from "sonner";
 
 const SuccessPage = () => {
+  const location = useLocation();
+  const carId = location.state?.carId || null;
+
+  const copyId = () => {
+    if (carId) {
+      navigator.clipboard.writeText(carId);
+      toast.success("ID kopiert!");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-6 py-12">
       <motion.div
@@ -25,6 +36,28 @@ const SuccessPage = () => {
           <h1 className="font-heading text-3xl font-bold text-slate-900 mb-4">
             Vielen Dank!
           </h1>
+
+          {carId && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-slate-100 rounded-xl p-4 mb-6"
+            >
+              <p className="text-sm text-slate-500 mb-2">Ihre Fahrzeug-ID:</p>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-2xl font-mono font-bold text-slate-900">#{carId}</span>
+                <button 
+                  onClick={copyId}
+                  className="p-2 hover:bg-slate-200 rounded-lg transition-colors"
+                  title="ID kopieren"
+                >
+                  <Copy className="w-5 h-5 text-slate-500" />
+                </button>
+              </div>
+              <p className="text-xs text-slate-400 mt-2">Notieren Sie sich diese ID für Rückfragen</p>
+            </motion.div>
+          )}
           
           <p className="text-lg text-slate-600 mb-8">
             Ihr Fahrzeug wurde erfolgreich eingereicht. Wir werden Ihre Angaben prüfen 
