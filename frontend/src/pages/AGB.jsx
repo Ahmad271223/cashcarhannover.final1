@@ -11,7 +11,7 @@ const AGB = () => {
             <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
               <Car className="w-6 h-6 text-white" />
             </div>
-            <span className="font-heading font-bold text-xl text-slate-900">AutoVerkauf Pro</span>
+            <span className="font-heading font-bold text-xl text-slate-900">CashCar</span>
           </Link>
         </div>
       </header>
@@ -165,7 +165,7 @@ const AGB = () => {
       {/* Footer */}
       <footer className="py-8 px-6 bg-slate-900 text-white">
         <div className="max-w-7xl mx-auto text-center text-slate-400 text-sm">
-          <p>&copy; {new Date().getFullYear()} AutoVerkauf Pro. Alle Rechte vorbehalten.</p>
+          <p>&copy; {new Date().getFullYear()} CashCar. Alle Rechte vorbehalten.</p>
         </div>
       </footer>
     </div>

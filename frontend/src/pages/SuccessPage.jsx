@@ -93,7 +93,7 @@ const SuccessPage = () => {
             </div>
             <div className="flex items-center justify-center gap-2">
               <Mail className="w-4 h-4" />
-              <span>info@autoverkauf-pro.de</span>
+              <span>info@cashcar.de</span>
             </div>
           </div>
 

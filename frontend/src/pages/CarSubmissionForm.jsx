@@ -326,7 +326,7 @@ const CarSubmissionForm = () => {
             <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
               <Car className="w-6 h-6 text-white" />
             </div>
-            <span className="font-heading font-bold text-xl text-slate-900">AutoVerkauf Pro</span>
+            <span className="font-heading font-bold text-xl text-slate-900">CashCar</span>
           </Link>
         </div>
       </header>
