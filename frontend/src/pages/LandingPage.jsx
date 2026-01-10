@@ -73,7 +73,6 @@ const LandingPage = () => {
           <nav className="hidden md:flex items-center gap-8">
             <a href="#vorteile" className="text-slate-600 hover:text-slate-900 transition-colors">Vorteile</a>
             <a href="#ablauf" className="text-slate-600 hover:text-slate-900 transition-colors">So funktioniert's</a>
-            <Link to="/admin" className="text-slate-600 hover:text-slate-900 transition-colors">Admin</Link>
           </nav>
           <Link to="/verkaufen">
             <Button 
