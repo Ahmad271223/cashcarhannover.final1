@@ -8,6 +8,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 import os
 import logging
 from pathlib import Path
@@ -44,13 +45,14 @@ UPLOAD_DIR = ROOT_DIR / 'uploads'
 UPLOAD_DIR.mkdir(exist_ok=True)
 MAX_UPLOAD_SIZE = int(os.environ.get('MAX_UPLOAD_SIZE_MB', 10)) * 1024 * 1024  # Default 10MB
 
-# Rate limiter
-limiter = Limiter(key_func=get_remote_address)
+# Rate limiter with in-memory storage
+limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
 
 # Create the main app
 app = FastAPI(title="AutoVerkauf Pro API")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
