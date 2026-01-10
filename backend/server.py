@@ -526,6 +526,7 @@ async def get_all_cars(
     
     if search:
         query["$or"] = [
+            {"id": {"$regex": search, "$options": "i"}},
             {"brand": {"$regex": search, "$options": "i"}},
             {"model": {"$regex": search, "$options": "i"}},
             {"vin": {"$regex": search, "$options": "i"}},
