@@ -30,7 +30,7 @@ const AGB = () => {
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">§ 1 Geltungsbereich</h2>
               <p className="text-slate-600 leading-relaxed">
                 (1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend "AGB") gelten für alle Verträge zwischen 
-                der AutoVerkauf Pro GmbH (nachfolgend "Vermittler") und dem Fahrzeugverkäufer (nachfolgend "Kunde") 
+                der CashCar UG (haftungsbeschränkt) (nachfolgend "Vermittler") und dem Fahrzeugverkäufer (nachfolgend "Kunde") 
                 über die Vermittlung von Gebrauchtfahrzeugen.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">

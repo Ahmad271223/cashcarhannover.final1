@@ -29,9 +29,9 @@ const Impressum = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">Angaben gemäß § 5 TMG</h2>
               <p className="text-slate-600 leading-relaxed">
-                AutoVerkauf Pro GmbH<br />
-                Musterstraße 123<br />
-                12345 Musterstadt<br />
+                CashCar UG (haftungsbeschränkt)<br />
+                Baldurstraße 5<br />
+                30657 Hannover<br />
                 Deutschland
               </p>
             </section>
@@ -39,15 +39,15 @@ const Impressum = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">Kontakt</h2>
               <p className="text-slate-600 leading-relaxed">
-                Telefon: +49 123 456 789<br />
-                E-Mail: info@autoverkauf-pro.de
+                Telefon: +49 178 3563025<br />
+                E-Mail: info@cashcar.de
               </p>
             </section>
 
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">Vertreten durch</h2>
               <p className="text-slate-600 leading-relaxed">
-                Geschäftsführer: Max Mustermann
+                Geschäftsführer: Ahmad Fakih
               </p>
             </section>
 
@@ -55,8 +55,8 @@ const Impressum = () => {
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">Registereintrag</h2>
               <p className="text-slate-600 leading-relaxed">
                 Eintragung im Handelsregister<br />
-                Registergericht: Amtsgericht Musterstadt<br />
-                Registernummer: HRB 12345
+                Registergericht: Amtsgericht Hannover<br />
+                Registernummer: HRB 123456
               </p>
             </section>
 
@@ -64,16 +64,16 @@ const Impressum = () => {
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">Umsatzsteuer-ID</h2>
               <p className="text-slate-600 leading-relaxed">
                 Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br />
-                DE 123456789
+                DE123456789
               </p>
             </section>
 
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
               <p className="text-slate-600 leading-relaxed">
-                Max Mustermann<br />
-                Musterstraße 123<br />
-                12345 Musterstadt
+                Ahmad Fakih<br />
+                Baldurstraße 5<br />
+                30657 Hannover
               </p>
             </section>
 

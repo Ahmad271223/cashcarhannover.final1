@@ -67,11 +67,11 @@ const Datenschutz = () => {
               <h3 className="font-heading text-xl font-semibold text-slate-900 mb-3 mt-6">Hinweis zur verantwortlichen Stelle</h3>
               <p className="text-slate-600 leading-relaxed">
                 Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:<br /><br />
-                AutoVerkauf Pro GmbH<br />
-                Musterstraße 123<br />
-                12345 Musterstadt<br /><br />
-                Telefon: +49 123 456 789<br />
-                E-Mail: info@autoverkauf-pro.de
+                CashCar UG (haftungsbeschränkt)<br />
+                Baldurstraße 5<br />
+                30657 Hannover<br /><br />
+                Telefon: +49 178 3563025<br />
+                E-Mail: info@cashcar.de
               </p>
             </section>
 
