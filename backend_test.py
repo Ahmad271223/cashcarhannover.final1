@@ -458,7 +458,7 @@ class AutoVerkaufAPITester:
         time.sleep(2)  # Wait between rate limit tests
         self.test_rate_limiting_cars()
         time.sleep(2)  # Wait between rate limit tests
-        self.test_rate_limiting_admin_login()
+        self.test_admin_login_rate_limiting()
         time.sleep(2)  # Wait before admin login
         
         # File validation tests
