@@ -10,6 +10,8 @@ import { Car, Lock, User, Loader2 } from "lucide-react";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+const ADMIN_PATH = "verwaltung-x7k9m2";
+
 const AdminLogin = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +29,7 @@ const AdminLogin = () => {
       localStorage.setItem("admin_token", response.data.token);
       localStorage.setItem("admin_username", response.data.username);
       toast.success("Erfolgreich angemeldet");
-      navigate("/admin/dashboard");
+      navigate(`/${ADMIN_PATH}/dashboard`);
     } catch (error) {
       toast.error("Ungültige Anmeldedaten");
     } finally {
