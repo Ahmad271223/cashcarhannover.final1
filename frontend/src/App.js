@@ -10,6 +10,7 @@ import AdminCarDetail from "@/pages/AdminCarDetail";
 import Impressum from "@/pages/Impressum";
 import Datenschutz from "@/pages/Datenschutz";
 import AGB from "@/pages/AGB";
+import NotFound from "@/pages/NotFound";
 
 // Secret admin path - change this to your own secret!
 const ADMIN_PATH = "verwaltung-x7k9m2";
