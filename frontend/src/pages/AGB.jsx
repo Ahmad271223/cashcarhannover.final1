@@ -29,8 +29,8 @@ const AGB = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">§ 1 Geltungsbereich</h2>
               <p className="text-slate-600 leading-relaxed">
-                (1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend "AGB") gelten für alle Verträge zwischen 
-                der CashCar UG (haftungsbeschränkt) (nachfolgend "Vermittler") und dem Fahrzeugverkäufer (nachfolgend "Kunde") 
+                (1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend &quot;AGB&quot;) gelten für alle Verträge zwischen 
+                der CashCar UG (haftungsbeschränkt) (nachfolgend &quot;Vermittler&quot;) und dem Fahrzeugverkäufer (nachfolgend &quot;Kunde&quot;) 
                 über die Vermittlung von Gebrauchtfahrzeugen.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
