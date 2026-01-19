@@ -8,6 +8,62 @@ import {
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
+// Vordefinierte Filter-Optionen (wie mobile.de)
+const BRANDS = [
+  "Audi", "BMW", "Mercedes-Benz", "Volkswagen", "Opel", "Ford",
+  "Skoda", "Seat", "Cupra", "Renault", "Peugeot", "Citroën", "Fiat",
+  "Toyota", "Honda", "Mazda", "Nissan", "Hyundai", "Kia",
+  "Volvo", "Porsche", "Mini", "Jaguar", "Land Rover", "Jeep",
+  "Tesla", "Dacia", "Suzuki", "Mitsubishi", "Subaru", "Lexus",
+  "Alfa Romeo", "Chevrolet", "Smart", "Andere"
+].sort();
+
+const FUEL_TYPES = [
+  "Benzin", "Diesel", "Elektro", "Hybrid (Benzin)", "Hybrid (Diesel)", 
+  "Plug-in-Hybrid", "Erdgas (CNG)", "Autogas (LPG)", "Wasserstoff"
+];
+
+const BODY_TYPES = [
+  "Limousine", "Kombi", "SUV/Geländewagen", "Cabrio", "Coupé", 
+  "Van/Kleinbus", "Sportwagen", "Pickup", "Kleinwagen", "Sonstige"
+];
+
+const PRICE_RANGES = [
+  { value: "5000", label: "bis 5.000 €" },
+  { value: "10000", label: "bis 10.000 €" },
+  { value: "15000", label: "bis 15.000 €" },
+  { value: "20000", label: "bis 20.000 €" },
+  { value: "25000", label: "bis 25.000 €" },
+  { value: "30000", label: "bis 30.000 €" },
+  { value: "40000", label: "bis 40.000 €" },
+  { value: "50000", label: "bis 50.000 €" },
+  { value: "75000", label: "bis 75.000 €" },
+  { value: "100000", label: "bis 100.000 €" },
+  { value: "150000", label: "bis 150.000 €" },
+];
+
+const MILEAGE_RANGES = [
+  { value: "10000", label: "bis 10.000 km" },
+  { value: "25000", label: "bis 25.000 km" },
+  { value: "50000", label: "bis 50.000 km" },
+  { value: "75000", label: "bis 75.000 km" },
+  { value: "100000", label: "bis 100.000 km" },
+  { value: "125000", label: "bis 125.000 km" },
+  { value: "150000", label: "bis 150.000 km" },
+  { value: "200000", label: "bis 200.000 km" },
+];
+
+const YEAR_RANGES = [
+  { value: "2024", label: "ab 2024" },
+  { value: "2023", label: "ab 2023" },
+  { value: "2022", label: "ab 2022" },
+  { value: "2021", label: "ab 2021" },
+  { value: "2020", label: "ab 2020" },
+  { value: "2018", label: "ab 2018" },
+  { value: "2015", label: "ab 2015" },
+  { value: "2010", label: "ab 2010" },
+];
+
 const formatPrice = (price) => {
   return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price);
 };
@@ -29,7 +85,6 @@ const Bestand = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({ brands: [], fuel_types: [], body_types: [] });
   const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 });
   const [showFilters, setShowFilters] = useState(false);
   
@@ -40,6 +95,7 @@ const Bestand = () => {
   const [selectedBodyType, setSelectedBodyType] = useState(searchParams.get('body_type') || '');
   const [priceMax, setPriceMax] = useState(searchParams.get('price_max') || '');
   const [mileageMax, setMileageMax] = useState(searchParams.get('mileage_max') || '');
+  const [yearMin, setYearMin] = useState(searchParams.get('year_min') || '');
   const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
 
   const fetchVehicles = async (page = 1) => {
@@ -56,6 +112,7 @@ const Bestand = () => {
       if (selectedBodyType) params.append('body_type', selectedBodyType);
       if (priceMax) params.append('price_max', priceMax);
       if (mileageMax) params.append('mileage_max', mileageMax);
+      if (yearMin) params.append('year_min', yearMin);
       
       const response = await fetch(`${API_URL}/api/inventory?${params}`);
       const data = await response.json();
