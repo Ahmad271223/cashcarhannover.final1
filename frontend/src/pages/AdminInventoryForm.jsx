@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 const ADMIN_PATH = "verwaltung-x7k9m2";
+const TOKEN_KEY = "admin_token";
 
 // Equipment features like mobile.de
 const EQUIPMENT_CATEGORIES = {
@@ -76,6 +77,7 @@ const AdminInventoryForm = () => {
   const [settings, setSettings] = useState(null);
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [dragOverIndex, setDragOverIndex] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -132,75 +134,102 @@ const AdminInventoryForm = () => {
     featured: false
   });
 
-  const getToken = () => localStorage.getItem('admin_token');
+  // Get token safely
+  const getToken = useCallback(() => {
+    return localStorage.getItem(TOKEN_KEY);
+  }, []);
 
-  // Check authentication
-  useEffect(() => {
-    const token = localStorage.getItem('admin_token');
-    if (!token) {
-      navigate(`/${ADMIN_PATH}/dashboard`);
-    }
-  }, [navigate]);
+  // Auth headers helper
+  const getAuthHeaders = useCallback(() => {
+    const token = getToken();
+    return token ? { 'Authorization': `Bearer ${token}` } : {};
+  }, [getToken]);
 
-  // Fetch settings for default contact info
+  // Check authentication on mount
   useEffect(() => {
     const token = getToken();
-    if (!token) return;
+    if (!token) {
+      toast.error("Bitte melden Sie sich an");
+      navigate(`/${ADMIN_PATH}`);
+      return;
+    }
+    setIsAuthenticated(true);
+  }, [navigate, getToken]);
+
+  // Fetch settings for default contact info (only when authenticated)
+  useEffect(() => {
+    if (!isAuthenticated) return;
     
     const fetchSettings = async () => {
       try {
         const response = await fetch(`${API_URL}/api/admin/settings`, {
-          headers: { 'Authorization': `Bearer ${token}` }
+          headers: getAuthHeaders()
         });
         if (response.ok) {
           const data = await response.json();
           setSettings(data);
+        } else if (response.status === 401) {
+          toast.error("Sitzung abgelaufen");
+          localStorage.removeItem(TOKEN_KEY);
+          navigate(`/${ADMIN_PATH}`);
         }
       } catch (error) {
         console.error('Error fetching settings:', error);
       }
     };
     fetchSettings();
-  }, []);
+  }, [isAuthenticated, navigate, getAuthHeaders]);
 
-  // Fetch vehicle data in edit mode
+  // Fetch vehicle data in edit mode (only when authenticated)
   useEffect(() => {
-    if (isEditMode) {
-      const fetchVehicle = async () => {
-        try {
-          const response = await fetch(`${API_URL}/api/admin/inventory/${id}`, {
-            headers: { 'Authorization': `Bearer ${getToken()}` }
-          });
-          if (!response.ok) throw new Error('Vehicle not found');
-          const data = await response.json();
-          
-          setFormData({
-            ...data,
-            mileage: data.mileage?.toString() || "",
-            power_hp: data.power_hp?.toString() || "",
-            power_kw: data.power_kw?.toString() || "",
-            engine_size: data.engine_size?.toString() || "",
-            cylinders: data.cylinders?.toString() || "",
-            seats: data.seats?.toString() || "",
-            previous_owners: data.previous_owners?.toString() || "",
-            co2_emission: data.co2_emission?.toString() || "",
-            fuel_consumption_combined: data.fuel_consumption_combined?.toString() || "",
-            fuel_consumption_city: data.fuel_consumption_city?.toString() || "",
-            fuel_consumption_highway: data.fuel_consumption_highway?.toString() || "",
-            price: data.price?.toString() || "",
-            photos: data.photos || [],
-            features: data.features || []
-          });
-        } catch (error) {
-          toast.error('Fahrzeug konnte nicht geladen werden');
-          navigate(`/${ADMIN_PATH}/dashboard`);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchVehicle();
+    if (!isAuthenticated || !isEditMode) {
+      if (!isEditMode) setLoading(false);
+      return;
     }
-  }, [id, isEditMode, navigate]);
+
+    const fetchVehicle = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/admin/inventory/${id}`, {
+          headers: getAuthHeaders()
+        });
+        
+        if (response.status === 401) {
+          toast.error("Sitzung abgelaufen");
+          localStorage.removeItem(TOKEN_KEY);
+          navigate(`/${ADMIN_PATH}`);
+          return;
+        }
+        
+        if (!response.ok) throw new Error('Vehicle not found');
+        const data = await response.json();
+        
+        setFormData({
+          ...data,
+          mileage: data.mileage?.toString() || "",
+          power_hp: data.power_hp?.toString() || "",
+          power_kw: data.power_kw?.toString() || "",
+          engine_size: data.engine_size?.toString() || "",
+          cylinders: data.cylinders?.toString() || "",
+          seats: data.seats?.toString() || "",
+          previous_owners: data.previous_owners?.toString() || "",
+          co2_emission: data.co2_emission?.toString() || "",
+          fuel_consumption_combined: data.fuel_consumption_combined?.toString() || "",
+          fuel_consumption_city: data.fuel_consumption_city?.toString() || "",
+          fuel_consumption_highway: data.fuel_consumption_highway?.toString() || "",
+          price: data.price?.toString() || "",
+          photos: data.photos || [],
+          features: data.features || []
+        });
+      } catch (error) {
+        toast.error('Fahrzeug konnte nicht geladen werden');
+        navigate(`/${ADMIN_PATH}/dashboard?tab=inventory`);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchVehicle();
+  }, [id, isEditMode, isAuthenticated, navigate, getAuthHeaders]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -330,7 +359,19 @@ const AdminInventoryForm = () => {
     
     // Validation
     if (!formData.brand || !formData.model || !formData.price) {
+      toast.error('Bitte füllen Sie alle Pflichtfelder aus (Marke, Modell, Preis)');
+      return;
+    }
+
+    if (!formData.first_registration || !formData.fuel_type || !formData.transmission || !formData.body_type || !formData.doors || !formData.exterior_color) {
       toast.error('Bitte füllen Sie alle Pflichtfelder aus');
+      return;
+    }
+
+    const token = getToken();
+    if (!token) {
+      toast.error("Sitzung abgelaufen. Bitte melden Sie sich erneut an.");
+      navigate(`/${ADMIN_PATH}`);
       return;
     }
 
@@ -363,31 +404,55 @@ const AdminInventoryForm = () => {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getToken()}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(submitData)
       });
 
-      if (!response.ok) throw new Error('Save failed');
+      if (response.status === 401) {
+        toast.error("Sitzung abgelaufen. Bitte melden Sie sich erneut an.");
+        localStorage.removeItem(TOKEN_KEY);
+        navigate(`/${ADMIN_PATH}`);
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Save failed');
+      }
 
       const result = await response.json();
       toast.success(isEditMode ? 'Fahrzeug aktualisiert' : 'Fahrzeug erstellt');
       navigate(`/${ADMIN_PATH}/dashboard?tab=inventory`);
     } catch (error) {
-      toast.error('Fehler beim Speichern');
+      toast.error(error.message || 'Fehler beim Speichern');
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm('Möchten Sie dieses Fahrzeug wirklich löschen?')) return;
+    if (!window.confirm('Möchten Sie dieses Fahrzeug wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) return;
+
+    const token = getToken();
+    if (!token) {
+      toast.error("Sitzung abgelaufen");
+      navigate(`/${ADMIN_PATH}`);
+      return;
+    }
 
     try {
       const response = await fetch(`${API_URL}/api/admin/inventory/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${getToken()}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
+
+      if (response.status === 401) {
+        toast.error("Sitzung abgelaufen");
+        localStorage.removeItem(TOKEN_KEY);
+        navigate(`/${ADMIN_PATH}`);
+        return;
+      }
 
       if (!response.ok) throw new Error('Delete failed');
 
@@ -398,7 +463,8 @@ const AdminInventoryForm = () => {
     }
   };
 
-  if (loading) {
+  // Show loading spinner while checking auth or loading data
+  if (loading || !isAuthenticated) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
@@ -1060,7 +1126,7 @@ const AdminInventoryForm = () => {
           <section className="bg-white rounded-2xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-slate-900">Kontaktdaten</h2>
-              {settings && (
+              {settings && (settings.default_contact_name || settings.default_contact_phone) && (
                 <button
                   type="button"
                   onClick={useDefaultContact}
