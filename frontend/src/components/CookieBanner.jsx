@@ -43,9 +43,9 @@ const CookieBanner = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: "spring", damping: 25, stiffness: 200 }}
-          className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
+          className="fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6 pointer-events-none"
         >
-          <div className="max-w-4xl mx-auto bg-slate-900 text-white rounded-2xl shadow-2xl border border-slate-700 overflow-hidden">
+          <div className="max-w-4xl mx-auto bg-slate-900 text-white rounded-2xl shadow-2xl border border-slate-700 overflow-hidden pointer-events-auto">
             <div className="p-6">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center shrink-0">
