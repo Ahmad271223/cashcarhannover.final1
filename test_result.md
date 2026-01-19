@@ -414,7 +414,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Production-ready test completed successfully"
+    - "Homepage Loading and Navigation"
+    - "Inventory Page (/bestand) - Filters and Search"
+    - "Admin Login (/verwaltung-x7k9m2)"
+    - "Admin Dashboard - Tabs and Features"
+    - "Customer Form (/verkaufen) - Multi-step Navigation"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
