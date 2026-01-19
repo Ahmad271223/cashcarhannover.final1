@@ -762,6 +762,11 @@ class AutoVerkaufAPITester:
             
             # Password change test
             self.test_admin_password_change()
+            
+            # NEW: Inventory API tests
+            self.test_inventory_settings()
+            self.test_inventory_crud_operations()
+            self.test_inventory_filtering_and_search()
         
         end_time = time.time()
         duration = end_time - start_time
@@ -769,6 +774,41 @@ class AutoVerkaufAPITester:
         # Print results
         self.log("=" * 50)
         self.log(f"📊 Test Results Summary")
+        self.log(f"Tests run: {self.tests_run}")
+        self.log(f"Tests passed: {self.tests_passed}")
+        self.log(f"Tests failed: {self.tests_run - self.tests_passed}")
+        self.log(f"Success rate: {(self.tests_passed/self.tests_run*100):.1f}%")
+        self.log(f"Duration: {duration:.1f} seconds")
+        self.log("=" * 50)
+        
+        return self.tests_passed == self.tests_run
+
+    def run_inventory_tests_only(self):
+        """Run only the inventory API tests"""
+        self.log("🚀 Starting Inventory API Tests")
+        self.log(f"Testing against: {self.base_url}")
+        
+        start_time = time.time()
+        
+        # Basic health check
+        self.test_health_check()
+        
+        # Admin authentication required for inventory tests
+        if self.test_admin_login():
+            # Run inventory-specific tests
+            self.test_inventory_settings()
+            self.test_inventory_crud_operations()
+            self.test_inventory_filtering_and_search()
+        else:
+            self.log("❌ Admin login failed - cannot run inventory tests", "ERROR")
+            return False
+        
+        end_time = time.time()
+        duration = end_time - start_time
+        
+        # Print results
+        self.log("=" * 50)
+        self.log(f"📊 Inventory Test Results Summary")
         self.log(f"Tests run: {self.tests_run}")
         self.log(f"Tests passed: {self.tests_passed}")
         self.log(f"Tests failed: {self.tests_run - self.tests_passed}")
