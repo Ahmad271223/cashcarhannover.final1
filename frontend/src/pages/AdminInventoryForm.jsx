@@ -74,6 +74,8 @@ const AdminInventoryForm = () => {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [settings, setSettings] = useState(null);
+  const [draggedIndex, setDraggedIndex] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
