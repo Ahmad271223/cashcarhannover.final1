@@ -580,6 +580,16 @@ async def create_indexes():
             ("contact.last_name", "text"),
             ("contact.email", "text")
         ])
+        
+        # Inventory indexes
+        await db.inventory.create_index("id", unique=True)
+        await db.inventory.create_index("is_published")
+        await db.inventory.create_index("is_sold")
+        await db.inventory.create_index("created_at")
+        await db.inventory.create_index([("brand", 1), ("model", 1)])
+        await db.inventory.create_index("price")
+        await db.inventory.create_index("featured")
+        
         logger.info("MongoDB indexes created")
     except Exception as e:
         logger.warning(f"Index creation warning: {e}")
