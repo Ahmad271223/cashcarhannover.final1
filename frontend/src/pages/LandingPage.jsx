@@ -75,20 +75,89 @@ const LandingPage = () => {
             </div>
             <span className="font-heading font-bold text-xl text-slate-900">CashCar</span>
           </Link>
+          
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/bestand" className="text-slate-600 hover:text-slate-900 transition-colors">Fahrzeugbestand</Link>
+            <Link to="/bestand" className="text-slate-600 hover:text-slate-900 transition-colors font-medium">Fahrzeugbestand</Link>
             <a href="#vorteile" className="text-slate-600 hover:text-slate-900 transition-colors">Vorteile</a>
             <a href="#ablauf" className="text-slate-600 hover:text-slate-900 transition-colors">So funktioniert's</a>
           </nav>
-          <Link to="/verkaufen">
-            <Button 
-              data-testid="hero-cta-btn"
-              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-lg shadow-lg hover:shadow-orange-500/20 transition-all"
+          
+          <div className="flex items-center gap-3">
+            <Link to="/verkaufen" className="hidden sm:block">
+              <Button 
+                data-testid="hero-cta-btn"
+                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-lg shadow-lg hover:shadow-orange-500/20 transition-all"
+              >
+                Jetzt verkaufen
+              </Button>
+            </Link>
+            
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
             >
-              Jetzt verkaufen
-            </Button>
-          </Link>
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
+        
+        {/* Mobile Navigation */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-white border-t border-slate-100"
+            >
+              <nav className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-2">
+                <Link 
+                  to="/bestand" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-orange-50 text-slate-700 font-medium transition-colors"
+                >
+                  <Car className="w-5 h-5 text-orange-500" />
+                  Fahrzeugbestand
+                </Link>
+                <Link 
+                  to="/verkaufen" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-orange-50 text-slate-700 font-medium transition-colors"
+                >
+                  <Upload className="w-5 h-5 text-orange-500" />
+                  Fahrzeug verkaufen
+                </Link>
+                <a 
+                  href="#vorteile" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors"
+                >
+                  <CheckCircle className="w-5 h-5 text-slate-400" />
+                  Vorteile
+                </a>
+                <a 
+                  href="#ablauf" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors"
+                >
+                  <Lightbulb className="w-5 h-5 text-slate-400" />
+                  So funktioniert's
+                </a>
+                <div className="pt-2 mt-2 border-t border-slate-100">
+                  <a 
+                    href="tel:+491234567890"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg bg-slate-900 text-white font-medium"
+                  >
+                    <Phone className="w-5 h-5" />
+                    +49 123 4567890
+                  </a>
+                </div>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* Hero Section */}
