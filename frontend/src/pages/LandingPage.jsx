@@ -143,7 +143,7 @@ const LandingPage = () => {
                   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors"
                 >
                   <Lightbulb className="w-5 h-5 text-slate-400" />
-                  So funktioniert's
+                  So funktioniert&apos;s
                 </a>
                 <div className="pt-2 mt-2 border-t border-slate-100">
                   <a 
