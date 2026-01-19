@@ -81,6 +81,7 @@ const AdminDashboard = () => {
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const [passwordData, setPasswordData] = useState({ current: "", new: "", confirm: "" });
   const [changingPassword, setChangingPassword] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("admin_token");
@@ -88,6 +89,11 @@ const AdminDashboard = () => {
       navigate(`/${ADMIN_PATH}`);
       return;
     }
+    setIsAuthenticated(true);
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
     
     if (activeTab === 'requests') {
       fetchRequestsData();
@@ -96,7 +102,7 @@ const AdminDashboard = () => {
     }
     
     fetchSettings();
-  }, [navigate, activeTab, filter, search, inventoryFilter, inventorySearch]);
+  }, [isAuthenticated, activeTab, filter, search, inventoryFilter, inventorySearch]);
 
   const getAuthHeaders = () => ({
     Authorization: `Bearer ${localStorage.getItem("admin_token")}`
