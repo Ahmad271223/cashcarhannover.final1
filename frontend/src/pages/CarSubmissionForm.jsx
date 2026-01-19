@@ -93,10 +93,7 @@ const CarSubmissionForm = () => {
     terms_accepted: false,
     // Anti-spam
     honeypot: "",
-    captcha_answer: "",
   });
-
-  const [captchaData, setCaptchaData] = useState({ question: "", form_token: "", answer_token: "", timestamp: 0 });
   
   // Hidden honeypot field ref
   const honeypotRef = useCallback((node) => {
@@ -110,7 +107,6 @@ const CarSubmissionForm = () => {
 
   useEffect(() => {
     fetchBrands();
-    fetchCaptcha();
   }, []);
 
   const fetchBrands = async () => {
@@ -119,15 +115,6 @@ const CarSubmissionForm = () => {
       setBrands(response.data.brands);
     } catch (error) {
       console.error("Error fetching brands:", error);
-    }
-  };
-
-  const fetchCaptcha = async () => {
-    try {
-      const response = await axios.get(`${API}/captcha`);
-      setCaptchaData(response.data);
-    } catch (error) {
-      console.error("Error fetching captcha:", error);
     }
   };
 
