@@ -875,6 +875,276 @@ async def delete_car(car_id: str, payload: dict = Depends(verify_token)):
     logger.info(f"Car deleted: {car_id}")
     return {"success": True, "message": "Fahrzeug gelöscht"}
 
+# ==================== INVENTORY ROUTES (PUBLIC) ====================
+
+@api_router.get("/inventory")
+async def get_public_inventory(
+    brand: Optional[str] = None,
+    fuel_type: Optional[str] = None,
+    body_type: Optional[str] = None,
+    price_min: Optional[float] = None,
+    price_max: Optional[float] = None,
+    mileage_max: Optional[int] = None,
+    year_min: Optional[int] = None,
+    search: Optional[str] = None,
+    sort: Optional[str] = "newest",  # newest, oldest, price_asc, price_desc, mileage
+    page: int = 1,
+    limit: int = 20
+):
+    """Get published inventory vehicles (public)"""
+    query = {"is_published": True, "is_sold": False}
+    
+    if brand:
+        query["brand"] = brand
+    if fuel_type:
+        query["fuel_type"] = fuel_type
+    if body_type:
+        query["body_type"] = body_type
+    if price_min:
+        query["price"] = {"$gte": price_min}
+    if price_max:
+        if "price" in query:
+            query["price"]["$lte"] = price_max
+        else:
+            query["price"] = {"$lte": price_max}
+    if mileage_max:
+        query["mileage"] = {"$lte": mileage_max}
+    if year_min:
+        query["first_registration"] = {"$regex": f".*/{year_min}|.*/{year_min + 1}|.*/{year_min + 2}|.*/{year_min + 3}|.*/{year_min + 4}|.*/{year_min + 5}"}
+    
+    if search:
+        query["$or"] = [
+            {"brand": {"$regex": search, "$options": "i"}},
+            {"model": {"$regex": search, "$options": "i"}},
+            {"variant": {"$regex": search, "$options": "i"}},
+            {"title": {"$regex": search, "$options": "i"}},
+            {"id": {"$regex": search, "$options": "i"}}
+        ]
+    
+    # Sorting
+    sort_options = {
+        "newest": [("featured", -1), ("created_at", -1)],
+        "oldest": [("created_at", 1)],
+        "price_asc": [("featured", -1), ("price", 1)],
+        "price_desc": [("featured", -1), ("price", -1)],
+        "mileage": [("featured", -1), ("mileage", 1)]
+    }
+    sort_by = sort_options.get(sort, sort_options["newest"])
+    
+    skip = (page - 1) * limit
+    total = await db.inventory.count_documents(query)
+    vehicles = await db.inventory.find(query, {"_id": 0}).sort(sort_by).skip(skip).limit(limit).to_list(limit)
+    
+    # Get unique values for filters
+    all_brands = await db.inventory.distinct("brand", {"is_published": True, "is_sold": False})
+    all_fuel_types = await db.inventory.distinct("fuel_type", {"is_published": True, "is_sold": False})
+    all_body_types = await db.inventory.distinct("body_type", {"is_published": True, "is_sold": False})
+    
+    return {
+        "vehicles": vehicles,
+        "total": total,
+        "page": page,
+        "pages": (total + limit - 1) // limit if total > 0 else 1,
+        "filters": {
+            "brands": sorted(all_brands),
+            "fuel_types": sorted(all_fuel_types),
+            "body_types": sorted(all_body_types)
+        }
+    }
+
+@api_router.get("/inventory/{vehicle_id}")
+async def get_public_vehicle_detail(vehicle_id: str):
+    """Get single vehicle detail (public)"""
+    vehicle = await db.inventory.find_one(
+        {"id": vehicle_id, "is_published": True},
+        {"_id": 0}
+    )
+    
+    if not vehicle:
+        raise HTTPException(status_code=404, detail="Fahrzeug nicht gefunden")
+    
+    # Get default contact info if not set on vehicle
+    settings = await db.settings.find_one({"type": "site_settings"}, {"_id": 0})
+    if settings:
+        if not vehicle.get("contact_name"):
+            vehicle["contact_name"] = settings.get("default_contact_name")
+        if not vehicle.get("contact_phone"):
+            vehicle["contact_phone"] = settings.get("default_contact_phone")
+        if not vehicle.get("contact_email"):
+            vehicle["contact_email"] = settings.get("default_contact_email")
+        if not vehicle.get("contact_address"):
+            vehicle["contact_address"] = settings.get("default_contact_address")
+        if not vehicle.get("contact_city"):
+            vehicle["contact_city"] = settings.get("default_contact_city")
+        if not vehicle.get("contact_zip"):
+            vehicle["contact_zip"] = settings.get("default_contact_zip")
+    
+    return vehicle
+
+# ==================== INVENTORY ROUTES (ADMIN) ====================
+
+@api_router.get("/admin/inventory")
+async def get_admin_inventory(
+    search: Optional[str] = None,
+    is_published: Optional[bool] = None,
+    is_sold: Optional[bool] = None,
+    page: int = 1,
+    limit: int = 50,
+    payload: dict = Depends(verify_token)
+):
+    """Get all inventory vehicles (admin only)"""
+    query = {}
+    
+    if is_published is not None:
+        query["is_published"] = is_published
+    if is_sold is not None:
+        query["is_sold"] = is_sold
+    
+    if search:
+        query["$or"] = [
+            {"id": {"$regex": search, "$options": "i"}},
+            {"brand": {"$regex": search, "$options": "i"}},
+            {"model": {"$regex": search, "$options": "i"}},
+            {"variant": {"$regex": search, "$options": "i"}}
+        ]
+    
+    skip = (page - 1) * limit
+    total = await db.inventory.count_documents(query)
+    vehicles = await db.inventory.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    
+    return {
+        "vehicles": vehicles,
+        "total": total,
+        "page": page,
+        "pages": (total + limit - 1) // limit if total > 0 else 1
+    }
+
+@api_router.get("/admin/inventory/{vehicle_id}")
+async def get_admin_vehicle_detail(vehicle_id: str, payload: dict = Depends(verify_token)):
+    """Get single vehicle detail (admin only)"""
+    vehicle = await db.inventory.find_one({"id": vehicle_id}, {"_id": 0})
+    
+    if not vehicle:
+        raise HTTPException(status_code=404, detail="Fahrzeug nicht gefunden")
+    
+    return vehicle
+
+@api_router.post("/admin/inventory")
+async def create_inventory_vehicle(
+    vehicle_data: InventoryVehicleCreate,
+    payload: dict = Depends(verify_token)
+):
+    """Create a new inventory vehicle (admin only)"""
+    try:
+        vehicle_id = await generate_inventory_id()
+        
+        vehicle = InventoryVehicle(**vehicle_data.model_dump())
+        vehicle.id = vehicle_id
+        
+        doc = vehicle.model_dump()
+        doc['created_at'] = doc['created_at'].isoformat()
+        doc['updated_at'] = doc['updated_at'].isoformat()
+        
+        await db.inventory.insert_one(doc)
+        
+        logger.info(f"New inventory vehicle created: {vehicle.brand} {vehicle.model} (ID: {vehicle.id})")
+        return {"success": True, "id": vehicle.id, "message": "Fahrzeug erfolgreich erstellt"}
+    
+    except Exception as e:
+        logger.error(f"Inventory creation error: {e}")
+        raise HTTPException(status_code=500, detail="Fehler beim Erstellen des Fahrzeugs")
+
+@api_router.put("/admin/inventory/{vehicle_id}")
+async def update_inventory_vehicle(
+    vehicle_id: str,
+    update_data: InventoryVehicleUpdate,
+    payload: dict = Depends(verify_token)
+):
+    """Update an inventory vehicle (admin only)"""
+    update_dict = {k: v for k, v in update_data.model_dump().items() if v is not None}
+    update_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.inventory.update_one(
+        {"id": vehicle_id},
+        {"$set": update_dict}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Fahrzeug nicht gefunden")
+    
+    logger.info(f"Inventory vehicle updated: {vehicle_id}")
+    return {"success": True, "message": "Fahrzeug aktualisiert"}
+
+@api_router.delete("/admin/inventory/{vehicle_id}")
+async def delete_inventory_vehicle(vehicle_id: str, payload: dict = Depends(verify_token)):
+    """Delete an inventory vehicle (admin only)"""
+    vehicle = await db.inventory.find_one({"id": vehicle_id}, {"_id": 0})
+    
+    if not vehicle:
+        raise HTTPException(status_code=404, detail="Fahrzeug nicht gefunden")
+    
+    # Delete associated photos
+    for photo in vehicle.get('photos', []):
+        try:
+            filepath = UPLOAD_DIR / photo
+            if filepath.exists():
+                filepath.unlink()
+        except Exception as e:
+            logger.warning(f"Could not delete photo {photo}: {e}")
+    
+    result = await db.inventory.delete_one({"id": vehicle_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Fahrzeug nicht gefunden")
+    
+    logger.info(f"Inventory vehicle deleted: {vehicle_id}")
+    return {"success": True, "message": "Fahrzeug gelöscht"}
+
+@api_router.get("/admin/inventory-stats")
+async def get_inventory_stats(payload: dict = Depends(verify_token)):
+    """Get inventory statistics (admin only)"""
+    total = await db.inventory.count_documents({})
+    published = await db.inventory.count_documents({"is_published": True, "is_sold": False})
+    sold = await db.inventory.count_documents({"is_sold": True})
+    reserved = await db.inventory.count_documents({"is_reserved": True, "is_sold": False})
+    drafts = await db.inventory.count_documents({"is_published": False})
+    
+    return {
+        "total": total,
+        "published": published,
+        "sold": sold,
+        "reserved": reserved,
+        "drafts": drafts
+    }
+
+# ==================== SETTINGS ROUTES ====================
+
+@api_router.get("/admin/settings")
+async def get_settings(payload: dict = Depends(verify_token)):
+    """Get site settings (admin only)"""
+    settings = await db.settings.find_one({"type": "site_settings"}, {"_id": 0})
+    if not settings:
+        return {
+            "default_contact_name": "",
+            "default_contact_phone": "",
+            "default_contact_email": "",
+            "default_contact_address": "",
+            "default_contact_city": "",
+            "default_contact_zip": ""
+        }
+    return settings
+
+@api_router.put("/admin/settings")
+async def update_settings(settings: SiteSettings, payload: dict = Depends(verify_token)):
+    """Update site settings (admin only)"""
+    await db.settings.update_one(
+        {"type": "site_settings"},
+        {"$set": {**settings.model_dump(), "type": "site_settings"}},
+        upsert=True
+    )
+    logger.info("Site settings updated")
+    return {"success": True, "message": "Einstellungen gespeichert"}
+
 # ==================== STATIC FILES ====================
 
 app.mount("/api/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
