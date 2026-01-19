@@ -208,10 +208,6 @@ const CarSubmissionForm = () => {
           toast.error("Bitte akzeptieren Sie die Konditionen");
           return false;
         }
-        if (!formData.captcha_answer) {
-          toast.error("Bitte lösen Sie die Rechenaufgabe");
-          return false;
-        }
         break;
       default:
         return true;
@@ -271,10 +267,8 @@ const CarSubmissionForm = () => {
         },
         features: formData.features,
         description: formData.description || null,
-        // Anti-spam fields
+        // Anti-spam field (honeypot)
         honeypot: formData.honeypot,
-        form_token: captchaData.form_token,
-        captcha_answer: parseInt(formData.captcha_answer),
       };
 
       const response = await axios.post(`${API}/cars`, submitData);
@@ -283,8 +277,6 @@ const CarSubmissionForm = () => {
       console.error("Submit error:", error);
       if (error.response?.data?.detail) {
         toast.error(error.response.data.detail);
-        // Refresh captcha on error
-        fetchCaptcha();
       } else {
         toast.error("Fehler beim Einreichen. Bitte versuchen Sie es erneut.");
       }
