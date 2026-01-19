@@ -454,51 +454,56 @@ const AdminInventoryForm = () => {
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Photos Section */}
           <section className="bg-white rounded-2xl p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
               <ImageIcon className="w-5 h-5 text-orange-500" />
               Fotos (max. 40)
             </h2>
+            <p className="text-sm text-slate-500 mb-4">
+              <GripVertical className="w-4 h-4 inline-block mr-1" />
+              Bilder per Drag & Drop neu anordnen. Das erste Bild wird als Hauptbild verwendet.
+            </p>
             
             <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3">
               {formData.photos.map((photo, index) => (
-                <div key={index} className="relative group aspect-square rounded-lg overflow-hidden bg-slate-100">
+                <div 
+                  key={photo} 
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragOver={(e) => handleDragOver(e, index)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, index)}
+                  onDragEnd={handleDragEnd}
+                  className={`relative group aspect-square rounded-lg overflow-hidden bg-slate-100 cursor-grab active:cursor-grabbing transition-all ${
+                    draggedIndex === index ? 'opacity-50 scale-95' : ''
+                  } ${
+                    dragOverIndex === index ? 'ring-2 ring-orange-500 ring-offset-2' : ''
+                  }`}
+                >
                   <img
                     src={`${API_URL}/api/uploads/${photo}`}
                     alt={`Foto ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover pointer-events-none"
                   />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
-                    {index > 0 && (
+                    <div className="absolute top-1 right-1">
                       <button
                         type="button"
-                        onClick={() => movePhoto(index, index - 1)}
-                        className="p-1.5 bg-white rounded-full text-slate-700 hover:bg-slate-100"
+                        onClick={() => removePhoto(index)}
+                        className="p-1.5 bg-red-500 rounded-full text-white hover:bg-red-600"
                       >
-                        ←
+                        <X className="w-4 h-4" />
                       </button>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => removePhoto(index)}
-                      className="p-1.5 bg-red-500 rounded-full text-white hover:bg-red-600"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                    {index < formData.photos.length - 1 && (
-                      <button
-                        type="button"
-                        onClick={() => movePhoto(index, index + 1)}
-                        className="p-1.5 bg-white rounded-full text-slate-700 hover:bg-slate-100"
-                      >
-                        →
-                      </button>
-                    )}
+                    </div>
+                    <GripVertical className="w-6 h-6 text-white" />
                   </div>
                   {index === 0 && (
-                    <span className="absolute top-1 left-1 px-1.5 py-0.5 bg-orange-500 text-white text-xs rounded">
+                    <span className="absolute bottom-1 left-1 px-1.5 py-0.5 bg-orange-500 text-white text-xs rounded font-medium">
                       Hauptbild
                     </span>
                   )}
+                  <span className="absolute top-1 left-1 px-1.5 py-0.5 bg-black/60 text-white text-xs rounded">
+                    {index + 1}
+                  </span>
                 </div>
               ))}
               
