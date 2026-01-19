@@ -255,6 +255,12 @@ const BestandDetail = () => {
 
                 {/* Badges */}
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                  {isNewArrival(vehicle.created_at) && (
+                    <span className="px-3 py-1.5 bg-emerald-500 text-white text-sm font-semibold rounded-full flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      Neu eingetroffen
+                    </span>
+                  )}
                   {vehicle.featured && (
                     <span className="px-3 py-1.5 bg-orange-500 text-white text-sm font-semibold rounded-full">
                       Top-Angebot
