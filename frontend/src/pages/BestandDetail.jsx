@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { 
   Car, ArrowLeft, Phone, Mail, MapPin, Calendar, Gauge, Fuel, 
   Settings2, Cog, Palette, Users, Shield, FileCheck, Leaf,
   Check, X, ChevronLeft, ChevronRight, Share2, Heart,
-  DoorOpen, Zap, Droplets, ThermometerSun
+  DoorOpen, Zap, Droplets, ThermometerSun, Copy, Sparkles,
+  Printer
 } from "lucide-react";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -17,6 +19,15 @@ const formatMileage = (mileage) => {
   return new Intl.NumberFormat('de-DE').format(mileage) + ' km';
 };
 
+// Check if vehicle is new (created within last 7 days)
+const isNewArrival = (createdAt) => {
+  if (!createdAt) return false;
+  const created = new Date(createdAt);
+  const now = new Date();
+  const diffDays = (now - created) / (1000 * 60 * 60 * 24);
+  return diffDays <= 7;
+};
+
 const BestandDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -26,6 +37,36 @@ const BestandDetail = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAllFeatures, setShowAllFeatures] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    const title = vehicle ? `${vehicle.brand} ${vehicle.model} - ${formatPrice(vehicle.price)}` : 'Fahrzeug';
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+      } catch (err) {
+        // User cancelled or error
+        if (err.name !== 'AbortError') {
+          copyToClipboard(url);
+        }
+      }
+    } else {
+      copyToClipboard(url);
+    }
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      toast.success('Link in Zwischenablage kopiert!');
+    }).catch(() => {
+      toast.error('Link konnte nicht kopiert werden');
+    });
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   useEffect(() => {
     const fetchVehicle = async () => {
