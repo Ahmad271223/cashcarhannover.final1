@@ -201,10 +201,17 @@ const Bestand = () => {
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors font-medium"
+              className={`flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl transition-colors font-medium ${
+                showFilters ? 'bg-white text-slate-900' : 'bg-white/10 hover:bg-white/20 text-white'
+              }`}
             >
               <Filter className="w-5 h-5" />
-              Filter {hasActiveFilters && <span className="w-2 h-2 rounded-full bg-orange-500"></span>}
+              Filter 
+              {activeFilterCount > 0 && (
+                <span className="w-5 h-5 rounded-full bg-orange-500 text-white text-xs flex items-center justify-center">
+                  {activeFilterCount}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -214,17 +221,19 @@ const Bestand = () => {
       {showFilters && (
         <div className="bg-white border-b border-slate-200 shadow-lg">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
               {/* Brand Filter */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Marke</label>
                 <select
                   value={selectedBrand}
                   onChange={(e) => setSelectedBrand(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
+                    selectedBrand ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                  }`}
                 >
                   <option value="">Alle Marken</option>
-                  {filters.brands.map(brand => (
+                  {BRANDS.map(brand => (
                     <option key={brand} value={brand}>{brand}</option>
                   ))}
                 </select>
@@ -236,10 +245,12 @@ const Bestand = () => {
                 <select
                   value={selectedFuelType}
                   onChange={(e) => setSelectedFuelType(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
+                    selectedFuelType ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                  }`}
                 >
-                  <option value="">Alle</option>
-                  {filters.fuel_types.map(type => (
+                  <option value="">Alle Kraftstoffe</option>
+                  {FUEL_TYPES.map(type => (
                     <option key={type} value={type}>{type}</option>
                   ))}
                 </select>
@@ -251,11 +262,30 @@ const Bestand = () => {
                 <select
                   value={selectedBodyType}
                   onChange={(e) => setSelectedBodyType(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
+                    selectedBodyType ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                  }`}
                 >
-                  <option value="">Alle</option>
-                  {filters.body_types.map(type => (
+                  <option value="">Alle Typen</option>
+                  {BODY_TYPES.map(type => (
                     <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Year Filter */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Erstzulassung</label>
+                <select
+                  value={yearMin}
+                  onChange={(e) => setYearMin(e.target.value)}
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
+                    yearMin ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                  }`}
+                >
+                  <option value="">Beliebig</option>
+                  {YEAR_RANGES.map(range => (
+                    <option key={range.value} value={range.value}>{range.label}</option>
                   ))}
                 </select>
               </div>
@@ -266,35 +296,31 @@ const Bestand = () => {
                 <select
                   value={priceMax}
                   onChange={(e) => setPriceMax(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
+                    priceMax ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                  }`}
                 >
                   <option value="">Beliebig</option>
-                  <option value="5000">5.000 €</option>
-                  <option value="10000">10.000 €</option>
-                  <option value="15000">15.000 €</option>
-                  <option value="20000">20.000 €</option>
-                  <option value="30000">30.000 €</option>
-                  <option value="50000">50.000 €</option>
-                  <option value="75000">75.000 €</option>
-                  <option value="100000">100.000 €</option>
+                  {PRICE_RANGES.map(range => (
+                    <option key={range.value} value={range.value}>{range.label}</option>
+                  ))}
                 </select>
               </div>
 
               {/* Max Mileage Filter */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">KM bis</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Kilometerstand</label>
                 <select
                   value={mileageMax}
                   onChange={(e) => setMileageMax(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
+                    mileageMax ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                  }`}
                 >
                   <option value="">Beliebig</option>
-                  <option value="10000">10.000 km</option>
-                  <option value="25000">25.000 km</option>
-                  <option value="50000">50.000 km</option>
-                  <option value="75000">75.000 km</option>
-                  <option value="100000">100.000 km</option>
-                  <option value="150000">150.000 km</option>
+                  {MILEAGE_RANGES.map(range => (
+                    <option key={range.value} value={range.value}>{range.label}</option>
+                  ))}
                 </select>
               </div>
 
@@ -320,7 +346,7 @@ const Bestand = () => {
                 className="mt-4 flex items-center gap-2 text-sm text-orange-600 hover:text-orange-700 font-medium"
               >
                 <X className="w-4 h-4" />
-                Alle Filter zurücksetzen
+                Alle Filter zurücksetzen ({activeFilterCount})
               </button>
             )}
           </div>
