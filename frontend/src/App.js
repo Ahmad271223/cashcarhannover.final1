@@ -8,6 +8,9 @@ import SuccessPage from "@/pages/SuccessPage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminCarDetail from "@/pages/AdminCarDetail";
+import AdminInventoryForm from "@/pages/AdminInventoryForm";
+import Bestand from "@/pages/Bestand";
+import BestandDetail from "@/pages/BestandDetail";
 import Impressum from "@/pages/Impressum";
 import Datenschutz from "@/pages/Datenschutz";
 import AGB from "@/pages/AGB";
@@ -25,9 +28,13 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/verkaufen" element={<CarSubmissionForm />} />
           <Route path="/erfolg" element={<SuccessPage />} />
+          <Route path="/bestand" element={<Bestand />} />
+          <Route path="/bestand/:id" element={<BestandDetail />} />
           <Route path={`/${ADMIN_PATH}`} element={<AdminLogin />} />
           <Route path={`/${ADMIN_PATH}/dashboard`} element={<AdminDashboard />} />
           <Route path={`/${ADMIN_PATH}/cars/:id`} element={<AdminCarDetail />} />
+          <Route path={`/${ADMIN_PATH}/inventory/new`} element={<AdminInventoryForm />} />
+          <Route path={`/${ADMIN_PATH}/inventory/:id`} element={<AdminInventoryForm />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/datenschutz" element={<Datenschutz />} />
           <Route path="/agb" element={<AGB />} />
