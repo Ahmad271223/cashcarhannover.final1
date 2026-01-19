@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { 
   Car, ArrowLeft, Save, Trash2, Eye, Upload, X, Plus,
-  Image as ImageIcon, Loader2, Check, AlertCircle
+  Image as ImageIcon, Loader2, Check, AlertCircle, GripVertical
 } from "lucide-react";
 import { toast } from "sonner";
 
