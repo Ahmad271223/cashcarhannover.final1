@@ -166,6 +166,23 @@ const BestandDetail = () => {
                 <ArrowLeft className="w-4 h-4" />
                 Zurück zum Bestand
               </Link>
+              
+              {/* Share & Print Buttons */}
+              <button
+                onClick={handleShare}
+                className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+                title="Teilen"
+              >
+                <Share2 className="w-5 h-5" />
+              </button>
+              <button
+                onClick={handlePrint}
+                className="hidden sm:block p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors print:hidden"
+                title="Drucken"
+              >
+                <Printer className="w-5 h-5" />
+              </button>
+              
               {vehicle.contact_phone && (
                 <a 
                   href={`tel:${vehicle.contact_phone}`}
