@@ -72,6 +72,7 @@ const AdminLogin = () => {
                   onChange={(e) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
                   placeholder="admin"
                   className="h-12 pl-10 bg-slate-50"
+                  autoComplete="username"
                   required
                 />
               </div>
@@ -89,6 +90,7 @@ const AdminLogin = () => {
                   onChange={(e) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
                   placeholder="••••••••"
                   className="h-12 pl-10 bg-slate-50"
+                  autoComplete="current-password"
                   required
                 />
               </div>
