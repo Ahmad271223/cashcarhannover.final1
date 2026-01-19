@@ -375,6 +375,17 @@ async def generate_car_id() -> str:
         if not existing:
             return car_id
 
+async def generate_inventory_id() -> str:
+    """Generate a unique inventory ID: 6 numbers + 3 letters (e.g., 123456ABC)"""
+    while True:
+        numbers = ''.join(random.choices(string.digits, k=6))
+        letters = ''.join(random.choices(string.ascii_uppercase, k=3))
+        inv_id = f"{numbers}{letters}"
+        
+        existing = await db.inventory.find_one({"id": inv_id})
+        if not existing:
+            return inv_id
+
 # ==================== CAPTCHA FUNCTIONS ====================
 
 def generate_captcha_token(timestamp: int) -> str:
