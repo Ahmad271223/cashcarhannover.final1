@@ -116,20 +116,21 @@ const LandingPage = () => {
               <Link to="/verkaufen">
                 <Button 
                   data-testid="hero-main-cta"
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-lg shadow-lg btn-orange-glow transition-all active:scale-95 text-lg"
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-lg shadow-lg btn-orange-glow transition-all active:scale-95 text-lg w-full sm:w-auto"
                 >
                   Fahrzeug einreichen
                   <ChevronRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
-              <a href="#ablauf">
+              <Link to="/bestand">
                 <Button 
                   variant="outline" 
-                  className="border-slate-200 text-slate-700 hover:bg-slate-50 px-8 py-4 rounded-lg text-lg"
+                  className="border-slate-300 text-slate-700 hover:bg-slate-50 px-8 py-4 rounded-lg text-lg w-full sm:w-auto"
                 >
-                  So funktioniert's
+                  <Car className="mr-2 w-5 h-5" />
+                  Fahrzeugbestand
                 </Button>
-              </a>
+              </Link>
             </div>
             <div className="mt-8 flex items-center gap-6 text-sm text-slate-500">
               <div className="flex items-center gap-2">
