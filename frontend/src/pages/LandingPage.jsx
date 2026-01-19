@@ -597,7 +597,7 @@ const LandingPage = () => {
               <div className="space-y-2 text-slate-400 text-sm">
                 <p className="flex items-center gap-2">
                   <Phone className="w-4 h-4" />
-                  +49 178 3563025
+                  +49 123 4567890
                 </p>
                 <p className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
@@ -608,6 +608,7 @@ const LandingPage = () => {
             <div>
               <h4 className="font-semibold mb-4">Links</h4>
               <ul className="space-y-2 text-slate-400 text-sm">
+                <li><Link to="/bestand" className="hover:text-white transition-colors">Fahrzeugbestand</Link></li>
                 <li><a href="#vorteile" className="hover:text-white transition-colors">Vorteile</a></li>
                 <li><a href="#ablauf" className="hover:text-white transition-colors">So funktioniert's</a></li>
                 <li><Link to="/verkaufen" className="hover:text-white transition-colors">Fahrzeug verkaufen</Link></li>
