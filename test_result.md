@@ -346,7 +346,65 @@ backend:
         - comment: "Security working correctly. Admin login with wrong password returns 401 unauthorized status."
 
 frontend:
-  # No frontend testing required for this task
+  - task: "Homepage Loading and Navigation"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/LandingPage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Testing homepage loading, Fahrzeugbestand button visibility, and mobile navigation functionality"
+
+  - task: "Inventory Page (/bestand) - Filters and Search"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/Bestand.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Testing inventory page loading, filter functionality (Marke, Kraftstoff, Fahrzeugtyp), and search functionality"
+
+  - task: "Admin Login (/verwaltung-x7k9m2)"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/AdminLogin.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Testing admin login page loading, authentication with admin/admin123 credentials, and redirect to dashboard"
+
+  - task: "Admin Dashboard - Tabs and Features"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/AdminDashboard.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Testing admin dashboard tabs (Kundenanfragen, Fahrzeugbestand), new listing creation, and settings modal functionality"
+
+  - task: "Customer Form (/verkaufen) - Multi-step Navigation"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/CarSubmissionForm.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Testing customer form loading and multi-step navigation through all 7 steps of the car submission process"
 
 metadata:
   created_by: "testing_agent"
