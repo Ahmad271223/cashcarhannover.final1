@@ -948,6 +948,180 @@ class AutoVerkaufAPITester:
         
         return self.tests_passed == self.tests_run
 
+    def run_production_ready_test(self):
+        """Run complete production-ready test as requested"""
+        self.log("🚀 Starting CashCar App Production-Ready Test")
+        self.log(f"Testing against: {self.base_url}")
+        
+        start_time = time.time()
+        
+        # 1. Public endpoints
+        self.log("\n=== 1. TESTING PUBLIC ENDPOINTS ===")
+        self.test_health_check()
+        self.test_brands_endpoint()
+        
+        # Test public inventory
+        success_inventory, _ = self.run_test(
+            "GET /api/inventory - Public Vehicle Inventory",
+            "GET",
+            "inventory",
+            200
+        )
+        
+        # Test file upload with a real test image
+        test_image = BytesIO(b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\tpHYs\x00\x00\x0b\x13\x00\x00\x0b\x13\x01\x00\x9a\x9c\x18\x00\x00\x00\nIDATx\x9cc\xf8\x00\x00\x00\x01\x00\x01\x00\x00\x00\x00IEND\xaeB`\x82')
+        test_image.name = "test.png"
+        files = {'file': ('test.png', test_image, 'image/png')}
+        
+        success_upload, _ = self.run_test(
+            "POST /api/upload - Image Upload",
+            "POST",
+            "upload",
+            200,
+            files=files
+        )
+        
+        # 2. Customer form testing
+        self.log("\n=== 2. TESTING CUSTOMER FORM ===")
+        car_id = self.test_car_submission()
+        self.test_honeypot_protection()
+        
+        # 3. Admin area testing
+        self.log("\n=== 3. TESTING ADMIN AREA ===")
+        if self.test_admin_login():
+            # Test all admin endpoints
+            self.test_inventory_settings()  # GET and PUT /api/admin/settings
+            
+            # Test inventory CRUD
+            vehicle_id = self.test_inventory_crud_single()  # POST, GET, PUT /api/admin/inventory
+            
+            # Test admin cars endpoint
+            success_admin_cars, _ = self.run_test(
+                "GET /api/admin/cars - Customer Requests",
+                "GET",
+                "admin/cars",
+                200
+            )
+            
+            # Test admin stats
+            success_admin_stats, _ = self.run_test(
+                "GET /api/admin/stats - Statistics",
+                "GET",
+                "admin/stats",
+                200
+            )
+        
+        # 4. Data separation testing
+        self.log("\n=== 4. TESTING DATA SEPARATION ===")
+        self.test_data_separation()
+        
+        # 5. Security testing
+        self.log("\n=== 5. TESTING SECURITY ===")
+        self.test_security_unauthorized_access()
+        self.test_security_wrong_password()
+        
+        end_time = time.time()
+        duration = end_time - start_time
+        
+        # Print results
+        self.log("=" * 60)
+        self.log(f"📊 CashCar App Production-Ready Test Results")
+        self.log(f"Tests run: {self.tests_run}")
+        self.log(f"Tests passed: {self.tests_passed}")
+        self.log(f"Tests failed: {self.tests_run - self.tests_passed}")
+        self.log(f"Success rate: {(self.tests_passed/self.tests_run*100):.1f}%")
+        self.log(f"Duration: {duration:.1f} seconds")
+        self.log("=" * 60)
+        
+        return self.tests_passed == self.tests_run
+
+    def test_inventory_crud_single(self):
+        """Test inventory CRUD operations for production test"""
+        self.log("=== Testing Inventory CRUD (Production Test) ===")
+        
+        if not self.token:
+            self.log("No admin token available", "ERROR")
+            return None
+        
+        # Create vehicle
+        vehicle_data = {
+            "brand": "BMW",
+            "model": "X5",
+            "variant": "xDrive40i",
+            "first_registration": "03/2021",
+            "mileage": 45000,
+            "fuel_type": "Benzin",
+            "transmission": "Automatik",
+            "power_hp": 340,
+            "body_type": "SUV",
+            "doors": "4/5",
+            "exterior_color": "Alpinweiß",
+            "price": 52900.00,
+            "is_published": True,
+            "features": ["Navigation", "Panoramadach", "Leder"]
+        }
+        
+        success1, response1 = self.run_test(
+            "POST /api/admin/inventory - Create Vehicle",
+            "POST",
+            "admin/inventory",
+            200,
+            data=vehicle_data
+        )
+        
+        if not success1:
+            return None
+        
+        vehicle_id = response1.get('id') if isinstance(response1, dict) else None
+        if not vehicle_id:
+            return None
+        
+        self.log(f"✅ Vehicle created with ID: {vehicle_id}")
+        
+        # Get admin inventory list
+        success2, _ = self.run_test(
+            "GET /api/admin/inventory - Admin Inventory List",
+            "GET",
+            "admin/inventory",
+            200
+        )
+        
+        # Get single vehicle (admin)
+        success3, _ = self.run_test(
+            f"GET /api/admin/inventory/{vehicle_id} - Single Vehicle (Admin)",
+            "GET",
+            f"admin/inventory/{vehicle_id}",
+            200
+        )
+        
+        # Get single vehicle (public)
+        success4, _ = self.run_test(
+            f"GET /api/inventory/{vehicle_id} - Single Vehicle (Public)",
+            "GET",
+            f"inventory/{vehicle_id}",
+            200
+        )
+        
+        # Update vehicle
+        update_data = {"price": 49900.00}
+        success5, _ = self.run_test(
+            f"PUT /api/admin/inventory/{vehicle_id} - Update Vehicle",
+            "PUT",
+            f"admin/inventory/{vehicle_id}",
+            200,
+            data=update_data
+        )
+        
+        # Cleanup - delete vehicle
+        success6, _ = self.run_test(
+            f"DELETE /api/admin/inventory/{vehicle_id} - Delete Vehicle",
+            "DELETE",
+            f"admin/inventory/{vehicle_id}",
+            200
+        )
+        
+        return vehicle_id if all([success1, success2, success3, success4, success5, success6]) else None
+
 def main():
     """Main test runner"""
     import sys
