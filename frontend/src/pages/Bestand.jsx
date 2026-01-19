@@ -118,7 +118,6 @@ const Bestand = () => {
       const data = await response.json();
       
       setVehicles(data.vehicles || []);
-      setFilters(data.filters || { brands: [], fuel_types: [], body_types: [] });
       setPagination({ page: data.page, pages: data.pages, total: data.total });
     } catch (error) {
       console.error('Error fetching vehicles:', error);
@@ -130,7 +129,7 @@ const Bestand = () => {
   useEffect(() => {
     fetchVehicles(1);
     // eslint-disable-next-line
-  }, [searchTerm, selectedBrand, selectedFuelType, selectedBodyType, priceMax, mileageMax, sortBy]);
+  }, [searchTerm, selectedBrand, selectedFuelType, selectedBodyType, priceMax, mileageMax, yearMin, sortBy]);
 
   const clearFilters = () => {
     setSearchTerm('');
@@ -139,10 +138,12 @@ const Bestand = () => {
     setSelectedBodyType('');
     setPriceMax('');
     setMileageMax('');
+    setYearMin('');
     setSortBy('newest');
   };
 
-  const hasActiveFilters = searchTerm || selectedBrand || selectedFuelType || selectedBodyType || priceMax || mileageMax;
+  const activeFilterCount = [searchTerm, selectedBrand, selectedFuelType, selectedBodyType, priceMax, mileageMax, yearMin].filter(Boolean).length;
+  const hasActiveFilters = activeFilterCount > 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
