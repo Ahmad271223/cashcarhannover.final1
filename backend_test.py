@@ -851,12 +851,20 @@ class AutoVerkaufAPITester:
             "password": "wrongpassword"
         }
         
+        # Temporarily remove token to test login
+        original_token = self.token
+        self.token = None
+        
         success, response = self.run_test(
             "Admin Login with Wrong Password",
             "POST",
             "admin/login",
-            401
+            401,
+            data=wrong_credentials
         )
+        
+        # Restore token
+        self.token = original_token
         
         if success:
             self.log("✅ Security test passed - wrong password returns 401")
