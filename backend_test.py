@@ -952,10 +952,17 @@ def main():
     """Main test runner"""
     import sys
     
-    # Check if we should run only inventory tests
-    if len(sys.argv) > 1 and sys.argv[1] == "inventory":
-        tester = AutoVerkaufAPITester()
-        success = tester.run_inventory_tests_only()
+    # Check command line arguments
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "inventory":
+            tester = AutoVerkaufAPITester()
+            success = tester.run_inventory_tests_only()
+        elif sys.argv[1] == "production":
+            tester = AutoVerkaufAPITester()
+            success = tester.run_production_ready_test()
+        else:
+            print("Usage: python backend_test.py [inventory|production]")
+            return 1
     else:
         tester = AutoVerkaufAPITester()
         success = tester.run_all_tests()
