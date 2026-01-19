@@ -132,14 +132,25 @@ const AdminInventoryForm = () => {
     featured: false
   });
 
-  const getToken = () => localStorage.getItem('adminToken');
+  const getToken = () => localStorage.getItem('admin_token');
+
+  // Check authentication
+  useEffect(() => {
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      navigate(`/${ADMIN_PATH}/dashboard`);
+    }
+  }, [navigate]);
 
   // Fetch settings for default contact info
   useEffect(() => {
+    const token = getToken();
+    if (!token) return;
+    
     const fetchSettings = async () => {
       try {
         const response = await fetch(`${API_URL}/api/admin/settings`, {
-          headers: { 'Authorization': `Bearer ${getToken()}` }
+          headers: { 'Authorization': `Bearer ${token}` }
         });
         if (response.ok) {
           const data = await response.json();
