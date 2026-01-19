@@ -316,7 +316,7 @@ const LandingPage = () => {
           >
             <p className="text-sm text-orange-500 uppercase tracking-wider font-medium mb-4">In 3 Schritten</p>
             <h2 className="font-heading text-3xl md:text-4xl font-semibold tracking-tight text-slate-900">
-              So funktioniert's
+              So funktioniert&apos;s
             </h2>
           </motion.div>
 
