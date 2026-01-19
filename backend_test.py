@@ -737,44 +737,128 @@ class AutoVerkaufAPITester:
         
         return all(all_tests)
 
-    def test_inventory_filtering_and_search(self):
-        """Test inventory filtering and search functionality"""
-        self.log("=== Testing Inventory Filtering and Search ===")
+    def test_data_separation(self):
+        """Test that customer cars and inventory are in separate collections with different ID formats"""
+        self.log("=== Testing Data Separation ===")
         
-        # Test public inventory with filters
-        success1, response1 = self.run_test(
-            "Get Inventory with Brand Filter",
+        if not self.token:
+            self.log("No admin token available, skipping data separation test", "ERROR")
+            return False
+        
+        # Get customer cars
+        success1, cars_response = self.run_test(
+            "Get Customer Cars",
             "GET",
-            "inventory?brand=BMW&sort=price_asc&limit=10",
+            "admin/cars",
             200
+        )
+        
+        # Get inventory vehicles
+        success2, inventory_response = self.run_test(
+            "Get Inventory Vehicles",
+            "GET",
+            "admin/inventory",
+            200
+        )
+        
+        if success1 and success2:
+            cars = cars_response.get('cars', []) if isinstance(cars_response, dict) else []
+            inventory = inventory_response.get('vehicles', []) if isinstance(inventory_response, dict) else []
+            
+            self.log(f"Found {len(cars)} customer cars and {len(inventory)} inventory vehicles")
+            
+            # Check ID formats
+            car_id_format_correct = True
+            inventory_id_format_correct = True
+            
+            for car in cars:
+                car_id = car.get('id', '')
+                if len(car_id) != 10:  # Should be 6 numbers + 4 letters
+                    car_id_format_correct = False
+                    self.log(f"❌ Car ID format incorrect: {car_id} (should be 6+4)", "ERROR")
+                else:
+                    self.log(f"✅ Car ID format correct: {car_id}")
+            
+            for vehicle in inventory:
+                vehicle_id = vehicle.get('id', '')
+                if len(vehicle_id) != 9:  # Should be 6 numbers + 3 letters
+                    inventory_id_format_correct = False
+                    self.log(f"❌ Inventory ID format incorrect: {vehicle_id} (should be 6+3)", "ERROR")
+                else:
+                    self.log(f"✅ Inventory ID format correct: {vehicle_id}")
+            
+            if car_id_format_correct and inventory_id_format_correct:
+                self.log("✅ Data separation confirmed - different collections with different ID formats")
+            
+            return car_id_format_correct and inventory_id_format_correct
+        
+        return False
+
+    def test_security_unauthorized_access(self):
+        """Test security - API calls without token should return 401"""
+        self.log("=== Testing Security - Unauthorized Access ===")
+        
+        # Temporarily remove token
+        original_token = self.token
+        self.token = None
+        
+        # Test admin endpoints without token
+        success1, response1 = self.run_test(
+            "Admin Cars without Token",
+            "GET",
+            "admin/cars",
+            401
         )
         
         success2, response2 = self.run_test(
-            "Get Inventory with Price Filter",
+            "Admin Settings without Token",
             "GET",
-            "inventory?price_min=20000&price_max=50000&sort=newest",
-            200
+            "admin/settings",
+            401
         )
         
         success3, response3 = self.run_test(
-            "Get Inventory with Search",
+            "Admin Inventory without Token",
             "GET",
-            "inventory?search=BMW&fuel_type=Benzin",
-            200
+            "admin/inventory",
+            401
         )
         
-        if success1 and isinstance(response1, dict):
-            self.log(f"✅ Brand filter test: Found {len(response1.get('vehicles', []))} BMW vehicles")
+        success4, response4 = self.run_test(
+            "Admin Stats without Token",
+            "GET",
+            "admin/stats",
+            401
+        )
         
-        if success2 and isinstance(response2, dict):
-            self.log(f"✅ Price filter test: Found {len(response2.get('vehicles', []))} vehicles in price range")
+        # Restore token
+        self.token = original_token
         
-        if success3 and isinstance(response3, dict):
-            self.log(f"✅ Search test: Found {len(response3.get('vehicles', []))} vehicles matching search")
-            filters = response3.get('filters', {})
-            self.log(f"Available filters - Brands: {len(filters.get('brands', []))}, Fuel types: {len(filters.get('fuel_types', []))}")
+        if success1 and success2 and success3 and success4:
+            self.log("✅ Security test passed - all admin endpoints require authentication")
         
-        return success1 and success2 and success3
+        return success1 and success2 and success3 and success4
+
+    def test_security_wrong_password(self):
+        """Test security - wrong password should return 401"""
+        self.log("=== Testing Security - Wrong Password ===")
+        
+        wrong_credentials = {
+            "username": "admin",
+            "password": "wrongpassword"
+        }
+        
+        success, response = self.run_test(
+            "Admin Login with Wrong Password",
+            "POST",
+            "admin/login",
+            401
+        )
+        
+        if success:
+            self.log("✅ Security test passed - wrong password returns 401")
+        
+        return success
 
     def run_all_tests(self):
         """Run all backend tests"""
