@@ -30,8 +30,8 @@ const Impressum = () => {
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">Angaben gemäß § 5 TMG</h2>
               <p className="text-slate-600 leading-relaxed">
                 CashCar UG (haftungsbeschränkt)<br />
-                Baldurstraße 5<br />
-                30657 Hannover<br />
+                Musterstraße 123<br />
+                12345 Musterstadt<br />
                 Deutschland
               </p>
             </section>
@@ -39,7 +39,7 @@ const Impressum = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">Kontakt</h2>
               <p className="text-slate-600 leading-relaxed">
-                Telefon: +49 178 3563025<br />
+                Telefon: +49 123 4567890<br />
                 E-Mail: info@cashcar.de
               </p>
             </section>
@@ -47,7 +47,7 @@ const Impressum = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">Vertreten durch</h2>
               <p className="text-slate-600 leading-relaxed">
-                Geschäftsführer: Ahmad Fakih
+                Geschäftsführer: Max Mustermann
               </p>
             </section>
 
@@ -55,7 +55,7 @@ const Impressum = () => {
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">Registereintrag</h2>
               <p className="text-slate-600 leading-relaxed">
                 Eintragung im Handelsregister<br />
-                Registergericht: Amtsgericht Hannover<br />
+                Registergericht: Amtsgericht Musterstadt<br />
                 Registernummer: HRB 123456
               </p>
             </section>
@@ -71,9 +71,9 @@ const Impressum = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
               <p className="text-slate-600 leading-relaxed">
-                Ahmad Fakih<br />
-                Baldurstraße 5<br />
-                30657 Hannover
+                Max Mustermann<br />
+                Musterstraße 123<br />
+                12345 Musterstadt
               </p>
             </section>
 

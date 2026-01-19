@@ -68,9 +68,9 @@ const Datenschutz = () => {
               <p className="text-slate-600 leading-relaxed">
                 Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:<br /><br />
                 CashCar UG (haftungsbeschränkt)<br />
-                Baldurstraße 5<br />
-                30657 Hannover<br /><br />
-                Telefon: +49 178 3563025<br />
+                Musterstraße 123<br />
+                12345 Musterstadt<br /><br />
+                Telefon: +49 123 4567890<br />
                 E-Mail: info@cashcar.de
               </p>
             </section>
