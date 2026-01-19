@@ -52,6 +52,7 @@ const AdminCarDetail = () => {
       return;
     }
     fetchCar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, navigate]);
 
   const getAuthHeaders = () => ({
