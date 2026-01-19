@@ -102,6 +102,7 @@ const AdminDashboard = () => {
     }
     
     fetchSettings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, activeTab, filter, search, inventoryFilter, inventorySearch]);
 
   const getAuthHeaders = () => ({
