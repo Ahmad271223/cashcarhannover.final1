@@ -910,7 +910,10 @@ async def get_public_inventory(
     if mileage_max:
         query["mileage"] = {"$lte": mileage_max}
     if year_min:
-        query["first_registration"] = {"$regex": f".*/{year_min}|.*/{year_min + 1}|.*/{year_min + 2}|.*/{year_min + 3}|.*/{year_min + 4}|.*/{year_min + 5}"}
+        # Filter für Erstzulassung ab dem Jahr (Format: MM/YYYY)
+        # Sucht nach allen Jahren >= year_min
+        year_pattern = "|".join([f"/{y}" for y in range(year_min, 2030)])
+        query["first_registration"] = {"$regex": f"({year_pattern})$"}
     
     if search:
         query["$or"] = [
