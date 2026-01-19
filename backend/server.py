@@ -662,11 +662,6 @@ async def submit_car(request: Request, car_data: CarSubmissionCreate):
             # Return success to not reveal detection (but don't save)
             return {"success": True, "id": str(uuid.uuid4()), "message": "Fahrzeug erfolgreich eingereicht"}
         
-        # Anti-spam check 2: Form token validation (time-based)
-        if not car_data.form_token or not verify_captcha_token(car_data.form_token, min_seconds=10):
-            logger.warning(f"Invalid form token from {get_remote_address(request)}")
-            raise HTTPException(status_code=400, detail="Sicherheitsvalidierung fehlgeschlagen. Bitte laden Sie die Seite neu.")
-        
         # Generate unique car ID (6 numbers + 4 letters)
         car_id = await generate_car_id()
         
