@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { 
   Car, Search, Filter, ChevronDown, MapPin, Calendar, 
   Gauge, Fuel, Settings2, X, ArrowUpDown, Check,
-  Phone, ChevronLeft, ChevronRight
+  Phone, ChevronLeft, ChevronRight, Sparkles
 } from "lucide-react";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -14,6 +14,15 @@ const formatPrice = (price) => {
 
 const formatMileage = (mileage) => {
   return new Intl.NumberFormat('de-DE').format(mileage) + ' km';
+};
+
+// Check if vehicle is new (created within last 7 days)
+const isNewArrival = (createdAt) => {
+  if (!createdAt) return false;
+  const created = new Date(createdAt);
+  const now = new Date();
+  const diffDays = (now - created) / (1000 * 60 * 60 * 24);
+  return diffDays <= 7;
 };
 
 const Bestand = () => {
