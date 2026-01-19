@@ -153,6 +153,204 @@ class CarStatusUpdate(BaseModel):
     status: str
     admin_notes: Optional[str] = None
 
+# ==================== INVENTORY MODELS ====================
+
+class InventoryVehicle(BaseModel):
+    id: str = ""  # Will be set automatically (6 digits + 3 letters)
+    # Basic Info
+    brand: str
+    model: str
+    variant: Optional[str] = None
+    title: Optional[str] = None  # Custom title for the listing
+    
+    # Registration & Mileage
+    first_registration: str  # MM/YYYY format
+    mileage: int
+    
+    # Technical Data
+    fuel_type: str  # Benzin, Diesel, Elektro, Hybrid, etc.
+    transmission: str  # Schaltgetriebe, Automatik
+    power_hp: Optional[int] = None
+    power_kw: Optional[int] = None
+    engine_size: Optional[int] = None  # ccm
+    cylinders: Optional[int] = None
+    drive_type: Optional[str] = None  # Frontantrieb, Heckantrieb, Allrad
+    
+    # Body & Design
+    body_type: str  # Limousine, Kombi, SUV, Cabrio, etc.
+    doors: str  # 2/3, 4/5, 6/7
+    seats: Optional[int] = None
+    exterior_color: str
+    interior_color: Optional[str] = None
+    interior_material: Optional[str] = None  # Stoff, Teilleder, Leder
+    
+    # Condition & History
+    tuv_until: Optional[str] = None  # MM/YYYY
+    hu_au: Optional[str] = None  # HU/AU date
+    accident_free: bool = True
+    service_history: bool = False  # Scheckheft gepflegt
+    previous_owners: Optional[int] = None
+    non_smoker: bool = False
+    garage_kept: bool = False
+    
+    # Environmental
+    emission_class: Optional[str] = None  # Euro 1-6
+    environmental_badge: Optional[str] = None  # Grün, Gelb, Rot
+    co2_emission: Optional[int] = None  # g/km
+    fuel_consumption_combined: Optional[float] = None  # l/100km
+    fuel_consumption_city: Optional[float] = None
+    fuel_consumption_highway: Optional[float] = None
+    energy_efficiency: Optional[str] = None  # A+++ to G
+    
+    # Features & Equipment
+    features: List[str] = []  # List of equipment features
+    
+    # Media
+    photos: List[str] = []  # Up to 40 photos
+    video_url: Optional[str] = None
+    
+    # Pricing
+    price: float
+    price_negotiable: bool = False
+    vat_deductible: bool = False  # MwSt. ausweisbar
+    
+    # Description
+    description: Optional[str] = None
+    highlights: Optional[str] = None  # Short highlights text
+    
+    # Contact Info (customizable per listing or use defaults)
+    contact_name: Optional[str] = None
+    contact_phone: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_address: Optional[str] = None
+    contact_city: Optional[str] = None
+    contact_zip: Optional[str] = None
+    
+    # Status
+    is_published: bool = True
+    is_sold: bool = False
+    is_reserved: bool = False
+    featured: bool = False  # Featured/highlighted listing
+    
+    # Timestamps
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class InventoryVehicleCreate(BaseModel):
+    brand: str
+    model: str
+    variant: Optional[str] = None
+    title: Optional[str] = None
+    first_registration: str
+    mileage: int
+    fuel_type: str
+    transmission: str
+    power_hp: Optional[int] = None
+    power_kw: Optional[int] = None
+    engine_size: Optional[int] = None
+    cylinders: Optional[int] = None
+    drive_type: Optional[str] = None
+    body_type: str
+    doors: str
+    seats: Optional[int] = None
+    exterior_color: str
+    interior_color: Optional[str] = None
+    interior_material: Optional[str] = None
+    tuv_until: Optional[str] = None
+    hu_au: Optional[str] = None
+    accident_free: bool = True
+    service_history: bool = False
+    previous_owners: Optional[int] = None
+    non_smoker: bool = False
+    garage_kept: bool = False
+    emission_class: Optional[str] = None
+    environmental_badge: Optional[str] = None
+    co2_emission: Optional[int] = None
+    fuel_consumption_combined: Optional[float] = None
+    fuel_consumption_city: Optional[float] = None
+    fuel_consumption_highway: Optional[float] = None
+    energy_efficiency: Optional[str] = None
+    features: List[str] = []
+    photos: List[str] = []
+    video_url: Optional[str] = None
+    price: float
+    price_negotiable: bool = False
+    vat_deductible: bool = False
+    description: Optional[str] = None
+    highlights: Optional[str] = None
+    contact_name: Optional[str] = None
+    contact_phone: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_address: Optional[str] = None
+    contact_city: Optional[str] = None
+    contact_zip: Optional[str] = None
+    is_published: bool = True
+    is_sold: bool = False
+    is_reserved: bool = False
+    featured: bool = False
+
+class InventoryVehicleUpdate(BaseModel):
+    brand: Optional[str] = None
+    model: Optional[str] = None
+    variant: Optional[str] = None
+    title: Optional[str] = None
+    first_registration: Optional[str] = None
+    mileage: Optional[int] = None
+    fuel_type: Optional[str] = None
+    transmission: Optional[str] = None
+    power_hp: Optional[int] = None
+    power_kw: Optional[int] = None
+    engine_size: Optional[int] = None
+    cylinders: Optional[int] = None
+    drive_type: Optional[str] = None
+    body_type: Optional[str] = None
+    doors: Optional[str] = None
+    seats: Optional[int] = None
+    exterior_color: Optional[str] = None
+    interior_color: Optional[str] = None
+    interior_material: Optional[str] = None
+    tuv_until: Optional[str] = None
+    hu_au: Optional[str] = None
+    accident_free: Optional[bool] = None
+    service_history: Optional[bool] = None
+    previous_owners: Optional[int] = None
+    non_smoker: Optional[bool] = None
+    garage_kept: Optional[bool] = None
+    emission_class: Optional[str] = None
+    environmental_badge: Optional[str] = None
+    co2_emission: Optional[int] = None
+    fuel_consumption_combined: Optional[float] = None
+    fuel_consumption_city: Optional[float] = None
+    fuel_consumption_highway: Optional[float] = None
+    energy_efficiency: Optional[str] = None
+    features: Optional[List[str]] = None
+    photos: Optional[List[str]] = None
+    video_url: Optional[str] = None
+    price: Optional[float] = None
+    price_negotiable: Optional[bool] = None
+    vat_deductible: Optional[bool] = None
+    description: Optional[str] = None
+    highlights: Optional[str] = None
+    contact_name: Optional[str] = None
+    contact_phone: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_address: Optional[str] = None
+    contact_city: Optional[str] = None
+    contact_zip: Optional[str] = None
+    is_published: Optional[bool] = None
+    is_sold: Optional[bool] = None
+    is_reserved: Optional[bool] = None
+    featured: Optional[bool] = None
+
+# Settings model for default contact info
+class SiteSettings(BaseModel):
+    default_contact_name: Optional[str] = None
+    default_contact_phone: Optional[str] = None
+    default_contact_email: Optional[str] = None
+    default_contact_address: Optional[str] = None
+    default_contact_city: Optional[str] = None
+    default_contact_zip: Optional[str] = None
+
 class AdminLogin(BaseModel):
     username: str
     password: str
