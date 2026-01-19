@@ -80,7 +80,7 @@ const LandingPage = () => {
           <nav className="hidden md:flex items-center gap-8">
             <Link to="/bestand" className="text-slate-600 hover:text-slate-900 transition-colors font-medium">Fahrzeugbestand</Link>
             <a href="#vorteile" className="text-slate-600 hover:text-slate-900 transition-colors">Vorteile</a>
-            <a href="#ablauf" className="text-slate-600 hover:text-slate-900 transition-colors">So funktioniert's</a>
+            <a href="#ablauf" className="text-slate-600 hover:text-slate-900 transition-colors">So funktioniert&apos;s</a>
           </nav>
           
           <div className="flex items-center gap-3">
