@@ -795,40 +795,40 @@ class AutoVerkaufAPITester:
         return False
 
     def test_security_unauthorized_access(self):
-        """Test security - API calls without token should return 401"""
+        """Test security - API calls without token should return 401 or 403"""
         self.log("=== Testing Security - Unauthorized Access ===")
         
         # Temporarily remove token
         original_token = self.token
         self.token = None
         
-        # Test admin endpoints without token
+        # Test admin endpoints without token (expecting 401 or 403)
         success1, response1 = self.run_test(
             "Admin Cars without Token",
             "GET",
             "admin/cars",
-            401
+            403  # FastAPI returns 403 for missing auth
         )
         
         success2, response2 = self.run_test(
             "Admin Settings without Token",
             "GET",
             "admin/settings",
-            401
+            403  # FastAPI returns 403 for missing auth
         )
         
         success3, response3 = self.run_test(
             "Admin Inventory without Token",
             "GET",
             "admin/inventory",
-            401
+            403  # FastAPI returns 403 for missing auth
         )
         
         success4, response4 = self.run_test(
             "Admin Stats without Token",
             "GET",
             "admin/stats",
-            401
+            403  # FastAPI returns 403 for missing auth
         )
         
         # Restore token
@@ -842,6 +842,9 @@ class AutoVerkaufAPITester:
     def test_security_wrong_password(self):
         """Test security - wrong password should return 401"""
         self.log("=== Testing Security - Wrong Password ===")
+        
+        # Wait a bit to avoid rate limiting
+        time.sleep(1)
         
         wrong_credentials = {
             "username": "admin",
