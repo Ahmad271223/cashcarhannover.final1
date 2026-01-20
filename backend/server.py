@@ -9,6 +9,8 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
+import cloudinary
+import cloudinary.uploader
 import os
 import logging
 from pathlib import Path
@@ -50,6 +52,13 @@ UPLOAD_DIR = ROOT_DIR / 'uploads'
 UPLOAD_DIR.mkdir(exist_ok=True)
 MAX_UPLOAD_SIZE = int(os.environ.get('MAX_UPLOAD_SIZE_MB', 10)) * 1024 * 1024  # Default 10MB
 
+# Cloudinary Configuration
+cloudinary.config( 
+  cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME'), 
+  api_key = os.environ.get('CLOUDINARY_API_KEY'), 
+  api_secret = os.environ.get('CLOUDINARY_API_SECRET') 
+)
+
 # Rate limiter with in-memory storage
 limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
 
@@ -58,6 +67,16 @@ app = FastAPI(title="AutoVerkauf Pro API")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIMiddleware)
+
+# CORS Configuration
+origins = os.environ.get("CORS_ORIGINS", "http://localhost:3000").split(",")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
@@ -486,84 +505,29 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
         raise HTTPException(status_code=401, detail="Ungültiger Token")
 
 async def send_notification_email(car: CarSubmission):
-    """Send email notification for new car submission using Resend"""
-    resend_key = os.environ.get('RESEND_API_KEY')
-    admin_email = os.environ.get('ADMIN_EMAIL')
-    sender_email = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
-    
-    if not all([resend_key, admin_email]):
-        logger.warning("Resend not configured, skipping email notification")
-        return
-    
-    try:
-        import resend
-        resend.api_key = resend_key
-        
-        html_content = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: #1e293b; color: white; padding: 20px; border-radius: 10px 10px 0 0;">
-                <h2 style="margin: 0;">🚗 Neue Fahrzeug-Einreichung!</h2>
-                <p style="margin: 5px 0 0 0; opacity: 0.8;">ID: #{car.id}</p>
-            </div>
-            <div style="background: #f8fafc; padding: 20px; border: 1px solid #e2e8f0;">
-                <h3 style="color: #1e293b; margin-top: 0;">Fahrzeug</h3>
-                <p><strong>{car.brand} {car.model}</strong> ({car.first_registration})</p>
-                <p>Kilometerstand: {car.mileage:,} km</p>
-                <p>Kraftstoff: {car.fuel_type} | Getriebe: {car.transmission}</p>
-                <p>FIN: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">{car.vin}</code></p>
-                
-                <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;">
-                
-                <h3 style="color: #1e293b;">Preisvorstellung</h3>
-                <p style="font-size: 24px; margin: 5px 0;"><strong style="color: #f97316;">Wunschpreis: {car.pricing.desired_price:,.0f} €</strong></p>
-                <p style="font-size: 18px; margin: 5px 0;">Mindestpreis: {car.pricing.minimum_price:,.0f} €</p>
-                
-                <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;">
-                
-                <h3 style="color: #1e293b;">Kontakt</h3>
-                <p><strong>{car.contact.first_name} {car.contact.last_name}</strong></p>
-                <p>📞 <a href="tel:{car.contact.phone}">{car.contact.phone}</a></p>
-                <p>✉️ <a href="mailto:{car.contact.email}">{car.contact.email}</a></p>
-                <p>📍 {car.contact.city}</p>
-                
-                <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;">
-                
-                <p style="color: #64748b; font-size: 14px;">
-                    📷 {len(car.photos)} Fotos hochgeladen<br>
-                    📄 {len(car.documents)} Dokumente hochgeladen
-                </p>
-            </div>
-            <div style="background: #1e293b; color: white; padding: 15px; border-radius: 0 0 10px 10px; text-align: center;">
-                <p style="margin: 0; font-size: 14px;">CashCar UG - Fahrzeugvermittlung</p>
-            </div>
-        </div>
-        """
-        
-        resend.Emails.send({
-            "from": f"CashCar <{sender_email}>",
-            "to": [admin_email],
-            "subject": f"🚗 Neue Anfrage: {car.brand} {car.model} - #{car.id}",
-            "html": html_content
-        })
-        
-        logger.info(f"Email notification sent for car {car.id} to {admin_email}")
-    except Exception as e:
-        logger.error(f"Failed to send email: {e}")
+    """Log email notification (Resend skipped as per config)"""
+    admin_email = os.environ.get('ADMIN_EMAIL', 'info@cashcarhannover.de')
+    logger.info(f"EMAIL SIMULATION: New car submission {car.id} - Notification would be sent to {admin_email}")
 
 # ==================== INIT ADMIN ====================
 
 async def init_admin():
     """Create default admin if not exists"""
-    admin = await db.admins.find_one({"username": "admin"})
-    if not admin:
+    admin_email = os.environ.get('ADMIN_EMAIL', 'info@cashcarhannover.de')
+    
+    # Check if any admin exists
+    count = await db.admins.count_documents({})
+    if count == 0:
         password_hash = bcrypt.hashpw("admin123".encode(), bcrypt.gensalt()).decode()
         await db.admins.insert_one({
             "id": str(uuid.uuid4()),
-            "username": "admin",
+            "username": admin_email, # Use email as username
             "password_hash": password_hash,
             "created_at": datetime.now(timezone.utc).isoformat()
         })
-        logger.info("Default admin created: admin / admin123")
+        logger.info(f"Default admin created: {admin_email} / admin123")
+    else:
+        logger.info("Admin accounts already exist - skipping creation")
 
 # Create indexes for better performance
 async def create_indexes():
@@ -626,7 +590,7 @@ async def health():
 @api_router.post("/upload")
 @limiter.limit("30/minute")
 async def upload_file(request: Request, file: UploadFile = File(...)):
-    """Upload a single file (photo or document) with size validation"""
+    """Upload a single file to Cloudinary with size validation"""
     file_ext = Path(file.filename).suffix.lower()
     allowed_exts = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.pdf', '.doc', '.docx']
     
@@ -638,18 +602,63 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     if len(content) > MAX_UPLOAD_SIZE:
         raise HTTPException(status_code=400, detail=f"Datei zu groß. Maximum: {MAX_UPLOAD_SIZE // (1024*1024)}MB")
     
-    file_id = str(uuid.uuid4())
-    filename = f"{file_id}{file_ext}"
-    filepath = UPLOAD_DIR / filename
-    
     try:
-        async with aiofiles.open(filepath, 'wb') as f:
-            await f.write(content)
+        # Upload to Cloudinary
+        # We can upload the bytes directly
+        result = cloudinary.uploader.upload(
+            content, 
+            resource_type="auto",
+            folder="cashcar_uploads"
+        )
         
-        return {"filename": filename, "url": f"/api/uploads/{filename}"}
+        # Return the secure URL
+        return {"filename": result.get("public_id"), "url": result.get("secure_url")}
+
     except Exception as e:
-        logger.error(f"File upload error: {e}")
+        logger.error(f"Cloudinary upload error: {e}")
         raise HTTPException(status_code=500, detail="Fehler beim Hochladen der Datei")
+
+@api_router.get("/test-cloudinary")
+async def test_cloudinary_connection():
+    """Debug endpoint to test Cloudinary connection from Render"""
+    try:
+        # 1. Check Env Vars
+        cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME')
+        api_key = os.environ.get('CLOUDINARY_API_KEY')
+        
+        if not cloud_name or not api_key:
+            return {
+                "status": "error", 
+                "message": "Environment variables missing",
+                "debug": {
+                    "cloud_name_set": bool(cloud_name),
+                    "api_key_set": bool(api_key)
+                }
+            }
+
+        # 2. Try Upload
+        # Create a tiny 1x1 pixel image in memory
+        dummy_image = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89\x00\x00\x00\rIDATx\x9cc\xfc\xcf\x00\x00\x02\x02\x01\x01\xfb\xf0\x9e\xbf\x00\x00\x00\x00IEND\xaeB`\x82'
+        
+        result = cloudinary.uploader.upload(
+            dummy_image, 
+            folder="debug_test",
+            resource_type="image"
+        )
+        
+        return {
+            "status": "success",
+            "message": "Connection to Cloudinary is WORKING!",
+            "test_url": result.get("secure_url"),
+            "cloud_name": cloud_name
+        }
+        
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e),
+            "type": str(type(e))
+        }
 
 @api_router.post("/cars", response_model=dict)
 @limiter.limit("10/minute")
