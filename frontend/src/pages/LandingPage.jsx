@@ -189,7 +189,7 @@ const LandingPage = () => {
               <span className="block text-orange-500 mt-2">& das Stressfrei nur bei uns.</span>
             </h1>
             <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-xl">
-              Wir verkaufen Ihr Fahrzeug im Kundenauftrag. Professionell
+              Wir verkaufen Ihr Fahrzeug im Kundenauftrag. Professionell,
               hart verhandelt, bestmöglicher Preis - ohne Stress für Sie.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -320,13 +320,13 @@ const LandingPage = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="text-sm text-orange-500 uppercase tracking-wider font-medium mb-4">In 3 Schritten</p>
+            <p className="text-sm text-orange-500 uppercase tracking-wider font-medium mb-4">In 4 Schritten</p>
             <h2 className="font-heading text-3xl md:text-4xl font-semibold tracking-tight text-slate-900">
               So funktioniert&apos;s
             </h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => (
               <motion.div
                 key={step.number}
