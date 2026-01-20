@@ -332,13 +332,19 @@ const AdminCarDetail = () => {
                   {car.documents.map((doc) => (
                     <a
                       key={doc}
-                      href={`${process.env.REACT_APP_BACKEND_URL}/api/uploads/${doc}`}
+                      href={
+                        doc.startsWith('http')
+                          ? doc
+                          : doc.startsWith('cashcar_uploads/')
+                            ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${doc}`
+                            : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${doc}`
+                      }
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
                     >
                       <FileText className="w-5 h-5 text-slate-400" />
-                      <span className="text-sm text-slate-700">{doc}</span>
+                      <span className="text-sm text-slate-700 truncate">{doc.split('/').pop()}</span>
                     </a>
                   ))}
                 </div>
