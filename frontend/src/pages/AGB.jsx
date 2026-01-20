@@ -11,7 +11,7 @@ const AGB = () => {
             <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
               <Car className="w-6 h-6 text-white" />
             </div>
-            <span className="font-heading font-bold text-xl text-slate-900">CashCar</span>
+            <span className="font-heading font-bold text-xl text-slate-900">CashCarHannover</span>
           </Link>
         </div>
       </header>
@@ -29,12 +29,12 @@ const AGB = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">§ 1 Geltungsbereich</h2>
               <p className="text-slate-600 leading-relaxed">
-                (1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend &quot;AGB&quot;) gelten für alle Verträge zwischen 
-                der CashCar UG (haftungsbeschränkt) (nachfolgend &quot;Vermittler&quot;) und dem Fahrzeugverkäufer (nachfolgend &quot;Kunde&quot;) 
+                (1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend &quot;AGB&quot;) gelten für alle Verträge zwischen
+                der CashCar UG (haftungsbeschränkt) (nachfolgend &quot;Vermittler&quot;) und dem Fahrzeugverkäufer (nachfolgend &quot;Kunde&quot;)
                 über die Vermittlung von Gebrauchtfahrzeugen.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
-                (2) Abweichende Bedingungen des Kunden werden nicht anerkannt, es sei denn, der Vermittler stimmt 
+                (2) Abweichende Bedingungen des Kunden werden nicht anerkannt, es sei denn, der Vermittler stimmt
                 ihrer Geltung ausdrücklich schriftlich zu.
               </p>
             </section>
@@ -42,11 +42,11 @@ const AGB = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">§ 2 Vertragsgegenstand</h2>
               <p className="text-slate-600 leading-relaxed">
-                (1) Der Vermittler bietet die Vermittlung von Gebrauchtfahrzeugen im Kundenauftrag an. Der Vermittler 
+                (1) Der Vermittler bietet die Vermittlung von Gebrauchtfahrzeugen im Kundenauftrag an. Der Vermittler
                 handelt dabei ausschließlich als Vermittler und nicht als Käufer oder Verkäufer des Fahrzeugs.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
-                (2) Der Vermittler erstellt im Namen des Kunden Inserate auf verschiedenen Plattformen und führt 
+                (2) Der Vermittler erstellt im Namen des Kunden Inserate auf verschiedenen Plattformen und führt
                 Verhandlungen mit potenziellen Käufern durch.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
@@ -75,14 +75,14 @@ const AGB = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">§ 4 Preisgestaltung und Provision</h2>
               <p className="text-slate-600 leading-relaxed">
-                (1) Der Kunde gibt einen Wunschpreis und einen Mindestpreis an. Der Vermittler bemüht sich, 
+                (1) Der Kunde gibt einen Wunschpreis und einen Mindestpreis an. Der Vermittler bemüht sich,
                 den bestmöglichen Preis für den Kunden zu erzielen.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
                 (2) Ein Verkauf unter dem angegebenen Mindestpreis erfolgt nur nach ausdrücklicher Zustimmung des Kunden.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
-                (3) Die Provision des Vermittlers wird bei Vertragsabschluss gesondert vereinbart und ist bei 
+                (3) Die Provision des Vermittlers wird bei Vertragsabschluss gesondert vereinbart und ist bei
                 erfolgreichem Verkauf fällig.
               </p>
             </section>
@@ -93,7 +93,7 @@ const AGB = () => {
                 (1) Der Vermittler informiert den Kunden regelmäßig über den Stand der Vermittlung und eingehende Angebote.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
-                (2) Bei Erreichen oder Überschreiten des Wunschpreises sowie bei Angeboten im vereinbarten 
+                (2) Bei Erreichen oder Überschreiten des Wunschpreises sowie bei Angeboten im vereinbarten
                 Preisrahmen kontaktiert der Vermittler den Kunden zur Bestätigung.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
@@ -110,8 +110,8 @@ const AGB = () => {
                 (2) Der Vermittler haftet nicht für Mängel am Fahrzeug oder sich daraus ergebende Ansprüche des Käufers.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
-                (3) Die Haftung des Vermittlers für leicht fahrlässig verursachte Schäden ist ausgeschlossen, 
-                soweit diese nicht Körper, Leben oder Gesundheit betreffen oder wesentliche Vertragspflichten 
+                (3) Die Haftung des Vermittlers für leicht fahrlässig verursachte Schäden ist ausgeschlossen,
+                soweit diese nicht Körper, Leben oder Gesundheit betreffen oder wesentliche Vertragspflichten
                 (Kardinalpflichten) verletzen.
               </p>
             </section>
@@ -125,7 +125,7 @@ const AGB = () => {
                 (2) Im Falle einer Kündigung werden sämtliche Inserate unverzüglich entfernt.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
-                (3) Bereits angefallene Kosten für Inserate oder Werbemaßnahmen können dem Kunden in Rechnung 
+                (3) Bereits angefallene Kosten für Inserate oder Werbemaßnahmen können dem Kunden in Rechnung
                 gestellt werden.
               </p>
             </section>
@@ -133,7 +133,7 @@ const AGB = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">§ 8 Datenschutz</h2>
               <p className="text-slate-600 leading-relaxed">
-                Die Erhebung und Verarbeitung personenbezogener Daten erfolgt gemäß unserer Datenschutzerklärung 
+                Die Erhebung und Verarbeitung personenbezogener Daten erfolgt gemäß unserer Datenschutzerklärung
                 und den geltenden Datenschutzgesetzen.
               </p>
             </section>
@@ -144,11 +144,11 @@ const AGB = () => {
                 (1) Es gilt das Recht der Bundesrepublik Deutschland.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
-                (2) Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit 
+                (2) Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit
                 der übrigen Bestimmungen unberührt.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
-                (3) Gerichtsstand für alle Streitigkeiten aus diesem Vertrag ist der Sitz des Vermittlers, 
+                (3) Gerichtsstand für alle Streitigkeiten aus diesem Vertrag ist der Sitz des Vermittlers,
                 sofern der Kunde Kaufmann ist.
               </p>
             </section>

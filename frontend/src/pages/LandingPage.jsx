@@ -53,8 +53,8 @@ const LandingPage = () => {
     {
       number: "02",
       icon: MessageSquare,
-      title: "Wir inserieren",
-      description: "Wir erstellen ein professionelles Inserat und bewerben Ihr Fahrzeug."
+      title: "Wir leiten es weiter",
+      description: "Wir erstellen ein professionelles Prospekt und bewerben Ihr Fahrzeuge an unsere Partner."
     },
     {
       number: "03",
@@ -151,7 +151,7 @@ const LandingPage = () => {
                     className="flex items-center gap-3 px-4 py-3 rounded-lg bg-slate-900 text-white font-medium"
                   >
                     <Phone className="w-5 h-5" />
-                    +49 123 4567890
+                    +49 178 3563 025
                   </a>
                 </div>
               </nav>
@@ -472,46 +472,7 @@ const LandingPage = () => {
             </motion.div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="bg-slate-50 rounded-2xl p-8 border border-slate-200"
-          >
-            <h3 className="font-heading text-xl font-semibold text-slate-900 mb-6 text-center">Provisionsmodell</h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-xl p-6 border border-slate-200">
-                <div className="text-center mb-4">
-                  <span className="text-sm text-slate-500">Verkaufspreis ab</span>
-                  <p className="font-heading text-2xl font-bold text-slate-900">7.500 €</p>
-                </div>
-                <div className="bg-orange-50 rounded-lg p-4 text-center">
-                  <span className="text-3xl font-bold text-orange-500">2,8%</span>
-                  <p className="text-sm text-slate-600 mt-1">vom Verkaufspreis</p>
-                </div>
-                <p className="text-sm text-slate-500 mt-4 text-center">
-                  Käufer & Verkäufer zahlen je <span className="font-semibold text-slate-700">1,4%</span>
-                </p>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 border border-slate-200">
-                <div className="text-center mb-4">
-                  <span className="text-sm text-slate-500">Verkaufspreis bis</span>
-                  <p className="font-heading text-2xl font-bold text-slate-900">7.499 €</p>
-                </div>
-                <div className="bg-slate-100 rounded-lg p-4 text-center">
-                  <span className="text-3xl font-bold text-slate-700">200 €</span>
-                  <p className="text-sm text-slate-600 mt-1">Pauschale</p>
-                </div>
-                <p className="text-sm text-slate-500 mt-4 text-center">
-                  Käufer & Verkäufer zahlen je <span className="font-semibold text-slate-700">100 €</span>
-                </p>
-              </div>
-            </div>
-            <p className="text-center text-sm text-slate-500 mt-6">
-              Die Provision wird erst fällig, wenn ein Verkauf erfolgreich zustande kommt. Sie entscheiden immer selbst, ob Sie verkaufen möchten.
-            </p>
-          </motion.div>
+          {/* Provisionsmodell section hidden as per request */}
         </div>
       </section>
 
