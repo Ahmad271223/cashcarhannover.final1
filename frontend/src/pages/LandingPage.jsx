@@ -61,6 +61,12 @@ const LandingPage = () => {
       icon: Handshake,
       title: "Verkauf & Auszahlung",
       description: "Nach erfolgreichem Verkauf erhalten Sie Ihr Geld schnell und sicher."
+    },
+    {
+      number: "04",
+      icon: FileCheck,
+      title: "Kostenlose Abmeldung",
+      description: "Wir übernehmen für Sie den kompletten Behördengang und melden Ihr Fahrzeug zuverlässig ab."
     }
   ];
 
@@ -73,7 +79,7 @@ const LandingPage = () => {
             <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
               <Car className="w-6 h-6 text-white" />
             </div>
-            <span className="font-heading font-bold text-xl text-slate-900">CashCar</span>
+            <span className="font-heading font-bold text-xl text-slate-900">CashCarHannover</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -183,7 +189,7 @@ const LandingPage = () => {
               <span className="block text-orange-500 mt-2">& das Stressfrei nur bei uns.</span>
             </h1>
             <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-xl">
-              Wir verkaufen Ihr Fahrzeug im Kundenauftrag. Professionell inseriert,
+              Wir verkaufen Ihr Fahrzeug im Kundenauftrag. Professionell
               hart verhandelt, bestmöglicher Preis - ohne Stress für Sie.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
