@@ -2,14 +2,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { 
-  Car, 
-  Shield, 
-  Banknote, 
-  Clock, 
-  CheckCircle, 
-  Upload, 
-  MessageSquare, 
+import {
+  Car,
+  Shield,
+  Banknote,
+  Clock,
+  CheckCircle,
+  Upload,
+  MessageSquare,
   Handshake,
   ChevronRight,
   Phone,
@@ -24,7 +24,7 @@ import {
 
 const LandingPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+
   const features = [
     {
       icon: Shield,
@@ -75,26 +75,26 @@ const LandingPage = () => {
             </div>
             <span className="font-heading font-bold text-xl text-slate-900">CashCar</span>
           </Link>
-          
+
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <Link to="/bestand" className="text-slate-600 hover:text-slate-900 transition-colors font-medium">Fahrzeugbestand</Link>
             <a href="#vorteile" className="text-slate-600 hover:text-slate-900 transition-colors">Vorteile</a>
             <a href="#ablauf" className="text-slate-600 hover:text-slate-900 transition-colors">So funktioniert&apos;s</a>
           </nav>
-          
+
           <div className="flex items-center gap-3">
             <Link to="/verkaufen" className="hidden sm:block">
-              <Button 
+              <Button
                 data-testid="hero-cta-btn"
                 className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-lg shadow-lg hover:shadow-orange-500/20 transition-all"
               >
                 Jetzt verkaufen
               </Button>
             </Link>
-            
+
             {/* Mobile Menu Button */}
-            <button 
+            <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
             >
@@ -102,7 +102,7 @@ const LandingPage = () => {
             </button>
           </div>
         </div>
-        
+
         {/* Mobile Navigation */}
         <AnimatePresence>
           {mobileMenuOpen && (
@@ -113,32 +113,32 @@ const LandingPage = () => {
               className="md:hidden bg-white border-t border-slate-100"
             >
               <nav className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-2">
-                <Link 
-                  to="/bestand" 
+                <Link
+                  to="/bestand"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-orange-50 text-slate-700 font-medium transition-colors"
                 >
                   <Car className="w-5 h-5 text-orange-500" />
                   Fahrzeugbestand
                 </Link>
-                <Link 
-                  to="/verkaufen" 
+                <Link
+                  to="/verkaufen"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-orange-50 text-slate-700 font-medium transition-colors"
                 >
                   <Upload className="w-5 h-5 text-orange-500" />
                   Fahrzeug verkaufen
                 </Link>
-                <a 
-                  href="#vorteile" 
+                <a
+                  href="#vorteile"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors"
                 >
                   <CheckCircle className="w-5 h-5 text-slate-400" />
                   Vorteile
                 </a>
-                <a 
-                  href="#ablauf" 
+                <a
+                  href="#ablauf"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors"
                 >
@@ -146,7 +146,7 @@ const LandingPage = () => {
                   So funktioniert&apos;s
                 </a>
                 <div className="pt-2 mt-2 border-t border-slate-100">
-                  <a 
+                  <a
                     href="tel:+491234567890"
                     className="flex items-center gap-3 px-4 py-3 rounded-lg bg-slate-900 text-white font-medium"
                   >
@@ -164,7 +164,7 @@ const LandingPage = () => {
       <section className="pt-32 pb-20 px-6 relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
-          <img 
+          <img
             src="https://images.unsplash.com/photo-1668692753736-a3a203aaabec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHw0fHxjYXIlMjBkZWFsZXJzaGlwJTIwc2hvd3Jvb20lMjBsdXh1cnklMjBwcm9mZXNzaW9uYWx8ZW58MHx8fHwxNzY4MDQ4MzMzfDA&ixlib=rb-4.1.0&q=85"
             alt="Showroom Background"
             className="w-full h-full object-cover opacity-10"
@@ -173,7 +173,7 @@ const LandingPage = () => {
         </div>
         <div className="absolute inset-0 hero-pattern opacity-30 z-0"></div>
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -183,12 +183,12 @@ const LandingPage = () => {
               <span className="block text-orange-500 mt-2">& das Stressfrei nur bei uns.</span>
             </h1>
             <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-xl">
-              Wir verkaufen Ihr Fahrzeug im Kundenauftrag. Professionell inseriert, 
+              Wir verkaufen Ihr Fahrzeug im Kundenauftrag. Professionell inseriert,
               hart verhandelt, bestmöglicher Preis - ohne Stress für Sie.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/verkaufen">
-                <Button 
+                <Button
                   data-testid="hero-main-cta"
                   className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-lg shadow-lg btn-orange-glow transition-all active:scale-95 text-lg w-full sm:w-auto"
                 >
@@ -197,8 +197,8 @@ const LandingPage = () => {
                 </Button>
               </Link>
               <Link to="/bestand">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="border-slate-300 text-slate-700 hover:bg-slate-50 px-8 py-4 rounded-lg text-lg w-full sm:w-auto"
                 >
                   <Car className="mr-2 w-5 h-5" />
@@ -217,15 +217,15 @@ const LandingPage = () => {
               </div>
             </div>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative hidden md:block"
           >
             <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
-              <img 
+              <img
                 src="https://images.unsplash.com/photo-1760713164476-7eb5063b3d07?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBjYXIlMjBzaWRlJTIwcHJvZmlsZSUyMHN0dWRpbyUyMGxpZ2h0aW5nfGVufDB8fHx8MTc2Nzk2NTg4OXww&ixlib=rb-4.1.0&q=85"
                 alt="Premium Fahrzeug"
                 className="w-full h-full object-cover"
@@ -259,8 +259,8 @@ const LandingPage = () => {
                   Unser Tipp: Holen Sie sich zuerst ein Vergleichsangebot
                 </h3>
                 <p className="text-slate-300 leading-relaxed">
-                  Lassen Sie Ihr Fahrzeug kostenlos bei Ihrem lokalen Autohändler bewerten oder holen Sie sich ein 
-                  Inzahlungnahme-Angebot bei Ankaufsunternehmen wie <span className="text-orange-400 font-medium">wirkaufendeinauto.de</span>. 
+                  Lassen Sie Ihr Fahrzeug kostenlos bei Ihrem lokalen Autohändler bewerten oder holen Sie sich ein
+                  Inzahlungnahme-Angebot bei Ankaufsunternehmen wie <span className="text-orange-400 font-medium">wirkaufendeinauto.de</span>.
                   Kommen Sie dann mit diesem Preis zu uns – wir helfen Ihnen, einen <span className="text-orange-400 font-medium">besseren Preis zu erzielen</span>.
                 </p>
               </div>
@@ -272,7 +272,7 @@ const LandingPage = () => {
       {/* Features Section */}
       <section id="vorteile" className="py-20 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -308,7 +308,7 @@ const LandingPage = () => {
       {/* How it Works Section */}
       <section id="ablauf" className="py-20 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -347,14 +347,14 @@ const LandingPage = () => {
             ))}
           </div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center mt-12"
           >
             <Link to="/verkaufen">
-              <Button 
+              <Button
                 data-testid="steps-cta-btn"
                 className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-lg shadow-lg btn-orange-glow transition-all active:scale-95 text-lg"
               >
@@ -375,14 +375,14 @@ const LandingPage = () => {
             viewport={{ once: true }}
           >
             <div className="aspect-[4/3] rounded-2xl overflow-hidden">
-              <img 
+              <img
                 src="https://images.pexels.com/photos/7144213/pexels-photo-7144213.jpeg"
                 alt="Zufriedener Kunde mit Autoschlüssel"
                 className="w-full h-full object-cover"
               />
             </div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -392,8 +392,8 @@ const LandingPage = () => {
               Vertrauen Sie auf unsere Erfahrung
             </h2>
             <p className="text-slate-300 text-lg leading-relaxed mb-8">
-              Seit Jahren vermitteln wir erfolgreich Fahrzeuge im Kundenauftrag. 
-              Unser Ziel: Den bestmöglichen Preis für Ihr Fahrzeug erzielen - 
+              Seit Jahren vermitteln wir erfolgreich Fahrzeuge im Kundenauftrag.
+              Unser Ziel: Den bestmöglichen Preis für Ihr Fahrzeug erzielen -
               ohne dass Sie sich um nervige Verhandlungen kümmern müssen.
             </p>
             <div className="grid grid-cols-3 gap-8">
@@ -417,7 +417,7 @@ const LandingPage = () => {
       {/* Pricing Transparency Section */}
       <section className="py-20 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -493,7 +493,7 @@ const LandingPage = () => {
                   Käufer & Verkäufer zahlen je <span className="font-semibold text-slate-700">1,4%</span>
                 </p>
               </div>
-              
+
               <div className="bg-white rounded-xl p-6 border border-slate-200">
                 <div className="text-center mb-4">
                   <span className="text-sm text-slate-500">Verkaufspreis bis</span>
@@ -527,11 +527,11 @@ const LandingPage = () => {
               Bereit, Ihr Auto zu verkaufen?
             </h2>
             <p className="text-lg text-slate-600 mb-8">
-              Tragen Sie jetzt Ihr Fahrzeug ein und lassen Sie uns die Arbeit machen. 
+              Tragen Sie jetzt Ihr Fahrzeug ein und lassen Sie uns die Arbeit machen.
               Kostenlos und unverbindlich – Sie zahlen nur bei erfolgreichem Verkauf.
             </p>
             <Link to="/verkaufen">
-              <Button 
+              <Button
                 data-testid="final-cta-btn"
                 className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-10 py-5 rounded-lg shadow-lg btn-orange-glow transition-all active:scale-95 text-lg"
               >
@@ -546,7 +546,7 @@ const LandingPage = () => {
       {/* Dealer Partner Section */}
       <section className="py-20 px-6 bg-slate-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img 
+          <img
             src="https://images.unsplash.com/photo-1758599543152-a73184816eba?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwyfHxoYW5kc2hha2UlMjBidXNpbmVzcyUyMGRlYWwlMjBwcm9mZXNzaW9uYWx8ZW58MHx8fHwxNzY4MDQ4MzM2fDA&ixlib=rb-4.1.0&q=85"
             alt="Business Partnership"
             className="w-full h-full object-cover opacity-10"
@@ -568,7 +568,7 @@ const LandingPage = () => {
                 Sie sind Autohändler? Werden Sie Partner!
               </h2>
               <p className="text-slate-300 text-lg leading-relaxed mb-6">
-                Wir arbeiten aktuell mit über <span className="text-orange-400 font-semibold">1.000 Händlern</span> deutschlandweit zusammen. 
+                Wir arbeiten aktuell mit über <span className="text-orange-400 font-semibold">1.000 Händlern</span> deutschlandweit zusammen.
                 Profitieren Sie von unserem Netzwerk und erhalten Sie exklusiven Zugang zu geprüften Fahrzeugen von Privatverkäufern.
               </p>
               <ul className="space-y-3 text-slate-300">
@@ -636,12 +636,12 @@ const LandingPage = () => {
                 </div>
               </div>
               <div className="mt-8 pt-6 border-t border-white/10">
-                <a 
-                  href="mailto:partner@cashcar.de?subject=Händler-Partnerschaft%20Anfrage&body=Unternehmensname:%20%0A%0AAnsprechpartner%20(Vor-%20und%20Nachname):%20%0A%0AStandort%20%26%20Adresse:%20%0A%0ATelefon:%20%0A%0AE-Mail:%20%0A%0AWeitere%20Informationen:%20"
+                <a
+                  href="mailto:partner@cashcarhannover.de?subject=Händler-Partnerschaft%20Anfrage&body=Unternehmensname:%20%0A%0AAnsprechpartner%20(Vor-%20und%20Nachname):%20%0A%0AStandort%20%26%20Adresse:%20%0A%0ATelefon:%20%0A%0AE-Mail:%20%0A%0AWeitere%20Informationen:%20"
                   className="flex items-center justify-center gap-2 w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-4 rounded-lg transition-all"
                 >
                   <Mail className="w-5 h-5" />
-                  partner@cashcar.de
+                  partner@cashcarhannover.de
                 </a>
                 <p className="text-center text-slate-400 text-xs mt-3">
                   Wir melden uns innerhalb von 48 Stunden
@@ -676,7 +676,7 @@ const LandingPage = () => {
                 </p>
                 <p className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
-                  info@cashcar.de
+                  info@cashcarhannover.de
                 </p>
               </div>
             </div>

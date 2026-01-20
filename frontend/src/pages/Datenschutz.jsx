@@ -28,39 +28,39 @@ const Datenschutz = () => {
           <div className="prose prose-slate max-w-none space-y-8">
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">1. Datenschutz auf einen Blick</h2>
-              
+
               <h3 className="font-heading text-xl font-semibold text-slate-900 mb-3 mt-6">Allgemeine Hinweise</h3>
               <p className="text-slate-600 leading-relaxed">
-                Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten 
-                passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie 
+                Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten
+                passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie
                 persönlich identifiziert werden können.
               </p>
 
               <h3 className="font-heading text-xl font-semibold text-slate-900 mb-3 mt-6">Datenerfassung auf dieser Website</h3>
               <p className="text-slate-600 leading-relaxed">
                 <strong>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong><br />
-                Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten 
+                Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten
                 können Sie dem Impressum dieser Website entnehmen.
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
                 <strong>Wie erfassen wir Ihre Daten?</strong><br />
-                Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z.B. 
+                Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z.B.
                 um Daten handeln, die Sie in ein Kontaktformular eingeben (Fahrzeugdaten, Kontaktinformationen, Preisvorstellungen).
               </p>
               <p className="text-slate-600 leading-relaxed mt-4">
-                Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere 
-                IT-Systeme erfasst. Das sind vor allem technische Daten (z.B. Internetbrowser, Betriebssystem oder 
+                Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere
+                IT-Systeme erfasst. Das sind vor allem technische Daten (z.B. Internetbrowser, Betriebssystem oder
                 Uhrzeit des Seitenaufrufs).
               </p>
             </section>
 
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">2. Allgemeine Hinweise und Pflichtinformationen</h2>
-              
+
               <h3 className="font-heading text-xl font-semibold text-slate-900 mb-3 mt-6">Datenschutz</h3>
               <p className="text-slate-600 leading-relaxed">
-                Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln 
-                Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften 
+                Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln
+                Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften
                 sowie dieser Datenschutzerklärung.
               </p>
 
@@ -71,13 +71,13 @@ const Datenschutz = () => {
                 Musterstraße 123<br />
                 12345 Musterstadt<br /><br />
                 Telefon: +49 123 4567890<br />
-                E-Mail: info@cashcar.de
+                E-Mail: info@cashcarhannover.de
               </p>
             </section>
 
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">3. Datenerfassung auf dieser Website</h2>
-              
+
               <h3 className="font-heading text-xl font-semibold text-slate-900 mb-3 mt-6">Fahrzeug-Einreichungsformular</h3>
               <p className="text-slate-600 leading-relaxed">
                 Wenn Sie uns ein Fahrzeug zur Vermittlung anbieten, erheben wir folgende Daten:
@@ -90,13 +90,13 @@ const Datenschutz = () => {
                 <li>Preisvorstellungen (Wunschpreis, Mindestpreis)</li>
               </ul>
               <p className="text-slate-600 leading-relaxed mt-4">
-                Diese Daten werden ausschließlich zur Durchführung der Fahrzeugvermittlung verwendet und nicht 
+                Diese Daten werden ausschließlich zur Durchführung der Fahrzeugvermittlung verwendet und nicht
                 an Dritte weitergegeben, es sei denn, dies ist für die Vermittlung erforderlich (z.B. an potenzielle Käufer).
               </p>
 
               <h3 className="font-heading text-xl font-semibold text-slate-900 mb-3 mt-6">Speicherdauer</h3>
               <p className="text-slate-600 leading-relaxed">
-                Ihre Daten werden nach Abschluss der Vermittlung oder nach Widerruf Ihrer Einwilligung gelöscht, 
+                Ihre Daten werden nach Abschluss der Vermittlung oder nach Widerruf Ihrer Einwilligung gelöscht,
                 sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen.
               </p>
             </section>
@@ -122,7 +122,7 @@ const Datenschutz = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">5. Cookies</h2>
               <p className="text-slate-600 leading-relaxed">
-                Diese Website verwendet nur technisch notwendige Cookies, die für den Betrieb der Website erforderlich 
+                Diese Website verwendet nur technisch notwendige Cookies, die für den Betrieb der Website erforderlich
                 sind. Es werden keine Tracking- oder Marketing-Cookies verwendet.
               </p>
             </section>
@@ -130,8 +130,8 @@ const Datenschutz = () => {
             <section>
               <h2 className="font-heading text-2xl font-semibold text-slate-900 mb-4">6. SSL-Verschlüsselung</h2>
               <p className="text-slate-600 leading-relaxed">
-                Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte eine 
-                SSL-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des 
+                Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte eine
+                SSL-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des
                 Browsers von &quot;http://&quot; auf &quot;https://&quot; wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.
               </p>
             </section>
