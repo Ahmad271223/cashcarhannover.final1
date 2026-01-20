@@ -563,7 +563,13 @@ const BestandDetail = () => {
 
           <div className="absolute inset-0 flex items-center justify-center p-4">
             <img
-              src={vehicle.photos[currentImageIndex].startsWith('http') ? vehicle.photos[currentImageIndex] : `${API_URL}/api/uploads/${vehicle.photos[currentImageIndex]}`}
+              src={
+                vehicle.photos[currentImageIndex].startsWith('http')
+                  ? vehicle.photos[currentImageIndex]
+                  : vehicle.photos[currentImageIndex].startsWith('cashcar_uploads/')
+                    ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${vehicle.photos[currentImageIndex]}`
+                    : `${API_URL}/api/uploads/${vehicle.photos[currentImageIndex]}`
+              }
               alt={`${vehicle.brand} ${vehicle.model}`}
               className="max-w-full max-h-full object-contain"
             />
