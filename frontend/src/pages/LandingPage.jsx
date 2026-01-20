@@ -19,7 +19,8 @@ import {
   MapPin,
   User,
   Menu,
-  X
+  X,
+  FileCheck
 } from "lucide-react";
 
 const LandingPage = () => {
