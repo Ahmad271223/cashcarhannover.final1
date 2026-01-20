@@ -9,12 +9,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Car, 
-  ChevronLeft, 
-  ChevronRight, 
-  Upload, 
-  X, 
+import {
+  Car,
+  ChevronLeft,
+  ChevronRight,
+  Upload,
+  X,
   FileText,
   User,
   Banknote,
@@ -38,7 +38,7 @@ const STEPS = [
 
 const FUEL_TYPES = ["Benzin", "Diesel", "Hybrid (Benzin)", "Hybrid (Diesel)", "Elektro", "Erdgas (CNG)", "Autogas (LPG)"];
 const TRANSMISSIONS = ["Schaltgetriebe", "Automatik", "Halbautomatik"];
-const BODY_TYPES = ["Limousine", "Kombi", "SUV/Geländewagen", "Cabrio/Roadster", "Coupé", "Van/Kleinbus", "Transporter", "Pick-up", "Andere"];
+const BODY_TYPES = ["Limousine", "Kombi", "Kleinwagen", "SUV/Geländewagen", "Cabrio/Roadster", "Coupé", "Van/Kleinbus", "Transporter", "Pick-up", "Andere"];
 const DOOR_OPTIONS = ["2/3", "4/5", "6/7"];
 const COLORS = ["Schwarz", "Weiß", "Silber", "Grau", "Blau", "Rot", "Grün", "Braun", "Beige", "Gold", "Orange", "Gelb", "Andere"];
 
@@ -94,7 +94,7 @@ const CarSubmissionForm = () => {
     // Anti-spam
     honeypot: "",
   });
-  
+
   // Hidden honeypot field ref
   const honeypotRef = useCallback((node) => {
     if (node) {
@@ -134,7 +134,7 @@ const CarSubmissionForm = () => {
         const response = await axios.post(`${API}/upload`, formDataUpload, {
           headers: { "Content-Type": "multipart/form-data" }
         });
-        uploadedFiles.push(response.data.filename);
+        uploadedFiles.push(response.data.url);
       } catch (error) {
         toast.error(`Fehler beim Hochladen: ${file.name}`);
       }
@@ -145,7 +145,7 @@ const CarSubmissionForm = () => {
       [type]: [...prev[type], ...uploadedFiles]
     }));
     setUploading(false);
-    
+
     if (uploadedFiles.length > 0) {
       toast.success(`${uploadedFiles.length} Datei(en) hochgeladen`);
     }
@@ -227,7 +227,7 @@ const CarSubmissionForm = () => {
 
   const handleSubmit = async () => {
     if (!validateStep()) return;
-    
+
     setIsSubmitting(true);
     try {
       const submitData = {
@@ -317,31 +317,27 @@ const CarSubmissionForm = () => {
             <div className="flex items-center justify-between overflow-x-auto pb-4">
               {STEPS.map((step, index) => (
                 <div key={step.id} className="flex items-center">
-                  <div 
-                    className={`flex flex-col items-center min-w-[80px] ${
-                      index < currentStep - 1 ? 'cursor-pointer' : ''
-                    }`}
+                  <div
+                    className={`flex flex-col items-center min-w-[80px] ${index < currentStep - 1 ? 'cursor-pointer' : ''
+                      }`}
                     onClick={() => index < currentStep - 1 && setCurrentStep(step.id)}
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
-                      step.id < currentStep 
-                        ? 'step-completed' 
-                        : step.id === currentStep 
-                          ? 'step-active' 
-                          : 'step-pending'
-                    }`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${step.id < currentStep
+                      ? 'step-completed'
+                      : step.id === currentStep
+                        ? 'step-active'
+                        : 'step-pending'
+                      }`}>
                       {step.id < currentStep ? <CheckCircle className="w-5 h-5" /> : step.id}
                     </div>
-                    <span className={`text-xs mt-2 text-center ${
-                      step.id === currentStep ? 'text-orange-600 font-medium' : 'text-slate-500'
-                    }`}>
+                    <span className={`text-xs mt-2 text-center ${step.id === currentStep ? 'text-orange-600 font-medium' : 'text-slate-500'
+                      }`}>
                       {step.title}
                     </span>
                   </div>
                   {index < STEPS.length - 1 && (
-                    <div className={`w-8 md:w-16 h-0.5 mx-2 ${
-                      step.id < currentStep ? 'bg-emerald-500' : 'bg-slate-200'
-                    }`} />
+                    <div className={`w-8 md:w-16 h-0.5 mx-2 ${step.id < currentStep ? 'bg-emerald-500' : 'bg-slate-200'
+                      }`} />
                   )}
                 </div>
               ))}
@@ -582,18 +578,18 @@ const CarSubmissionForm = () => {
 
                       <div className="md:col-span-2 flex flex-wrap gap-6">
                         <div className="flex items-center space-x-2">
-                          <Checkbox 
+                          <Checkbox
                             data-testid="accident-free-checkbox"
-                            id="accident_free" 
+                            id="accident_free"
                             checked={formData.accident_free}
                             onCheckedChange={(checked) => updateField("accident_free", checked)}
                           />
                           <Label htmlFor="accident_free" className="cursor-pointer">Unfallfrei</Label>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <Checkbox 
+                          <Checkbox
                             data-testid="service-history-checkbox"
-                            id="service_history" 
+                            id="service_history"
                             checked={formData.service_history}
                             onCheckedChange={(checked) => updateField("service_history", checked)}
                           />
@@ -625,7 +621,7 @@ const CarSubmissionForm = () => {
                       <p className="text-slate-500">Laden Sie bis zu 40 Fotos Ihres Fahrzeugs hoch (mindestens 5).</p>
                     </div>
 
-                    <div 
+                    <div
                       className="drop-zone cursor-pointer"
                       onDrop={(e) => handleDrop(e, "photos")}
                       onDragOver={handleDragOver}
@@ -660,7 +656,7 @@ const CarSubmissionForm = () => {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {formData.photos.map((photo, index) => (
                           <div key={photo} className="image-preview">
-                            <img src={`${process.env.REACT_APP_BACKEND_URL}/api/uploads/${photo}`} alt={`Foto ${index + 1}`} />
+                            <img src={photo.startsWith('http') ? photo : photo.startsWith('cashcar_uploads/') ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${photo}` : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${photo}`} alt={`Foto ${index + 1}`} />
                             <button
                               type="button"
                               className="delete-btn"
@@ -683,7 +679,7 @@ const CarSubmissionForm = () => {
                       <p className="text-slate-500">Laden Sie optionale Dokumente wie TÜV-Berichte, Serviceheft oder Gutachten hoch.</p>
                     </div>
 
-                    <div 
+                    <div
                       className="drop-zone cursor-pointer"
                       onDrop={(e) => handleDrop(e, "documents")}
                       onDragOver={handleDragOver}
@@ -1022,16 +1018,16 @@ const CarSubmissionForm = () => {
 
                         <div className="mt-6 pt-4 border-t border-slate-700">
                           <div className="flex items-start space-x-3">
-                            <Checkbox 
+                            <Checkbox
                               data-testid="terms-checkbox"
-                              id="terms_accepted" 
+                              id="terms_accepted"
                               checked={formData.terms_accepted}
                               onCheckedChange={(checked) => updateField("terms_accepted", checked)}
                               className="mt-1 border-slate-500 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
                             />
                             <Label htmlFor="terms_accepted" className="cursor-pointer text-sm text-slate-300 leading-relaxed">
-                              Ich habe die Konditionen gelesen und akzeptiere, dass bei einem erfolgreichen Verkauf 
-                              die oben genannte Provision anfällt. Mir ist bewusst, dass ich <strong className="text-white">nicht zum Verkauf verpflichtet</strong> bin 
+                              Ich habe die Konditionen gelesen und akzeptiere, dass bei einem erfolgreichen Verkauf
+                              die oben genannte Provision anfällt. Mir ist bewusst, dass ich <strong className="text-white">nicht zum Verkauf verpflichtet</strong> bin
                               und <strong className="text-white">keine Kosten</strong> entstehen, wenn kein Verkauf zustande kommt.
                             </Label>
                           </div>

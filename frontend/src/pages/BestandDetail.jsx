@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { 
-  Car, ArrowLeft, Phone, Mail, MapPin, Calendar, Gauge, Fuel, 
+import {
+  Car, ArrowLeft, Phone, Mail, MapPin, Calendar, Gauge, Fuel,
   Settings2, Cog, Palette, Users, Shield, FileCheck, Leaf,
   Check, X, ChevronLeft, ChevronRight, Share2, Heart,
   DoorOpen, Zap, Droplets, ThermometerSun, Copy, Sparkles,
@@ -41,7 +41,7 @@ const BestandDetail = () => {
   const handleShare = async () => {
     const url = window.location.href;
     const title = vehicle ? `${vehicle.brand} ${vehicle.model} - ${formatPrice(vehicle.price)}` : 'Fahrzeug';
-    
+
     if (navigator.share) {
       try {
         await navigator.share({ title, url });
@@ -159,14 +159,14 @@ const BestandDetail = () => {
               <span className="font-heading font-bold text-xl sm:text-2xl text-slate-900">CashCar</span>
             </Link>
             <div className="flex items-center gap-2 sm:gap-4">
-              <Link 
-                to="/bestand" 
+              <Link
+                to="/bestand"
                 className="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Zurück zum Bestand
               </Link>
-              
+
               {/* Share & Print Buttons */}
               <button
                 onClick={handleShare}
@@ -182,9 +182,9 @@ const BestandDetail = () => {
               >
                 <Printer className="w-5 h-5" />
               </button>
-              
+
               {vehicle.contact_phone && (
-                <a 
+                <a
                   href={`tel:${vehicle.contact_phone}`}
                   className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-semibold text-sm shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 transition-all"
                 >
@@ -221,12 +221,18 @@ const BestandDetail = () => {
                 {vehicle.photos && vehicle.photos.length > 0 ? (
                   <>
                     <img
-                      src={`${API_URL}/api/uploads/${vehicle.photos[currentImageIndex]}`}
+                      src={
+                        vehicle.photos[currentImageIndex].startsWith('http')
+                          ? vehicle.photos[currentImageIndex]
+                          : vehicle.photos[currentImageIndex].startsWith('cashcar_uploads/')
+                            ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${vehicle.photos[currentImageIndex]}`
+                            : `${API_URL}/api/uploads/${vehicle.photos[currentImageIndex]}`
+                      }
                       alt={`${vehicle.brand} ${vehicle.model}`}
                       className="w-full h-full object-cover cursor-pointer"
                       onClick={() => setShowGallery(true)}
                     />
-                    
+
                     {vehicle.photos.length > 1 && (
                       <>
                         <button
@@ -282,14 +288,19 @@ const BestandDetail = () => {
                       <button
                         key={index}
                         onClick={() => setCurrentImageIndex(index)}
-                        className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                          currentImageIndex === index 
-                            ? 'border-orange-500 ring-2 ring-orange-500/20' 
-                            : 'border-transparent hover:border-slate-300'
-                        }`}
+                        className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all ${currentImageIndex === index
+                          ? 'border-orange-500 ring-2 ring-orange-500/20'
+                          : 'border-transparent hover:border-slate-300'
+                          }`}
                       >
                         <img
-                          src={`${API_URL}/api/uploads/${photo}`}
+                          src={
+                            photo.startsWith('http')
+                              ? photo
+                              : photo.startsWith('cashcar_uploads/')
+                                ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${photo}`
+                                : `${API_URL}/api/uploads/${photo}`
+                          }
                           alt={`Bild ${index + 1}`}
                           className="w-full h-full object-cover"
                         />
@@ -345,19 +356,17 @@ const BestandDetail = () => {
               <div className="mt-6 pt-6 border-t border-slate-100">
                 <h3 className="text-sm font-semibold text-slate-700 mb-3">Zustand & Historie</h3>
                 <div className="flex flex-wrap gap-2">
-                  <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${
-                    vehicle.accident_free 
-                      ? 'bg-green-100 text-green-700' 
-                      : 'bg-red-100 text-red-700'
-                  }`}>
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${vehicle.accident_free
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-red-100 text-red-700'
+                    }`}>
                     {vehicle.accident_free ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
                     {vehicle.accident_free ? 'Unfallfrei' : 'Unfallfahrzeug'}
                   </span>
-                  <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${
-                    vehicle.service_history 
-                      ? 'bg-green-100 text-green-700' 
-                      : 'bg-slate-100 text-slate-600'
-                  }`}>
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${vehicle.service_history
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-slate-100 text-slate-600'
+                    }`}>
                     {vehicle.service_history ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
                     {vehicle.service_history ? 'Scheckheftgepflegt' : 'Kein Scheckheft'}
                   </span>
@@ -425,7 +434,7 @@ const BestandDetail = () => {
               {vehicle.variant && (
                 <p className="text-slate-600 mt-1">{vehicle.variant}</p>
               )}
-              
+
               <div className="my-6 pb-6 border-b border-slate-100">
                 <div className="flex items-baseline gap-2">
                   <span className="text-4xl font-bold text-slate-900">{formatPrice(vehicle.price)}</span>
@@ -443,7 +452,7 @@ const BestandDetail = () => {
               {/* Contact Info */}
               <div className="space-y-4">
                 <h3 className="font-semibold text-slate-900">Kontakt</h3>
-                
+
                 {vehicle.contact_name && (
                   <p className="text-slate-700 font-medium">{vehicle.contact_name}</p>
                 )}
@@ -493,7 +502,7 @@ const BestandDetail = () => {
             {/* Mobile Contact Card */}
             <div className="lg:hidden bg-white rounded-2xl p-6 shadow-sm">
               <h3 className="font-semibold text-slate-900 mb-4">Kontakt</h3>
-              
+
               {vehicle.contact_name && (
                 <p className="text-slate-700 font-medium mb-4">{vehicle.contact_name}</p>
               )}
@@ -551,10 +560,10 @@ const BestandDetail = () => {
           >
             <X className="w-6 h-6" />
           </button>
-          
+
           <div className="absolute inset-0 flex items-center justify-center p-4">
             <img
-              src={`${API_URL}/api/uploads/${vehicle.photos[currentImageIndex]}`}
+              src={vehicle.photos[currentImageIndex].startsWith('http') ? vehicle.photos[currentImageIndex] : `${API_URL}/api/uploads/${vehicle.photos[currentImageIndex]}`}
               alt={`${vehicle.brand} ${vehicle.model}`}
               className="max-w-full max-h-full object-contain"
             />

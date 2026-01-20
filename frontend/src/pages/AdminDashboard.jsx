@@ -7,10 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { 
-  Car, 
-  LogOut, 
-  Search, 
+import {
+  Car,
+  LogOut,
+  Search,
   Eye,
   Trash2,
   RefreshCw,
@@ -50,21 +50,21 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'requests';
-  
+
   // Requests state
   const [cars, setCars] = useState([]);
   const [stats, setStats] = useState({ total: 0, new: 0, in_progress: 0, listed: 0, sold: 0 });
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("Alle");
   const [search, setSearch] = useState("");
-  
+
   // Inventory state
   const [inventory, setInventory] = useState([]);
   const [inventoryStats, setInventoryStats] = useState({ total: 0, published: 0, sold: 0, reserved: 0, drafts: 0 });
   const [inventoryLoading, setInventoryLoading] = useState(true);
   const [inventorySearch, setInventorySearch] = useState("");
   const [inventoryFilter, setInventoryFilter] = useState("all");
-  
+
   // Settings state
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
   const [settings, setSettings] = useState({
@@ -76,7 +76,7 @@ const AdminDashboard = () => {
     default_contact_zip: ""
   });
   const [savingSettings, setSavingSettings] = useState(false);
-  
+
   // Password dialog
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const [passwordData, setPasswordData] = useState({ current: "", new: "", confirm: "" });
@@ -94,13 +94,13 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (!isAuthenticated) return;
-    
+
     if (activeTab === 'requests') {
       fetchRequestsData();
     } else if (activeTab === 'inventory') {
       fetchInventoryData();
     }
-    
+
     fetchSettings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, activeTab, filter, search, inventoryFilter, inventorySearch]);
@@ -142,7 +142,7 @@ const AdminDashboard = () => {
       if (inventoryFilter === 'published') params.is_published = true;
       if (inventoryFilter === 'sold') params.is_sold = true;
       if (inventoryFilter === 'drafts') params.is_published = false;
-      
+
       const [inventoryRes, statsRes] = await Promise.all([
         axios.get(`${API}/admin/inventory`, {
           headers: getAuthHeaders(),
@@ -209,7 +209,7 @@ const AdminDashboard = () => {
         current_password: passwordData.current,
         new_password: passwordData.new
       }, { headers: getAuthHeaders() });
-      
+
       toast.success("Passwort erfolgreich geändert");
       setShowPasswordDialog(false);
       setPasswordData({ current: "", new: "", confirm: "" });
@@ -290,8 +290,8 @@ const AdminDashboard = () => {
             {/* Settings Dialog */}
             <Dialog open={showSettingsDialog} onOpenChange={setShowSettingsDialog}>
               <DialogTrigger asChild>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   className="text-slate-300 hover:text-white hover:bg-slate-800"
                 >
                   <Settings className="w-4 h-4 sm:mr-2" />
@@ -366,10 +366,10 @@ const AdminDashboard = () => {
                       />
                     </div>
                   </div>
-                  
+
                   <hr className="my-4" />
-                  
-                  <Button 
+
+                  <Button
                     variant="outline"
                     onClick={() => setShowPasswordDialog(true)}
                     className="w-full"
@@ -377,8 +377,8 @@ const AdminDashboard = () => {
                     <Lock className="w-4 h-4 mr-2" />
                     Passwort ändern
                   </Button>
-                  
-                  <Button 
+
+                  <Button
                     onClick={saveSettings}
                     disabled={savingSettings}
                     className="w-full bg-orange-500 hover:bg-orange-600"
@@ -427,7 +427,7 @@ const AdminDashboard = () => {
                       onChange={(e) => setPasswordData(p => ({ ...p, confirm: e.target.value }))}
                     />
                   </div>
-                  <Button 
+                  <Button
                     onClick={handlePasswordChange}
                     disabled={changingPassword}
                     className="w-full bg-orange-500 hover:bg-orange-600"
@@ -438,8 +438,8 @@ const AdminDashboard = () => {
               </DialogContent>
             </Dialog>
 
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={handleLogout}
               className="text-slate-300 hover:text-white hover:bg-slate-800"
             >
@@ -456,22 +456,20 @@ const AdminDashboard = () => {
           <nav className="flex gap-1">
             <button
               onClick={() => setTab('requests')}
-              className={`px-4 py-3 font-medium text-sm border-b-2 transition-colors ${
-                activeTab === 'requests'
-                  ? 'border-orange-500 text-orange-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-700'
-              }`}
+              className={`px-4 py-3 font-medium text-sm border-b-2 transition-colors ${activeTab === 'requests'
+                ? 'border-orange-500 text-orange-600'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
+                }`}
             >
               <FileText className="w-4 h-4 inline-block mr-2" />
               Kundenanfragen
             </button>
             <button
               onClick={() => setTab('inventory')}
-              className={`px-4 py-3 font-medium text-sm border-b-2 transition-colors ${
-                activeTab === 'inventory'
-                  ? 'border-orange-500 text-orange-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-700'
-              }`}
+              className={`px-4 py-3 font-medium text-sm border-b-2 transition-colors ${activeTab === 'inventory'
+                ? 'border-orange-500 text-orange-600'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
+                }`}
             >
               <Package className="w-4 h-4 inline-block mr-2" />
               Fahrzeugbestand
@@ -599,16 +597,22 @@ const AdminDashboard = () => {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {cars.map((car) => (
-                        <tr 
-                          key={car.id} 
+                        <tr
+                          key={car.id}
                           className="table-row-hover cursor-pointer"
                           onClick={() => navigate(`/${ADMIN_PATH}/cars/${car.id}`)}
                         >
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                               {car.photos && car.photos.length > 0 ? (
-                                <img 
-                                  src={`${process.env.REACT_APP_BACKEND_URL}/api/uploads/${car.photos[0]}`}
+                                <img
+                                  src={
+                                    car.photos[0].startsWith('http')
+                                      ? car.photos[0]
+                                      : car.photos[0].startsWith('cashcar_uploads/')
+                                        ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${car.photos[0]}`
+                                        : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${car.photos[0]}`
+                                  }
                                   alt={`${car.brand} ${car.model}`}
                                   className="w-16 h-12 object-cover rounded-lg bg-slate-100"
                                 />
@@ -646,8 +650,8 @@ const AdminDashboard = () => {
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center justify-end gap-2">
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="sm"
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -656,8 +660,8 @@ const AdminDashboard = () => {
                               >
                                 <Eye className="w-4 h-4" />
                               </Button>
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="sm"
                                 className="text-red-500 hover:text-red-700 hover:bg-red-50"
                                 onClick={(e) => handleDeleteCar(car.id, e)}
@@ -806,16 +810,16 @@ const AdminDashboard = () => {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {inventory.map((vehicle) => (
-                        <tr 
-                          key={vehicle.id} 
+                        <tr
+                          key={vehicle.id}
                           className="table-row-hover cursor-pointer"
                           onClick={() => navigate(`/${ADMIN_PATH}/inventory/${vehicle.id}`)}
                         >
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                               {vehicle.photos && vehicle.photos.length > 0 ? (
-                                <img 
-                                  src={`${process.env.REACT_APP_BACKEND_URL}/api/uploads/${vehicle.photos[0]}`}
+                                <img
+                                  src={vehicle.photos[0].startsWith('http') ? vehicle.photos[0] : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${vehicle.photos[0]}`}
                                   alt={`${vehicle.brand} ${vehicle.model}`}
                                   className="w-16 h-12 object-cover rounded-lg bg-slate-100"
                                 />
@@ -873,8 +877,8 @@ const AdminDashboard = () => {
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center justify-end gap-1">
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="sm"
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -884,8 +888,8 @@ const AdminDashboard = () => {
                               >
                                 <ExternalLink className="w-4 h-4" />
                               </Button>
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="sm"
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -895,8 +899,8 @@ const AdminDashboard = () => {
                               >
                                 <Edit className="w-4 h-4" />
                               </Button>
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="sm"
                                 className="text-red-500 hover:text-red-700 hover:bg-red-50"
                                 onClick={(e) => handleDeleteInventory(vehicle.id, e)}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { 
-  Car, Search, Filter, ChevronDown, MapPin, Calendar, 
+import {
+  Car, Search, Filter, ChevronDown, MapPin, Calendar,
   Gauge, Fuel, Settings2, X, ArrowUpDown, Check,
   Phone, ChevronLeft, ChevronRight, Sparkles
 } from "lucide-react";
@@ -19,12 +19,12 @@ const BRANDS = [
 ].sort();
 
 const FUEL_TYPES = [
-  "Benzin", "Diesel", "Elektro", "Hybrid (Benzin)", "Hybrid (Diesel)", 
+  "Benzin", "Diesel", "Elektro", "Hybrid (Benzin)", "Hybrid (Diesel)",
   "Plug-in-Hybrid", "Erdgas (CNG)", "Autogas (LPG)", "Wasserstoff"
 ];
 
 const BODY_TYPES = [
-  "Limousine", "Kombi", "SUV/Geländewagen", "Cabrio", "Coupé", 
+  "Limousine", "Kombi", "SUV/Geländewagen", "Cabrio", "Coupé",
   "Van/Kleinbus", "Sportwagen", "Pickup", "Kleinwagen", "Sonstige"
 ];
 
@@ -87,7 +87,7 @@ const Bestand = () => {
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 });
   const [showFilters, setShowFilters] = useState(false);
-  
+
   // Filter states
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [selectedBrand, setSelectedBrand] = useState(searchParams.get('brand') || '');
@@ -105,7 +105,7 @@ const Bestand = () => {
       params.append('page', page);
       params.append('limit', 12);
       params.append('sort', sortBy);
-      
+
       if (searchTerm) params.append('search', searchTerm);
       if (selectedBrand) params.append('brand', selectedBrand);
       if (selectedFuelType) params.append('fuel_type', selectedFuelType);
@@ -113,10 +113,10 @@ const Bestand = () => {
       if (priceMax) params.append('price_max', priceMax);
       if (mileageMax) params.append('mileage_max', mileageMax);
       if (yearMin) params.append('year_min', yearMin);
-      
+
       const response = await fetch(`${API_URL}/api/inventory?${params}`);
       const data = await response.json();
-      
+
       setVehicles(data.vehicles || []);
       setPagination({ page: data.page, pages: data.pages, total: data.total });
     } catch (error) {
@@ -158,14 +158,14 @@ const Bestand = () => {
               <span className="font-heading font-bold text-xl sm:text-2xl text-slate-900">CashCar</span>
             </Link>
             <div className="flex items-center gap-2 sm:gap-4">
-              <Link 
-                to="/verkaufen" 
+              <Link
+                to="/verkaufen"
                 className="hidden sm:inline-flex px-4 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors"
               >
                 Fahrzeug verkaufen
               </Link>
-              <a 
-                href="tel:+491234567890" 
+              <a
+                href="tel:+491234567890"
                 className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-semibold text-sm shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 transition-all"
               >
                 <Phone className="w-4 h-4" />
@@ -183,10 +183,10 @@ const Bestand = () => {
             Aktueller Bestand
           </h1>
           <p className="text-slate-300 text-base sm:text-lg max-w-2xl">
-            Entdecken Sie unsere handverlesene Auswahl an Qualitätsfahrzeugen. 
+            Entdecken Sie unsere handverlesene Auswahl an Qualitätsfahrzeugen.
             Jedes Fahrzeug wurde sorgfältig geprüft und aufbereitet.
           </p>
-          
+
           {/* Search Bar */}
           <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
@@ -201,12 +201,11 @@ const Bestand = () => {
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl transition-colors font-medium ${
-                showFilters ? 'bg-white text-slate-900' : 'bg-white/10 hover:bg-white/20 text-white'
-              }`}
+              className={`flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl transition-colors font-medium ${showFilters ? 'bg-white text-slate-900' : 'bg-white/10 hover:bg-white/20 text-white'
+                }`}
             >
               <Filter className="w-5 h-5" />
-              Filter 
+              Filter
               {activeFilterCount > 0 && (
                 <span className="w-5 h-5 rounded-full bg-orange-500 text-white text-xs flex items-center justify-center">
                   {activeFilterCount}
@@ -228,9 +227,8 @@ const Bestand = () => {
                 <select
                   value={selectedBrand}
                   onChange={(e) => setSelectedBrand(e.target.value)}
-                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
-                    selectedBrand ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
-                  }`}
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${selectedBrand ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                    }`}
                 >
                   <option value="">Alle Marken</option>
                   {BRANDS.map(brand => (
@@ -245,9 +243,8 @@ const Bestand = () => {
                 <select
                   value={selectedFuelType}
                   onChange={(e) => setSelectedFuelType(e.target.value)}
-                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
-                    selectedFuelType ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
-                  }`}
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${selectedFuelType ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                    }`}
                 >
                   <option value="">Alle Kraftstoffe</option>
                   {FUEL_TYPES.map(type => (
@@ -262,9 +259,8 @@ const Bestand = () => {
                 <select
                   value={selectedBodyType}
                   onChange={(e) => setSelectedBodyType(e.target.value)}
-                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
-                    selectedBodyType ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
-                  }`}
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${selectedBodyType ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                    }`}
                 >
                   <option value="">Alle Typen</option>
                   {BODY_TYPES.map(type => (
@@ -279,9 +275,8 @@ const Bestand = () => {
                 <select
                   value={yearMin}
                   onChange={(e) => setYearMin(e.target.value)}
-                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
-                    yearMin ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
-                  }`}
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${yearMin ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                    }`}
                 >
                   <option value="">Beliebig</option>
                   {YEAR_RANGES.map(range => (
@@ -296,9 +291,8 @@ const Bestand = () => {
                 <select
                   value={priceMax}
                   onChange={(e) => setPriceMax(e.target.value)}
-                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
-                    priceMax ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
-                  }`}
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${priceMax ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                    }`}
                 >
                   <option value="">Beliebig</option>
                   {PRICE_RANGES.map(range => (
@@ -313,9 +307,8 @@ const Bestand = () => {
                 <select
                   value={mileageMax}
                   onChange={(e) => setMileageMax(e.target.value)}
-                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${
-                    mileageMax ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
-                  }`}
+                  className={`w-full px-3 py-2.5 rounded-lg border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm ${mileageMax ? 'border-orange-500 bg-orange-50' : 'border-slate-200'
+                    }`}
                 >
                   <option value="">Beliebig</option>
                   {MILEAGE_RANGES.map(range => (
@@ -410,7 +403,13 @@ const Bestand = () => {
                 <div className="relative h-48 sm:h-56 overflow-hidden bg-slate-100">
                   {vehicle.photos && vehicle.photos.length > 0 ? (
                     <img
-                      src={`${API_URL}/api/uploads/${vehicle.photos[0]}`}
+                      src={
+                        vehicle.photos[0].startsWith('http')
+                          ? vehicle.photos[0]
+                          : vehicle.photos[0].startsWith('cashcar_uploads/')
+                            ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${vehicle.photos[0]}`
+                            : `${API_URL}/api/uploads/${vehicle.photos[0]}`
+                      }
                       alt={`${vehicle.brand} ${vehicle.model}`}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
@@ -419,7 +418,7 @@ const Bestand = () => {
                       <Car className="w-16 h-16 text-slate-300" />
                     </div>
                   )}
-                  
+
                   {/* Badges */}
                   <div className="absolute top-3 left-3 flex flex-wrap gap-2">
                     {isNewArrival(vehicle.created_at) && (
@@ -439,7 +438,7 @@ const Bestand = () => {
                       </span>
                     )}
                   </div>
-                  
+
                   {/* ID Badge */}
                   <div className="absolute bottom-3 right-3">
                     <span className="px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-xs font-mono rounded">
@@ -456,7 +455,7 @@ const Bestand = () => {
                   {vehicle.variant && (
                     <p className="text-slate-500 text-sm mb-3">{vehicle.variant}</p>
                   )}
-                  
+
                   {/* Quick Stats */}
                   <div className="grid grid-cols-2 gap-2 mb-4">
                     <div className="flex items-center gap-2 text-sm text-slate-600 bg-slate-50 px-3 py-2 rounded-lg">
@@ -502,7 +501,7 @@ const Bestand = () => {
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            
+
             <div className="flex items-center gap-1">
               {[...Array(Math.min(5, pagination.pages))].map((_, i) => {
                 let pageNum;
@@ -515,16 +514,15 @@ const Bestand = () => {
                 } else {
                   pageNum = pagination.page - 2 + i;
                 }
-                
+
                 return (
                   <button
                     key={pageNum}
                     onClick={() => fetchVehicles(pageNum)}
-                    className={`w-10 h-10 rounded-lg font-medium transition-colors ${
-                      pagination.page === pageNum
-                        ? 'bg-slate-900 text-white'
-                        : 'text-slate-600 hover:bg-slate-100'
-                    }`}
+                    className={`w-10 h-10 rounded-lg font-medium transition-colors ${pagination.page === pageNum
+                      ? 'bg-slate-900 text-white'
+                      : 'text-slate-600 hover:bg-slate-100'
+                      }`}
                   >
                     {pageNum}
                   </button>

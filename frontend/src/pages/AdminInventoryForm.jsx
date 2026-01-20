@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { 
+import {
   Car, ArrowLeft, Save, Trash2, Eye, Upload, X, Plus,
   Image as ImageIcon, Loader2, Check, AlertCircle, GripVertical
 } from "lucide-react";
@@ -13,7 +13,7 @@ const TOKEN_KEY = "admin_token";
 // Equipment features like mobile.de
 const EQUIPMENT_CATEGORIES = {
   "Komfort": [
-    "Klimaanlage", "Klimaautomatik", "Sitzheizung", "Lenkradheizung", 
+    "Klimaanlage", "Klimaautomatik", "Sitzheizung", "Lenkradheizung",
     "Standheizung", "Elektrische Fensterheber", "Elektrische Seitenspiegel",
     "Zentralverriegelung", "Keyless Entry", "Keyless Go", "Start-Stop-Automatik",
     "Multifunktionslenkrad", "Tempomat", "Adaptiver Tempomat", "Lordosenstütze"
@@ -30,7 +30,7 @@ const EQUIPMENT_CATEGORIES = {
     "Reifendruckkontrolle", "Berganfahrassistent", "Nebelscheinwerfer"
   ],
   "Exterieur": [
-    "LED-Scheinwerfer", "Xenon-Scheinwerfer", "Tagfahrlicht", 
+    "LED-Scheinwerfer", "Xenon-Scheinwerfer", "Tagfahrlicht",
     "Kurvenlicht", "Anhängerkupplung", "Dachgepäckträger", "Schiebedach",
     "Panoramadach", "Sportfahrwerk", "Leichtmetallfelgen", "Dachreling"
   ],
@@ -48,7 +48,7 @@ const EQUIPMENT_CATEGORIES = {
 
 const FUEL_TYPES = ["Benzin", "Diesel", "Elektro", "Hybrid (Benzin)", "Hybrid (Diesel)", "Plug-in-Hybrid", "Erdgas (CNG)", "Autogas (LPG)", "Wasserstoff"];
 const TRANSMISSIONS = ["Schaltgetriebe", "Automatik", "Halbautomatik"];
-const BODY_TYPES = ["Limousine", "Kombi", "SUV/Geländewagen", "Cabrio", "Coupé", "Van/Kleinbus", "Sportwagen", "Pickup", "Sonstige"];
+const BODY_TYPES = ["Limousine", "Kombi", "Kleinwagen", "SUV/Geländewagen", "Cabrio", "Coupé", "Van/Kleinbus", "Sportwagen", "Pickup", "Sonstige"];
 const DOOR_OPTIONS = ["2/3", "4/5", "6/7"];
 const COLORS = ["Schwarz", "Weiß", "Silber", "Grau", "Blau", "Rot", "Grün", "Braun", "Beige", "Orange", "Gelb", "Gold", "Violett", "Sonstige"];
 const INTERIOR_MATERIALS = ["Stoff", "Teilleder", "Leder", "Alcantara", "Velours", "Sonstige"];
@@ -70,7 +70,7 @@ const AdminInventoryForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(id);
-  
+
   const [loading, setLoading] = useState(isEditMode);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -159,7 +159,7 @@ const AdminInventoryForm = () => {
   // Fetch settings for default contact info (only when authenticated)
   useEffect(() => {
     if (!isAuthenticated) return;
-    
+
     const fetchSettings = async () => {
       try {
         const response = await fetch(`${API_URL}/api/admin/settings`, {
@@ -192,17 +192,17 @@ const AdminInventoryForm = () => {
         const response = await fetch(`${API_URL}/api/admin/inventory/${id}`, {
           headers: getAuthHeaders()
         });
-        
+
         if (response.status === 401) {
           toast.error("Sitzung abgelaufen");
           localStorage.removeItem(TOKEN_KEY);
           navigate(`/${ADMIN_PATH}`);
           return;
         }
-        
+
         if (!response.ok) throw new Error('Vehicle not found');
         const data = await response.json();
-        
+
         setFormData({
           ...data,
           mileage: data.mileage?.toString() || "",
@@ -227,7 +227,7 @@ const AdminInventoryForm = () => {
         setLoading(false);
       }
     };
-    
+
     fetchVehicle();
   }, [id, isEditMode, isAuthenticated, navigate, getAuthHeaders]);
 
@@ -275,9 +275,9 @@ const AdminInventoryForm = () => {
         });
 
         if (!response.ok) throw new Error('Upload failed');
-        
+
         const data = await response.json();
-        newPhotos.push(data.filename);
+        newPhotos.push(data.url);
       } catch (error) {
         toast.error(`Fehler beim Hochladen von ${file.name}`);
       }
@@ -288,7 +288,7 @@ const AdminInventoryForm = () => {
       photos: [...prev.photos, ...newPhotos]
     }));
     setUploading(false);
-    
+
     if (newPhotos.length > 0) {
       toast.success(`${newPhotos.length} Bild(er) hochgeladen`);
     }
@@ -356,7 +356,7 @@ const AdminInventoryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validation
     if (!formData.brand || !formData.model || !formData.price) {
       toast.error('Bitte füllen Sie alle Pflichtfelder aus (Marke, Modell, Preis)');
@@ -394,10 +394,10 @@ const AdminInventoryForm = () => {
         price: parseFloat(formData.price) || 0
       };
 
-      const url = isEditMode 
+      const url = isEditMode
         ? `${API_URL}/api/admin/inventory/${id}`
         : `${API_URL}/api/admin/inventory`;
-      
+
       const method = isEditMode ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -479,7 +479,7 @@ const AdminInventoryForm = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link 
+              <Link
                 to={`/${ADMIN_PATH}/dashboard?tab=inventory`}
                 className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
               >
@@ -519,8 +519,10 @@ const AdminInventoryForm = () => {
                 disabled={saving}
                 className="flex items-center gap-2 px-5 py-2.5 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 disabled:opacity-50 transition-colors"
               >
-                {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                Speichern
+                <span className="flex items-center justify-center w-4 h-4">
+                  {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                </span>
+                <span>Speichern</span>
               </button>
             </div>
           </div>
@@ -539,25 +541,29 @@ const AdminInventoryForm = () => {
               <GripVertical className="w-4 h-4 inline-block mr-1" />
               Bilder per Drag & Drop neu anordnen. Das erste Bild wird als Hauptbild verwendet.
             </p>
-            
+
             <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3">
               {formData.photos.map((photo, index) => (
-                <div 
-                  key={photo} 
+                <div
+                  key={photo}
                   draggable
                   onDragStart={(e) => handleDragStart(e, index)}
                   onDragOver={(e) => handleDragOver(e, index)}
                   onDragLeave={handleDragLeave}
                   onDrop={(e) => handleDrop(e, index)}
                   onDragEnd={handleDragEnd}
-                  className={`relative group aspect-square rounded-lg overflow-hidden bg-slate-100 cursor-grab active:cursor-grabbing transition-all ${
-                    draggedIndex === index ? 'opacity-50 scale-95' : ''
-                  } ${
-                    dragOverIndex === index ? 'ring-2 ring-orange-500 ring-offset-2' : ''
-                  }`}
+                  className={`relative group aspect-square rounded-lg overflow-hidden bg-slate-100 cursor-grab active:cursor-grabbing transition-all ${draggedIndex === index ? 'opacity-50 scale-95' : ''
+                    } ${dragOverIndex === index ? 'ring-2 ring-orange-500 ring-offset-2' : ''
+                    }`}
                 >
                   <img
-                    src={`${API_URL}/api/uploads/${photo}`}
+                    src={
+                      photo.startsWith('http')
+                        ? photo
+                        : photo.startsWith('cashcar_uploads/')
+                          ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${photo}`
+                          : `${API_URL}/api/uploads/${photo}`
+                    }
                     alt={`Foto ${index + 1}`}
                     className="w-full h-full object-cover pointer-events-none"
                   />
@@ -583,7 +589,7 @@ const AdminInventoryForm = () => {
                   </span>
                 </div>
               ))}
-              
+
               {formData.photos.length < 40 && (
                 <label className="aspect-square rounded-lg border-2 border-dashed border-slate-300 hover:border-orange-500 flex flex-col items-center justify-center cursor-pointer transition-colors">
                   <input
@@ -1069,11 +1075,10 @@ const AdminInventoryForm = () => {
                     {features.map(feature => (
                       <label
                         key={feature}
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors ${
-                          formData.features.includes(feature)
-                            ? 'bg-orange-50 border-orange-500 text-orange-700'
-                            : 'border-slate-200 hover:border-slate-300'
-                        }`}
+                        className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors ${formData.features.includes(feature)
+                          ? 'bg-orange-50 border-orange-500 text-orange-700'
+                          : 'border-slate-200 hover:border-slate-300'
+                          }`}
                       >
                         <input
                           type="checkbox"
@@ -1260,8 +1265,10 @@ const AdminInventoryForm = () => {
               disabled={saving}
               className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600 disabled:opacity-50 transition-colors"
             >
-              {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-              {isEditMode ? 'Änderungen speichern' : 'Fahrzeug erstellen'}
+              <span className="flex items-center justify-center w-5 h-5">
+                {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+              </span>
+              <span>{isEditMode ? 'Änderungen speichern' : 'Fahrzeug erstellen'}</span>
             </button>
           </div>
         </form>

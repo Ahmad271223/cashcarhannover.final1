@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Car, 
-  ArrowLeft, 
-  Phone, 
-  Mail, 
+import {
+  Car,
+  ArrowLeft,
+  Phone,
+  Mail,
   MapPin,
   Calendar,
   Gauge,
@@ -83,7 +83,7 @@ const AdminCarDetail = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await axios.put(`${API}/admin/cars/${id}`, 
+      await axios.put(`${API}/admin/cars/${id}`,
         { status, admin_notes: adminNotes },
         { headers: getAuthHeaders() }
       );
@@ -159,12 +159,18 @@ const AdminCarDetail = () => {
               </div>
               {car.photos && car.photos.length > 0 ? (
                 <div>
-                  <div 
+                  <div
                     className="aspect-video relative cursor-pointer"
                     onClick={() => setShowLightbox(true)}
                   >
-                    <img 
-                      src={`${process.env.REACT_APP_BACKEND_URL}/api/uploads/${car.photos[selectedPhoto]}`}
+                    <img
+                      src={
+                        car.photos[selectedPhoto].startsWith('http')
+                          ? car.photos[selectedPhoto]
+                          : car.photos[selectedPhoto].startsWith('cashcar_uploads/')
+                            ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${car.photos[selectedPhoto]}`
+                            : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${car.photos[selectedPhoto]}`
+                      }
                       alt={`${car.brand} ${car.model}`}
                       className="w-full h-full object-cover"
                     />
@@ -174,15 +180,20 @@ const AdminCarDetail = () => {
                   </div>
                   <div className="p-4 grid grid-cols-6 md:grid-cols-8 gap-2">
                     {car.photos.map((photo, index) => (
-                      <div 
+                      <div
                         key={photo}
-                        className={`aspect-square rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
-                          index === selectedPhoto ? 'border-orange-500' : 'border-transparent'
-                        }`}
+                        className={`aspect-square rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${index === selectedPhoto ? 'border-orange-500' : 'border-transparent'
+                          }`}
                         onClick={() => setSelectedPhoto(index)}
                       >
-                        <img 
-                          src={`${process.env.REACT_APP_BACKEND_URL}/api/uploads/${photo}`}
+                        <img
+                          src={
+                            photo.startsWith('http')
+                              ? photo
+                              : photo.startsWith('cashcar_uploads/')
+                                ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${photo}`
+                                : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${photo}`
+                          }
                           alt={`Foto ${index + 1}`}
                           className="w-full h-full object-cover"
                         />
@@ -371,14 +382,14 @@ const AdminCarDetail = () => {
               </div>
               <div className="p-6 space-y-4">
                 <p className="font-semibold text-lg">{car.contact.first_name} {car.contact.last_name}</p>
-                <a 
+                <a
                   href={`tel:${car.contact.phone}`}
                   className="flex items-center gap-3 text-slate-600 hover:text-orange-600 transition-colors"
                 >
                   <Phone className="w-5 h-5" />
                   {car.contact.phone}
                 </a>
-                <a 
+                <a
                   href={`mailto:${car.contact.email}`}
                   className="flex items-center gap-3 text-slate-600 hover:text-orange-600 transition-colors"
                 >
@@ -425,7 +436,7 @@ const AdminCarDetail = () => {
                   />
                 </div>
 
-                <Button 
+                <Button
                   onClick={handleSave}
                   disabled={saving}
                   className="w-full bg-orange-500 hover:bg-orange-600 text-white"
@@ -456,17 +467,17 @@ const AdminCarDetail = () => {
 
       {/* Lightbox */}
       {showLightbox && car.photos && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
           onClick={() => setShowLightbox(false)}
         >
-          <button 
+          <button
             className="absolute top-4 right-4 text-white p-2 hover:bg-white/10 rounded-full"
             onClick={() => setShowLightbox(false)}
           >
             <X className="w-8 h-8" />
           </button>
-          <button 
+          <button
             className="absolute left-4 top-1/2 -translate-y-1/2 text-white p-2 hover:bg-white/10 rounded-full"
             onClick={(e) => {
               e.stopPropagation();
@@ -475,7 +486,7 @@ const AdminCarDetail = () => {
           >
             <ChevronLeft className="w-8 h-8" />
           </button>
-          <button 
+          <button
             className="absolute right-4 top-1/2 -translate-y-1/2 text-white p-2 hover:bg-white/10 rounded-full"
             onClick={(e) => {
               e.stopPropagation();
@@ -484,8 +495,8 @@ const AdminCarDetail = () => {
           >
             <ChevronRight className="w-8 h-8" />
           </button>
-          <img 
-            src={`${process.env.REACT_APP_BACKEND_URL}/api/uploads/${car.photos[selectedPhoto]}`}
+          <img
+            src={car.photos[selectedPhoto].startsWith('http') ? car.photos[selectedPhoto] : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${car.photos[selectedPhoto]}`}
             alt={`${car.brand} ${car.model}`}
             className="max-w-full max-h-[90vh] object-contain"
             onClick={(e) => e.stopPropagation()}
