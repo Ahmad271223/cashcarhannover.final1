@@ -1004,7 +1004,8 @@ const CarSubmissionForm = () => {
                             <CheckCircle className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
                             <span>Sie haben <strong className="text-white">keinerlei Verkaufszwang</strong> – Sie entscheiden, ob Sie verkaufen.</span>
                           </p>
-                          <div className="border-t border-slate-700 my-4"></div>
+                          {/* Provision details hidden as requested */}
+                          {/* <div className="border-t border-slate-700 my-4"></div>
                           <p className="text-slate-400">Bei erfolgreichem Verkauf:</p>
                           <p className="flex items-start gap-2">
                             <Banknote className="w-4 h-4 text-orange-400 mt-0.5 shrink-0" />
@@ -1013,7 +1014,7 @@ const CarSubmissionForm = () => {
                           <p className="flex items-start gap-2">
                             <Banknote className="w-4 h-4 text-orange-400 mt-0.5 shrink-0" />
                             <span>Bis <strong className="text-white">7.499 €</strong> Verkaufspreis: <strong className="text-orange-400">200 € Pauschale</strong> (je 100 € für Käufer & Verkäufer)</span>
-                          </p>
+                          </p> */}
                         </div>
 
                         <div className="mt-6 pt-4 border-t border-slate-700">
@@ -1026,8 +1027,7 @@ const CarSubmissionForm = () => {
                               className="mt-1 border-slate-500 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
                             />
                             <Label htmlFor="terms_accepted" className="cursor-pointer text-sm text-slate-300 leading-relaxed">
-                              Ich habe die Konditionen gelesen und akzeptiere, dass bei einem erfolgreichen Verkauf
-                              die oben genannte Provision anfällt. Mir ist bewusst, dass ich <strong className="text-white">nicht zum Verkauf verpflichtet</strong> bin
+                              Ich habe die Konditionen gelesen und akzeptiere diese. Mir ist bewusst, dass ich <strong className="text-white">nicht zum Verkauf verpflichtet</strong> bin
                               und <strong className="text-white">keine Kosten</strong> entstehen, wenn kein Verkauf zustande kommt.
                             </Label>
                           </div>

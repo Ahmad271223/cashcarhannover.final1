@@ -629,7 +629,7 @@ const LandingPage = () => {
                 <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
                   <Car className="w-6 h-6 text-slate-900" />
                 </div>
-                <span className="font-heading font-bold text-xl">CashCar</span>
+                <span className="font-heading font-bold text-xl">CashCarHannover</span>
               </div>
               <p className="text-slate-400 text-sm">
                 Ihr Partner für den stressfreien Autoverkauf im Kundenauftrag.
@@ -640,7 +640,7 @@ const LandingPage = () => {
               <div className="space-y-2 text-slate-400 text-sm">
                 <p className="flex items-center gap-2">
                   <Phone className="w-4 h-4" />
-                  +49 123 4567890
+                  +49 178 3563 025
                 </p>
                 <p className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
