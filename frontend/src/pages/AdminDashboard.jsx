@@ -819,7 +819,13 @@ const AdminDashboard = () => {
                             <div className="flex items-center gap-3">
                               {vehicle.photos && vehicle.photos.length > 0 ? (
                                 <img
-                                  src={vehicle.photos[0].startsWith('http') ? vehicle.photos[0] : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${vehicle.photos[0]}`}
+                                  src={
+                                    vehicle.photos[0].startsWith('http')
+                                      ? vehicle.photos[0]
+                                      : vehicle.photos[0].startsWith('cashcar_uploads/')
+                                        ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${vehicle.photos[0]}`
+                                        : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${vehicle.photos[0]}`
+                                  }
                                   alt={`${vehicle.brand} ${vehicle.model}`}
                                   className="w-16 h-12 object-cover rounded-lg bg-slate-100"
                                 />
