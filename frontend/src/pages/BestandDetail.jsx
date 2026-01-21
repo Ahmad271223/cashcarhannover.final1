@@ -5,9 +5,9 @@ import {
   Car, ArrowLeft, Phone, Mail, MapPin, Calendar, Gauge, Fuel,
   Settings2, Cog, Palette, Users, Shield, FileCheck, Leaf,
   Check, X, ChevronLeft, ChevronRight, Share2, Heart,
-  DoorOpen, Zap, Droplets, ThermometerSun, Copy, Sparkles,
   Printer
 } from "lucide-react";
+import { getOptimizedImageUrl } from "../utils/imageUtils";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -221,13 +221,7 @@ const BestandDetail = () => {
                 {vehicle.photos && vehicle.photos.length > 0 ? (
                   <>
                     <img
-                      src={
-                        vehicle.photos[currentImageIndex].startsWith('http')
-                          ? vehicle.photos[currentImageIndex]
-                          : vehicle.photos[currentImageIndex].startsWith('cashcar_uploads/')
-                            ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${vehicle.photos[currentImageIndex]}`
-                            : `${API_URL}/api/uploads/${vehicle.photos[currentImageIndex]}`
-                      }
+                      src={getOptimizedImageUrl(vehicle.photos[currentImageIndex], 1200)}
                       alt={`${vehicle.brand} ${vehicle.model}`}
                       className="w-full h-full object-cover cursor-pointer"
                       onClick={() => setShowGallery(true)}
@@ -294,13 +288,7 @@ const BestandDetail = () => {
                           }`}
                       >
                         <img
-                          src={
-                            photo.startsWith('http')
-                              ? photo
-                              : photo.startsWith('cashcar_uploads/')
-                                ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${photo}`
-                                : `${API_URL}/api/uploads/${photo}`
-                          }
+                          src={getOptimizedImageUrl(photo, 200)}
                           alt={`Bild ${index + 1}`}
                           className="w-full h-full object-cover"
                         />
@@ -563,13 +551,7 @@ const BestandDetail = () => {
 
           <div className="absolute inset-0 flex items-center justify-center p-4">
             <img
-              src={
-                vehicle.photos[currentImageIndex].startsWith('http')
-                  ? vehicle.photos[currentImageIndex]
-                  : vehicle.photos[currentImageIndex].startsWith('cashcar_uploads/')
-                    ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${vehicle.photos[currentImageIndex]}`
-                    : `${API_URL}/api/uploads/${vehicle.photos[currentImageIndex]}`
-              }
+              src={getOptimizedImageUrl(vehicle.photos[currentImageIndex], 1600)}
               alt={`${vehicle.brand} ${vehicle.model}`}
               className="max-w-full max-h-full object-contain"
             />

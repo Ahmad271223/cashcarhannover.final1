@@ -5,6 +5,7 @@ import {
   Gauge, Fuel, Settings2, X, ArrowUpDown, Check,
   Phone, ChevronLeft, ChevronRight, Sparkles
 } from "lucide-react";
+import { getOptimizedImageUrl } from "../utils/imageUtils";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -403,13 +404,7 @@ const Bestand = () => {
                 <div className="relative h-48 sm:h-56 overflow-hidden bg-slate-100">
                   {vehicle.photos && vehicle.photos.length > 0 ? (
                     <img
-                      src={
-                        vehicle.photos[0].startsWith('http')
-                          ? vehicle.photos[0]
-                          : vehicle.photos[0].startsWith('cashcar_uploads/')
-                            ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${vehicle.photos[0]}`
-                            : `${API_URL}/api/uploads/${vehicle.photos[0]}`
-                      }
+                      src={getOptimizedImageUrl(vehicle.photos[0], 600)}
                       alt={`${vehicle.brand} ${vehicle.model}`}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />

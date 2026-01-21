@@ -28,6 +28,7 @@ import {
   ChevronRight,
   X
 } from "lucide-react";
+import { getOptimizedImageUrl } from "../utils/imageUtils";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -164,13 +165,7 @@ const AdminCarDetail = () => {
                     onClick={() => setShowLightbox(true)}
                   >
                     <img
-                      src={
-                        car.photos[selectedPhoto].startsWith('http')
-                          ? car.photos[selectedPhoto]
-                          : car.photos[selectedPhoto].startsWith('cashcar_uploads/')
-                            ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${car.photos[selectedPhoto]}`
-                            : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${car.photos[selectedPhoto]}`
-                      }
+                      src={getOptimizedImageUrl(car.photos[selectedPhoto], 800)}
                       alt={`${car.brand} ${car.model}`}
                       className="w-full h-full object-cover"
                     />
@@ -187,13 +182,7 @@ const AdminCarDetail = () => {
                         onClick={() => setSelectedPhoto(index)}
                       >
                         <img
-                          src={
-                            photo.startsWith('http')
-                              ? photo
-                              : photo.startsWith('cashcar_uploads/')
-                                ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${photo}`
-                                : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${photo}`
-                          }
+                          src={getOptimizedImageUrl(photo, 200)}
                           alt={`Foto ${index + 1}`}
                           className="w-full h-full object-cover"
                         />
@@ -502,7 +491,7 @@ const AdminCarDetail = () => {
             <ChevronRight className="w-8 h-8" />
           </button>
           <img
-            src={car.photos[selectedPhoto].startsWith('http') ? car.photos[selectedPhoto] : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${car.photos[selectedPhoto]}`}
+            src={getOptimizedImageUrl(car.photos[selectedPhoto], 1600)}
             alt={`${car.brand} ${car.model}`}
             className="max-w-full max-h-[90vh] object-contain"
             onClick={(e) => e.stopPropagation()}

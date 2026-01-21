@@ -23,6 +23,7 @@ import {
   Info,
   Shield
 } from "lucide-react";
+import { getOptimizedImageUrl } from "../utils/imageUtils";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -656,7 +657,7 @@ const CarSubmissionForm = () => {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {formData.photos.map((photo, index) => (
                           <div key={photo} className="image-preview">
-                            <img src={photo.startsWith('http') ? photo : photo.startsWith('cashcar_uploads/') ? `https://res.cloudinary.com/dktiuq3jr/image/upload/${photo}` : `${process.env.REACT_APP_BACKEND_URL}/api/uploads/${photo}`} alt={`Foto ${index + 1}`} />
+                            <img src={getOptimizedImageUrl(photo, 400)} alt={`Foto ${index + 1}`} />
                             <button
                               type="button"
                               className="delete-btn"
