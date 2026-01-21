@@ -45,56 +45,74 @@ const COLORS = ["Schwarz", "Weiß", "Silber", "Grau", "Blau", "Rot", "Grün", "B
 
 const CarSubmissionForm = () => {
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(1);
+
+  // Initialize from localStorage or default
+  const [currentStep, setCurrentStep] = useState(() => {
+    const savedStep = localStorage.getItem('carSubmissionStep');
+    return savedStep ? parseInt(savedStep) : 1;
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [brands, setBrands] = useState([]);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
   const [uploadingDocs, setUploadingDocs] = useState(false);
 
-  const [formData, setFormData] = useState({
-    // Step 1: Basic
-    brand: "",
-    model: "",
-    variant: "",
-    first_registration: "",
-    mileage: "",
-    // Step 2: Technical
-    fuel_type: "",
-    transmission: "",
-    power_hp: "",
-    power_kw: "",
-    engine_size: "",
-    body_type: "",
-    doors: "",
-    color: "",
-    interior_color: "",
-    tuv_until: "",
-    previous_owners: "1",
-    accident_free: true,
-    service_history: false,
-    vin: "",
-    features: [],
-    description: "",
-    // Step 3: Photos
-    photos: [],
-    // Step 4: Documents
-    documents: [],
-    // Step 5: Contact
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone: "",
-    city: "",
-    // Step 6: Pricing
-    desired_price: "",
-    minimum_price: "",
-    competitor_price: "",
-    competitor_source: "",
-    // Terms
-    terms_accepted: false,
-    // Anti-spam
-    honeypot: "",
+  const [formData, setFormData] = useState(() => {
+    const savedData = localStorage.getItem('carSubmissionData');
+    return savedData ? JSON.parse(savedData) : {
+      // Step 1: Basic
+      brand: "",
+      model: "",
+      variant: "",
+      first_registration: "",
+      mileage: "",
+      // Step 2: Technical
+      fuel_type: "",
+      transmission: "",
+      power_hp: "",
+      power_kw: "",
+      engine_size: "",
+      body_type: "",
+      doors: "",
+      color: "",
+      interior_color: "",
+      tuv_until: "",
+      previous_owners: "1",
+      accident_free: true,
+      service_history: false,
+      vin: "",
+      features: [],
+      description: "",
+      // Step 3: Photos
+      photos: [],
+      // Step 4: Documents
+      documents: [],
+      // Step 5: Contact
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone: "",
+      city: "",
+      // Step 6: Pricing
+      desired_price: "",
+      minimum_price: "",
+      competitor_price: "",
+      competitor_source: "",
+      // Terms
+      terms_accepted: false,
+      // Anti-spam
+      honeypot: "",
+    };
   });
+
+  // Save to localStorage whenever state changes
+  useEffect(() => {
+    localStorage.setItem('carSubmissionStep', currentStep.toString());
+  }, [currentStep]);
+
+  useEffect(() => {
+    localStorage.setItem('carSubmissionData', JSON.stringify(formData));
+  }, [formData]);
 
   // Hidden honeypot field ref
   const honeypotRef = useCallback((node) => {
@@ -273,6 +291,11 @@ const CarSubmissionForm = () => {
       };
 
       const response = await axios.post(`${API}/cars`, submitData);
+
+      // Clear localStorage on success
+      localStorage.removeItem('carSubmissionData');
+      localStorage.removeItem('carSubmissionStep');
+
       navigate("/erfolg", { state: { carId: response.data.id } });
     } catch (error) {
       console.error("Submit error:", error);
