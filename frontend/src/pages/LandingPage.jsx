@@ -436,7 +436,7 @@ const LandingPage = () => {
             </h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -464,7 +464,7 @@ const LandingPage = () => {
               <p className="text-slate-600 text-sm">Kein Käufer gefunden? Kostet nichts. Nicht verkaufen wollen? Auch kostenlos.</p>
             </motion.div>
 
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -476,7 +476,7 @@ const LandingPage = () => {
               </div>
               <h3 className="font-heading text-lg font-semibold text-slate-900 mb-2">Nur bei Erfolg</h3>
               <p className="text-slate-600 text-sm">Provision nur bei erfolgreichem Verkauf – fair geteilt zwischen Käufer & Verkäufer.</p>
-            </motion.div>
+            </motion.div> */}
           </div>
 
           {/* Provisionsmodell section hidden as per request */}
