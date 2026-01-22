@@ -5,7 +5,7 @@ import {
   Car, ArrowLeft, Phone, Mail, MapPin, Calendar, Gauge, Fuel,
   Settings2, Cog, Palette, Users, Shield, FileCheck, Leaf,
   Check, X, ChevronLeft, ChevronRight, Share2, Heart,
-  Printer
+  Printer, Zap, DoorOpen, Droplets, ThermometerSun, Sparkles
 } from "lucide-react";
 import { getOptimizedImageUrl } from "../utils/imageUtils";
 
