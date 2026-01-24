@@ -156,6 +156,53 @@ const CarSubmissionForm = () => {
     updateField(field, formatted);
   };
 
+  const handleMileageChange = (value) => {
+    // If user enters comma, allow it (don't format yet)
+    if (value.includes(',')) {
+      updateField("mileage", value);
+      return;
+    }
+
+    // Otherwise format as integer immediately
+    const clean = value.replace(/\D/g, '');
+    if (!clean) {
+      updateField("mileage", "");
+      return;
+    }
+    const formatted = new Intl.NumberFormat('de-DE').format(clean);
+    updateField("mileage", formatted);
+  };
+
+  const handleMileageBlur = () => {
+    const value = formData.mileage;
+    if (!value) return;
+
+    let raw = value.toString().replace(/\./g, ''); // Remove existing dots
+
+    // Smart comma logic
+    if (raw.includes(',')) {
+      const parts = raw.split(',');
+      const lastPart = parts[parts.length - 1];
+
+      // If suffix is 3 digits (e.g. 10,000), interpret as thousand separator -> Keep number
+      if (lastPart.length === 3) {
+        raw = raw.replace(/,/g, '');
+      } else {
+        // Otherwise (e.g. 10,0 or 100,00), interpret as decimal -> Discard decimal part
+        raw = parts.slice(0, -1).join('');
+      }
+    }
+
+    // Final Sanitize & Format
+    const clean = raw.replace(/\D/g, '');
+    if (!clean) {
+      updateField("mileage", "");
+    } else {
+      const formatted = new Intl.NumberFormat('de-DE').format(clean);
+      updateField("mileage", formatted);
+    }
+  };
+
   const handleFileUpload = async (files, type) => {
     const setUploading = type === "photos" ? setUploadingPhotos : setUploadingDocs;
     setUploading(true);
@@ -269,7 +316,7 @@ const CarSubmissionForm = () => {
         model: formData.model,
         variant: formData.variant || null,
         first_registration: formData.first_registration,
-        mileage: parseInt(formData.mileage),
+        mileage: parseInt(formData.mileage.toString().replace(/\./g, '')),
         fuel_type: formData.fuel_type,
         transmission: formData.transmission,
         power_hp: formData.power_hp ? parseInt(formData.power_hp) : null,
@@ -455,15 +502,19 @@ const CarSubmissionForm = () => {
                       <div className="space-y-2 md:col-span-2">
                         <Label htmlFor="mileage">Kilometerstand *</Label>
                         <div className="relative">
-                          <Input
-                            data-testid="mileage-input"
-                            id="mileage"
-                            type="number"
-                            value={formData.mileage}
-                            onChange={(e) => updateField("mileage", e.target.value)}
-                            placeholder="z.B. 85000"
-                            className="h-12 bg-slate-50 pr-12"
-                          />
+                          <div className="relative">
+                            <Input
+                              data-testid="mileage-input"
+                              id="mileage"
+                              type="text"
+                              value={formData.mileage}
+                              onChange={(e) => handleMileageChange(e.target.value)}
+                              onBlur={handleMileageBlur}
+                              placeholder="z.B. 85.000"
+                              className="h-12 bg-slate-50 pr-12"
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">km</span>
+                          </div>
                           <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">km</span>
                         </div>
                       </div>
