@@ -278,7 +278,7 @@ const AdminDashboard = () => {
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
                 <Car className="w-6 h-6 text-slate-900" />
               </div>
-              <span className="font-heading font-bold text-xl hidden md:inline">CashCar</span>
+              <span className="font-heading font-bold text-xl hidden md:inline">CashCarHannover</span>
             </Link>
             <span className="text-slate-400 hidden sm:inline">|</span>
             <span className="flex items-center gap-2 text-sm hidden sm:flex">

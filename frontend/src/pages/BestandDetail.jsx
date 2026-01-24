@@ -156,7 +156,7 @@ const BestandDetail = () => {
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-slate-900 to-slate-700 rounded-xl flex items-center justify-center shadow-lg">
                 <Car className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <span className="font-heading font-bold text-xl sm:text-2xl text-slate-900">CashCar</span>
+              <span className="font-heading font-bold text-xl sm:text-2xl text-slate-900">CashCarHannover</span>
             </Link>
             <div className="flex items-center gap-2 sm:gap-4">
               <Link
