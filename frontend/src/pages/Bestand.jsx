@@ -54,16 +54,10 @@ const MILEAGE_RANGES = [
   { value: "200000", label: "bis 200.000 km" },
 ];
 
-const YEAR_RANGES = [
-  { value: "2024", label: "ab 2024" },
-  { value: "2023", label: "ab 2023" },
-  { value: "2022", label: "ab 2022" },
-  { value: "2021", label: "ab 2021" },
-  { value: "2020", label: "ab 2020" },
-  { value: "2018", label: "ab 2018" },
-  { value: "2015", label: "ab 2015" },
-  { value: "2010", label: "ab 2010" },
-];
+const YEAR_RANGES = Array.from({ length: 2026 - 1950 + 1 }, (_, i) => {
+  const year = 2026 - i;
+  return { value: year.toString(), label: `ab ${year}` };
+});
 
 const formatPrice = (price) => {
   return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price);

@@ -141,6 +141,21 @@ const CarSubmissionForm = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleDateInput = (field, value) => {
+    // Allows only numbers
+    const clean = value.replace(/\D/g, '');
+    let formatted = clean;
+
+    // Auto-slash after 2 digits, max 2 digits after slash (MM/YY)
+    if (clean.length > 2) {
+      formatted = clean.slice(0, 2) + '/' + clean.slice(2, 4);
+    } else {
+      formatted = clean.slice(0, 2);
+    }
+
+    updateField(field, formatted);
+  };
+
   const handleFileUpload = async (files, type) => {
     const setUploading = type === "photos" ? setUploadingPhotos : setUploadingDocs;
     setUploading(true);
@@ -431,8 +446,8 @@ const CarSubmissionForm = () => {
                           data-testid="first-registration-input"
                           id="first_registration"
                           value={formData.first_registration}
-                          onChange={(e) => updateField("first_registration", e.target.value)}
-                          placeholder="MM/JJJJ"
+                          onChange={(e) => handleDateInput("first_registration", e.target.value)}
+                          placeholder="MM/JJ"
                           className="h-12 bg-slate-50"
                         />
                       </div>
@@ -567,8 +582,8 @@ const CarSubmissionForm = () => {
                           data-testid="tuv-input"
                           id="tuv_until"
                           value={formData.tuv_until}
-                          onChange={(e) => updateField("tuv_until", e.target.value)}
-                          placeholder="MM/JJJJ"
+                          onChange={(e) => handleDateInput("tuv_until", e.target.value)}
+                          placeholder="MM/JJ"
                           className="h-12 bg-slate-50"
                         />
                       </div>

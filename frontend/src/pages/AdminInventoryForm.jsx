@@ -245,6 +245,23 @@ const AdminInventoryForm = () => {
     }
   };
 
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+    const clean = value.replace(/\D/g, '');
+    let formatted = clean;
+
+    if (clean.length > 2) {
+      formatted = clean.slice(0, 2) + '/' + clean.slice(2, 4);
+    } else {
+      formatted = clean.slice(0, 2);
+    }
+
+    setFormData(prev => ({
+      ...prev,
+      [name]: formatted
+    }));
+  };
+
   const handleFeatureToggle = (feature) => {
     setFormData(prev => ({
       ...prev,
@@ -673,9 +690,9 @@ const AdminInventoryForm = () => {
                   type="text"
                   name="first_registration"
                   value={formData.first_registration}
-                  onChange={handleInputChange}
+                  onChange={handleDateChange}
                   className="w-full px-3 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  placeholder="MM/YYYY"
+                  placeholder="MM/JJ"
                   required
                 />
               </div>
@@ -908,9 +925,9 @@ const AdminInventoryForm = () => {
                   type="text"
                   name="tuv_until"
                   value={formData.tuv_until}
-                  onChange={handleInputChange}
+                  onChange={handleDateChange}
                   className="w-full px-3 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  placeholder="MM/YYYY"
+                  placeholder="MM/JJ"
                 />
               </div>
               <div>
