@@ -48,7 +48,7 @@ const AdminLogin = () => {
       >
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <Logo className="w-12 h-12" iconClassName="w-7 h-7" />
+            <Logo className="w-24 h-24" iconClassName="w-14 h-14" />
           </Link>
           <h1 className="font-heading text-2xl font-bold text-white mb-2">
             Admin-Bereich
