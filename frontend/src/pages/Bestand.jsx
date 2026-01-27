@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import Logo from "@/components/ui/Logo";
 import {
   Car, Search, Filter, ChevronDown, MapPin, Calendar,
   Gauge, Fuel, Settings2, X, ArrowUpDown, Check,
@@ -147,9 +148,7 @@ const Bestand = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2 sm:gap-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-slate-900 to-slate-700 rounded-xl flex items-center justify-center shadow-lg">
-                <Car className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-              </div>
+              <Logo className="w-10 h-10 sm:w-12 sm:h-12" bgClass="bg-gradient-to-br from-slate-100 to-slate-200 shadow-lg" iconClassName="w-8 h-8 object-contain" />
               <span className="font-heading font-bold text-xl sm:text-2xl text-slate-900">CashCarHannover</span>
             </Link>
             <div className="flex items-center gap-2 sm:gap-4">
@@ -536,9 +535,7 @@ const Bestand = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
-                  <Car className="w-5 h-5 text-white" />
-                </div>
+                <Logo />
                 <span className="font-heading font-bold text-xl">CashCar</span>
               </div>
               <p className="text-slate-400 text-sm">

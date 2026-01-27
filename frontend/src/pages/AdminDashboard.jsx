@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import Logo from "@/components/ui/Logo";
 import {
   Car,
   LogOut,
@@ -275,9 +276,7 @@ const AdminDashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                <Car className="w-6 h-6 text-slate-900" />
-              </div>
+              <Logo />
               <span className="font-heading font-bold text-xl hidden md:inline">CashCarHannover</span>
             </Link>
             <span className="text-slate-400 hidden sm:inline">|</span>
