@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Logo from "@/components/ui/Logo";
 import { Car, Lock, User, Loader2 } from "lucide-react";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -48,7 +47,9 @@ const AdminLogin = () => {
       >
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <Logo className="w-12 h-12" iconClassName="w-7 h-7" />
+            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+              <Car className="w-7 h-7 text-slate-900" />
+            </div>
           </Link>
           <h1 className="font-heading text-2xl font-bold text-white mb-2">
             Admin-Bereich

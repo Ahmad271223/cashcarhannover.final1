@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import Logo from "@/components/ui/Logo";
 import {
   Car,
   Shield,
@@ -78,7 +77,9 @@ const LandingPage = () => {
       <header className="glass-header fixed top-0 left-0 right-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <Logo bgClass="bg-slate-100" />
+            <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
+              <Car className="w-6 h-6 text-white" />
+            </div>
             <span className="font-heading font-bold text-xl text-slate-900">CashCarHannover</span>
           </Link>
 
@@ -625,7 +626,9 @@ const LandingPage = () => {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Logo />
+                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                  <Car className="w-6 h-6 text-slate-900" />
+                </div>
                 <span className="font-heading font-bold text-xl">CashCarHannover</span>
               </div>
               <p className="text-slate-400 text-sm">
