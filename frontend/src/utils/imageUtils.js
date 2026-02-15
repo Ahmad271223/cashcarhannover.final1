@@ -13,23 +13,9 @@ export const getOptimizedImageUrl = (urlOrPath, width = 'auto') => {
     const OPTIMIZATIONS = `f_auto,q_auto${width !== 'auto' ? `,w_${width}` : ''}`;
     const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
 
-    // Case 1: Already a full Cloudinary URL
-    if (urlOrPath.includes('cloudinary.com')) {
-        // Check if already optimized (simple check)
-        if (urlOrPath.includes('f_auto') && urlOrPath.includes('q_auto')) {
-            return urlOrPath;
-        }
-
-        // Inject optimizations after /upload/
-        if (urlOrPath.includes(UPLOAD_PREFIX)) {
-            return urlOrPath.replace(UPLOAD_PREFIX, `${UPLOAD_PREFIX}${OPTIMIZATIONS}/`);
-        }
+    // Case 1: URLs (S3 or external)
+    if (urlOrPath.startsWith('http')) {
         return urlOrPath;
-    }
-
-    // Case 2: Relative path stored in DB (e.g. "cashcar_uploads/xyz")
-    if (urlOrPath.startsWith('cashcar_uploads/')) {
-        return `https://res.cloudinary.com/${CLOUD_NAME}${UPLOAD_PREFIX}${OPTIMIZATIONS}/${urlOrPath}`;
     }
 
     // Case 3: Local uploads or other URLs (fallback)

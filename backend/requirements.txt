@@ -9,7 +9,7 @@ certifi
 cffi
 charset-normalizer
 click
-cloudinary
+
 colorama
 cryptography
 dnspython

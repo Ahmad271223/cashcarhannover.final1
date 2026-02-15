@@ -9,8 +9,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
-import cloudinary
-import cloudinary.uploader
+
 import os
 import logging
 from pathlib import Path
@@ -52,12 +51,7 @@ UPLOAD_DIR = ROOT_DIR / 'uploads'
 UPLOAD_DIR.mkdir(exist_ok=True)
 MAX_UPLOAD_SIZE = int(os.environ.get('MAX_UPLOAD_SIZE_MB', 10)) * 1024 * 1024  # Default 10MB
 
-# Cloudinary Configuration
-cloudinary.config( 
-  cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME'), 
-  api_key = os.environ.get('CLOUDINARY_API_KEY'), 
-  api_secret = os.environ.get('CLOUDINARY_API_SECRET') 
-)
+
 
 # Rate limiter with in-memory storage
 limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
@@ -721,47 +715,7 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
         logger.error(f"Upload error: {e}")
         raise HTTPException(status_code=500, detail="Fehler beim Hochladen der Datei")
 
-@api_router.get("/test-cloudinary")
-async def test_cloudinary_connection():
-    """Debug endpoint to test Cloudinary connection from Render"""
-    try:
-        # 1. Check Env Vars
-        cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME')
-        api_key = os.environ.get('CLOUDINARY_API_KEY')
-        
-        if not cloud_name or not api_key:
-            return {
-                "status": "error", 
-                "message": "Environment variables missing",
-                "debug": {
-                    "cloud_name_set": bool(cloud_name),
-                    "api_key_set": bool(api_key)
-                }
-            }
 
-        # 2. Try Upload
-        # Create a tiny 1x1 pixel image in memory
-        dummy_image = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89\x00\x00\x00\rIDATx\x9cc\xfc\xcf\x00\x00\x02\x02\x01\x01\xfb\xf0\x9e\xbf\x00\x00\x00\x00IEND\xaeB`\x82'
-        
-        result = cloudinary.uploader.upload(
-            dummy_image, 
-            folder="debug_test",
-            resource_type="image"
-        )
-        
-        return {
-            "status": "success",
-            "message": "Connection to Cloudinary is WORKING!",
-            "test_url": result.get("secure_url"),
-            "cloud_name": cloud_name
-        }
-        
-    except Exception as e:
-        return {
-            "status": "error",
-            "message": str(e),
-            "type": str(type(e))
-        }
 
 @api_router.post("/cars", response_model=dict)
 @limiter.limit("10/minute")
