@@ -1,5 +1,5 @@
 # Update this with your real domain
-{$DOMAIN_NAME} {
+:80 {
     # Frontend (Root)
     handle / {
         reverse_proxy frontend:80
