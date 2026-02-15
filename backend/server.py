@@ -35,7 +35,7 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(
     mongo_url,
-    maxPoolSize=100,
+    maxPoolSize=150,
     minPoolSize=10,
     maxIdleTimeMS=30000,
     serverSelectionTimeoutMS=5000,
@@ -587,35 +587,138 @@ async def health():
     except Exception:
         return JSONResponse(status_code=503, content={"status": "unhealthy", "database": "disconnected"})
 
+# S3 / Hetzner Object Storage Configuration
+S3_ENDPOINT = os.environ.get('S3_ENDPOINT', 'https://fsn1.your-object-storage.hetzner.com')
+S3_ACCESS_KEY = os.environ.get('S3_ACCESS_KEY')
+S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY')
+S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME', 'cashcar-images')
+S3_REGION = os.environ.get('S3_REGION', 'fsn1')
+
+import boto3
+from botocore.exceptions import NoCredentialsError
+from PIL import Image
+import io
+
+# Initialize S3 Client
+s3_client = boto3.client(
+    's3',
+    endpoint_url=S3_ENDPOINT,
+    aws_access_key_id=S3_ACCESS_KEY,
+    aws_secret_access_key=S3_SECRET_KEY,
+    region_name=S3_REGION
+)
+
+async def process_and_upload_image(file_content: bytes, filename_base: str) -> dict:
+    """
+    Process image into 3 variants (thumb, detail, original) and upload to S3/Hetzner.
+    Returns a dict with URLs.
+    """
+    try:
+        urls = {}
+        
+        # Open image from bytes
+        original_img = Image.open(io.BytesIO(file_content))
+        
+        # Convert to RGB (if RGBA/P mode) for WebP compatibility
+        if original_img.mode in ('RGBA', 'P'):
+            original_img = original_img.convert('RGB')
+            
+        variants = [
+            # defined as (suffix, width, quality)
+            ('thumb', 640, 80),
+            ('detail', 1600, 85),
+            ('original', 2400, 90) # limit max width
+        ]
+        
+        for suffix, target_width, quality in variants:
+            # Copy image for processing
+            img = original_img.copy()
+            
+            # Resize if image is larger than target
+            if img.width > target_width:
+                # Calculate height maintaining aspect ratio
+                ratio = target_width / img.width
+                target_height = int(img.height * ratio)
+                img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+            
+            # Save to byte stream as WebP
+            output_stream = io.BytesIO()
+            img.save(output_stream, format='WEBP', quality=quality)
+            output_stream.seek(0)
+            
+            # S3 Key (Path)
+            s3_key = f"{filename_base}_{suffix}.webp"
+            
+            # Upload to S3
+            await asyncio.to_thread(
+                s3_client.upload_fileobj,
+                output_stream,
+                S3_BUCKET_NAME,
+                s3_key,
+                ExtraArgs={'ContentType': 'image/webp', 'ACL': 'public-read'}
+            )
+            
+            # Construct Public URL (Hetzner specific pattern)
+            # URL Pattern usually: https://<bucket>.<endpoint>/<key> OR https://<endpoint>/<bucket>/<key>
+            # Adjust based on Hetzner documentation. Typically path style:
+            urls[suffix] = f"{S3_ENDPOINT}/{S3_BUCKET_NAME}/{s3_key}"
+            
+        return urls
+
+    except Exception as e:
+        logger.error(f"Image processing error: {e}")
+        raise
+
 @api_router.post("/upload")
 @limiter.limit("30/minute")
 async def upload_file(request: Request, file: UploadFile = File(...)):
-    """Upload a single file to Cloudinary with size validation"""
+    """Upload a single file, optimize it (WebP/Resize), and store in Hetzner Object Storage"""
     file_ext = Path(file.filename).suffix.lower()
-    allowed_exts = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.pdf', '.doc', '.docx']
+    allowed_images = ['.jpg', '.jpeg', '.png', '.webp']
+    allowed_docs = ['.pdf', '.doc', '.docx']
     
-    if file_ext not in allowed_exts:
-        raise HTTPException(status_code=400, detail="Dateityp nicht erlaubt")
-    
-    # Check file size
-    content = await file.read()
-    if len(content) > MAX_UPLOAD_SIZE:
-        raise HTTPException(status_code=400, detail=f"Datei zu groß. Maximum: {MAX_UPLOAD_SIZE // (1024*1024)}MB")
+    # Generate unique base filename
+    file_id = str(uuid.uuid4())
     
     try:
-        # Upload to Cloudinary
-        # We can upload the bytes directly
-        result = cloudinary.uploader.upload(
-            content, 
-            resource_type="auto",
-            folder="cashcar_uploads"
-        )
+        content = await file.read()
         
-        # Return the secure URL
-        return {"filename": result.get("public_id"), "url": result.get("secure_url")}
+        if len(content) > MAX_UPLOAD_SIZE:
+            raise HTTPException(status_code=400, detail=f"Datei zu groß. Maximum: {MAX_UPLOAD_SIZE // (1024*1024)}MB")
+
+        # CASE 1: IMAGE UPLOAD -> Process & Optimize
+        if file_ext in allowed_images:
+            urls = await process_and_upload_image(content, file_id)
+            # Return structure compatible with frontend
+            # We return the 'detail' URL as default, but frontend might need to handle object
+            # For now, let's return the detail view as the main URL, but maybe we should update frontend to handle optimized object
+            return {
+                "filename": file_id, 
+                "url": urls['detail'], # Default to detail view for now
+                "variants": urls
+            }
+            
+        # CASE 2: DOCUMENT UPLOAD -> Upload directly (no resize)
+        elif file_ext in allowed_docs:
+            s3_key = f"{file_id}{file_ext}"
+            file_stream = io.BytesIO(content)
+            
+            await asyncio.to_thread(
+                s3_client.upload_fileobj,
+                file_stream,
+                S3_BUCKET_NAME,
+                s3_key,
+                ExtraArgs={'ContentType': file.content_type, 'ACL': 'public-read'}
+            )
+            
+            url = f"{S3_ENDPOINT}/{S3_BUCKET_NAME}/{s3_key}"
+            return {"filename": s3_key, "url": url}
+            
+        else:
+            raise HTTPException(status_code=400, detail="Dateityp nicht erlaubt")
 
     except Exception as e:
-        logger.error(f"Cloudinary upload error: {e}")
+        logger.error(f"Upload error: {e}")
         raise HTTPException(status_code=500, detail="Fehler beim Hochladen der Datei")
 
 @api_router.get("/test-cloudinary")

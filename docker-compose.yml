@@ -1,0 +1,45 @@
+services:
+  backend:
+    build: ./backend
+    restart: always
+    environment:
+      - MONGO_URL=${MONGO_URL}
+      - DB_NAME=cashcar
+      - JWT_SECRET=${JWT_SECRET}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      # Allow frontend domain
+      - CORS_ORIGINS=https://${DOMAIN_NAME},http://localhost
+    networks:
+      - cashcar-net
+
+  frontend:
+    build: ./frontend
+    restart: always
+    environment:
+      # This variable is needed at BUILD time for React
+      - REACT_APP_BACKEND_URL=https://${DOMAIN_NAME}/api
+    networks:
+      - cashcar-net
+
+  caddy:
+    image: caddy:alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - cashcar-net
+
+networks:
+  cashcar-net:
+
+
+volumes:
+  caddy_data:
+  caddy_config:

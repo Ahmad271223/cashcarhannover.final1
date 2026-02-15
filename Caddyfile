@@ -1,0 +1,17 @@
+# Update this with your real domain
+{$DOMAIN_NAME} {
+    # Frontend (Root)
+    handle / {
+        reverse_proxy frontend:80
+    }
+    
+    # Static assets handled by frontend too
+    handle /* {
+        reverse_proxy frontend:80
+    }
+
+    # API Backend
+    handle /api/* {
+        reverse_proxy backend:10000
+    }
+}

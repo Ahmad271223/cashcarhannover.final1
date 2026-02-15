@@ -71,7 +71,9 @@ resend
 rich
 rsa
 s3transfer
-s5cmd
+boto3
+Pillow
+python-multipart
 sendgrid
 shellingham
 six
