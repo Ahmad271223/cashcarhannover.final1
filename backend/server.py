@@ -77,6 +77,11 @@ api_router = APIRouter(prefix="/api")
 
 security = HTTPBearer()
 
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint for Load Balancer"""
+    return {"status": "healthy", "service": "cashcar-backend"}
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
