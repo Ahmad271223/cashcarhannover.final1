@@ -404,8 +404,8 @@ const BestandDetail = () => {
                 {vehicle.highlights && (
                   <p className="text-orange-600 font-medium mb-4">{vehicle.highlights}</p>
                 )}
-                <div className="prose prose-slate max-w-none">
-                  <p className="text-slate-600 whitespace-pre-line">{vehicle.description}</p>
+                <div className="prose prose-slate max-w-none overflow-hidden">
+                  <p className="text-slate-600 whitespace-pre-line break-words">{vehicle.description}</p>
                 </div>
               </div>
             )}
