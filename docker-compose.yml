@@ -12,11 +12,15 @@ services:
       - cashcar-net
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_BACKEND_URL=https://${DOMAIN_NAME}
     restart: always
     environment:
-      # This variable is needed at BUILD time for React
-      - REACT_APP_BACKEND_URL=https://${DOMAIN_NAME}/api
+      # This variable is needed at BUILD time for React (passed via args above)
+      - REACT_APP_BACKEND_URL=https://${DOMAIN_NAME}
     networks:
       - cashcar-net
 
