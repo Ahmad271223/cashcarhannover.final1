@@ -600,19 +600,27 @@ from PIL import Image
 import io
 
 # Initialize S3 Client
-s3_client = boto3.client(
-    's3',
-    endpoint_url=S3_ENDPOINT,
-    aws_access_key_id=S3_ACCESS_KEY,
-    aws_secret_access_key=S3_SECRET_KEY,
-    region_name=S3_REGION
-)
+s3_client = None
+try:
+    s3_client = boto3.client(
+        's3',
+        endpoint_url=S3_ENDPOINT,
+        aws_access_key_id=S3_ACCESS_KEY,
+        aws_secret_access_key=S3_SECRET_KEY,
+        region_name=S3_REGION
+    )
+except Exception as e:
+    print(f"WARNING: S3 Client could not be initialized: {e}")
+    s3_client = None
 
 async def process_and_upload_image(file_content: bytes, filename_base: str) -> dict:
     """
     Process image into 3 variants (thumb, detail, original) and upload to S3/Hetzner.
     Returns a dict with URLs.
     """
+    if s3_client is None:
+        raise Exception("S3 Client is not initialized. Check server logs for details.")
+
     try:
         urls = {}
         
