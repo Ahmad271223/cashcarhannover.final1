@@ -587,11 +587,12 @@ async def health():
         return JSONResponse(status_code=503, content={"status": "unhealthy", "database": "disconnected"})
 
 # S3 / Hetzner Object Storage Configuration
-S3_ENDPOINT = os.environ.get('S3_ENDPOINT', 'https://fsn1.your-object-storage.hetzner.com')
-S3_ACCESS_KEY = os.environ.get('S3_ACCESS_KEY')
-S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY')
-S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME', 'cashcar-images')
-S3_REGION = os.environ.get('S3_REGION', 'fsn1')
+# S3 / Hetzner Object Storage Configuration
+S3_ENDPOINT = os.environ.get('S3_ENDPOINT', 'https://fsn1.your-object-storage.hetzner.com').strip()
+S3_ACCESS_KEY = os.environ.get('S3_ACCESS_KEY', '').strip()
+S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY', '').strip()
+S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME', 'cashcar-images').strip()
+S3_REGION = os.environ.get('S3_REGION', 'fsn1').strip()
 
 import boto3
 from botocore.exceptions import NoCredentialsError
