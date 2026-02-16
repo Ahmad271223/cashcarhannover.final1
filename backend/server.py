@@ -588,11 +588,11 @@ async def health():
 
 # S3 / Hetzner Object Storage Configuration
 # S3 / Hetzner Object Storage Configuration
-S3_ENDPOINT = os.environ.get('S3_ENDPOINT', 'https://fsn1.your-objectstorage.com').strip()
+S3_ENDPOINT = os.environ.get('S3_ENDPOINT', 'https://nbg1.your-objectstorage.com').strip()
 S3_ACCESS_KEY = os.environ.get('S3_ACCESS_KEY', '').strip()
 S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY', '').strip()
-S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME', 'cashcar-images').strip()
-S3_REGION = os.environ.get('S3_REGION', 'fsn1').strip()
+S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME', 'cashcarhannover-images').strip()
+S3_REGION = os.environ.get('S3_REGION', 'nbg1').strip()
 
 import boto3
 from botocore.exceptions import NoCredentialsError
