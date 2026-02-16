@@ -378,11 +378,11 @@ const BestandDetail = () => {
             {vehicle.features && vehicle.features.length > 0 && (
               <div className="bg-white rounded-2xl p-6 shadow-sm">
                 <h2 className="text-xl font-bold text-slate-900 mb-6">Ausstattung</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {(showAllFeatures ? vehicle.features : vehicle.features.slice(0, 12)).map((feature, index) => (
-                    <div key={index} className="flex items-center gap-2 text-slate-700">
-                      <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                      <span className="text-sm">{feature}</span>
+                    <div key={index} className="flex items-start gap-2 text-slate-700">
+                      <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm break-words">{feature}</span>
                     </div>
                   ))}
                 </div>
