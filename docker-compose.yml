@@ -8,6 +8,12 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       # Allow frontend domain
       - CORS_ORIGINS=https://${DOMAIN_NAME},http://localhost
+      # S3 / Hetzner Object Storage
+      - S3_ENDPOINT=${S3_ENDPOINT}
+      - S3_ACCESS_KEY=${S3_ACCESS_KEY}
+      - S3_SECRET_KEY=${S3_SECRET_KEY}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+      - S3_REGION=${S3_REGION}
     networks:
       - cashcar-net
 
