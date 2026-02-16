@@ -6,9 +6,6 @@ services:
       - MONGO_URL=${MONGO_URL}
       - DB_NAME=cashcar
       - JWT_SECRET=${JWT_SECRET}
-      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
-      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
-      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
       # Allow frontend domain
       - CORS_ORIGINS=https://${DOMAIN_NAME},http://localhost
     networks:
