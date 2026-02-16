@@ -1,17 +1,11 @@
-# Update this with your real domain
 :80 {
-    # Frontend (Root)
-    handle / {
-        reverse_proxy frontend:80
-    }
-    
-    # Static assets handled by frontend too
-    handle /* {
-        reverse_proxy frontend:80
-    }
-
-    # API Backend
+    # API Backend - MUST come before catch-all
     handle /api/* {
         reverse_proxy backend:10000
+    }
+
+    # Frontend (Catch-all for SPA)
+    handle {
+        reverse_proxy frontend:80
     }
 }
