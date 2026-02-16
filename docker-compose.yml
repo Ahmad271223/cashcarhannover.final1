@@ -6,8 +6,8 @@ services:
       - MONGO_URL=${MONGO_URL}
       - DB_NAME=cashcar
       - JWT_SECRET=${JWT_SECRET}
-      # Allow frontend domain
-      - CORS_ORIGINS=https://${DOMAIN_NAME},http://localhost
+      # Allow frontend domain (including www)
+      - CORS_ORIGINS=https://${DOMAIN_NAME},https://www.${DOMAIN_NAME},http://localhost
       # S3 / Hetzner Object Storage
       - S3_ENDPOINT=${S3_ENDPOINT}
       - S3_ACCESS_KEY=${S3_ACCESS_KEY}
