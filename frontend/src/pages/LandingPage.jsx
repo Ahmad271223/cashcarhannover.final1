@@ -253,6 +253,54 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Trust Section */}
+      <section className="py-20 px-6 bg-slate-900 text-white">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="aspect-[4/3] rounded-2xl overflow-hidden">
+              <img
+                src="https://images.pexels.com/photos/7144213/pexels-photo-7144213.jpeg"
+                alt="Zufriedener Kunde mit Autoschlüssel"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="font-heading text-3xl md:text-4xl font-semibold tracking-tight mb-6">
+              Vertrauen Sie auf unsere Erfahrung
+            </h2>
+            <p className="text-slate-300 text-lg leading-relaxed mb-8">
+              Seit Jahren vermitteln wir erfolgreich Fahrzeuge im Kundenauftrag.
+              Unser Ziel: Den bestmöglichen Preis für Ihr Fahrzeug erzielen -
+              ohne dass Sie sich um nervige Verhandlungen kümmern müssen.
+            </p>
+            <div className="grid grid-cols-3 gap-8">
+              <div>
+                <p className="font-heading text-4xl font-bold text-orange-500">500+</p>
+                <p className="text-slate-400">Autos im 1. Monat</p>
+              </div>
+              <div>
+                <p className="font-heading text-4xl font-bold text-orange-500">98%</p>
+                <p className="text-slate-400">Zufriedenheit</p>
+              </div>
+              <div>
+                <p className="font-heading text-4xl font-bold text-orange-500">23%</p>
+                <p className="text-slate-400">Mehr Erlös möglich</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Pro Tip Section */}
       <section className="py-12 px-6 bg-gradient-to-r from-slate-900 to-slate-800">
         <div className="max-w-5xl mx-auto">
@@ -373,53 +421,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Trust Section */}
-      <section className="py-20 px-6 bg-slate-900 text-white">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className="aspect-[4/3] rounded-2xl overflow-hidden">
-              <img
-                src="https://images.pexels.com/photos/7144213/pexels-photo-7144213.jpeg"
-                alt="Zufriedener Kunde mit Autoschlüssel"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="font-heading text-3xl md:text-4xl font-semibold tracking-tight mb-6">
-              Vertrauen Sie auf unsere Erfahrung
-            </h2>
-            <p className="text-slate-300 text-lg leading-relaxed mb-8">
-              Seit Jahren vermitteln wir erfolgreich Fahrzeuge im Kundenauftrag.
-              Unser Ziel: Den bestmöglichen Preis für Ihr Fahrzeug erzielen -
-              ohne dass Sie sich um nervige Verhandlungen kümmern müssen.
-            </p>
-            <div className="grid grid-cols-3 gap-8">
-              <div>
-                <p className="font-heading text-4xl font-bold text-orange-500">500+</p>
-                <p className="text-slate-400">Autos im 1. Monat</p>
-              </div>
-              <div>
-                <p className="font-heading text-4xl font-bold text-orange-500">98%</p>
-                <p className="text-slate-400">Zufriedenheit</p>
-              </div>
-              <div>
-                <p className="font-heading text-4xl font-bold text-orange-500">23%</p>
-                <p className="text-slate-400">Mehr Erlös möglich</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       {/* Pricing Transparency Section */}
       <section className="py-20 px-6 bg-white">
