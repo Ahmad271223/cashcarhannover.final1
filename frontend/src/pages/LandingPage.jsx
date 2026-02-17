@@ -301,29 +301,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Pro Tip Section */}
-      <section className="py-12 px-6 bg-gradient-to-r from-slate-900 to-slate-800">
-        <div className="max-w-5xl mx-auto">
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shrink-0">
-                <Banknote className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 className="font-heading text-xl font-semibold text-white mb-3">
-                  Unser Tipp: Holen Sie sich zuerst ein Vergleichsangebot
-                </h3>
-                <p className="text-slate-300 leading-relaxed">
-                  Lassen Sie Ihr Fahrzeug kostenlos bei Ihrem lokalen Autohändler bewerten oder holen Sie sich ein
-                  Inzahlungnahme-Angebot bei Ankaufsunternehmen wie <span className="text-orange-400 font-medium">wirkaufendeinauto.de</span>.
-                  Kommen Sie dann mit diesem Preis zu uns – wir helfen Ihnen, einen <span className="text-orange-400 font-medium">besseren Preis zu erzielen</span>.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Features Section */}
       <section id="vorteile" className="py-20 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto">
@@ -356,6 +333,29 @@ const LandingPage = () => {
                 <p className="text-slate-600 leading-relaxed">{feature.description}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pro Tip Section */}
+      <section className="py-12 px-6 bg-gradient-to-r from-slate-900 to-slate-800">
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shrink-0">
+                <Banknote className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-heading text-xl font-semibold text-white mb-3">
+                  Unser Tipp: Holen Sie sich zuerst ein Vergleichsangebot
+                </h3>
+                <p className="text-slate-300 leading-relaxed">
+                  Lassen Sie Ihr Fahrzeug kostenlos bei Ihrem lokalen Autohändler bewerten oder holen Sie sich ein
+                  Inzahlungnahme-Angebot bei Ankaufsunternehmen wie <span className="text-orange-400 font-medium">wirkaufendeinauto.de</span>.
+                  Kommen Sie dann mit diesem Preis zu uns – wir helfen Ihnen, einen <span className="text-orange-400 font-medium">besseren Preis zu erzielen</span>.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
