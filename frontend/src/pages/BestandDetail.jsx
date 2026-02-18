@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { toast } from "sonner";
 import {
   Car, ArrowLeft, Phone, Mail, MapPin, Calendar, Gauge, Fuel,
@@ -148,6 +149,13 @@ const BestandDetail = () => {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {vehicle && (
+        <Helmet>
+          <title>{`${vehicle.brand} ${vehicle.model} kaufen - ${formatPrice(vehicle.price)} | CashCarHannover`}</title>
+          <meta name="description" content={`${vehicle.brand} ${vehicle.model} für ${formatPrice(vehicle.price)} in Hannover kaufen. ${vehicle.fuel_type}, ${vehicle.transmission}, ${formatMileage(vehicle.mileage)}. Jetzt Probefahrt vereinbaren!`} />
+          <link rel="canonical" href={`https://www.cashcarhannover.de/bestand/${id}`} />
+        </Helmet>
+      )}
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">

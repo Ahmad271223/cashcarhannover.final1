@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -73,6 +74,11 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <Helmet>
+        <title>CashCarHannover - Ihr Auto zum besten Preis verkaufen</title>
+        <meta name="description" content="Verkaufen Sie Ihr Auto in Hannover stressfrei und zum Bestpreis. CashCarHannover übernimmt die Verhandlung und Abwicklung für Sie. Kostenlos & unverbindlich." />
+        <link rel="canonical" href="https://www.cashcarhannover.de/" />
+      </Helmet>
       {/* Header */}
       <header className="glass-header fixed top-0 left-0 right-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
