@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { toast } from "sonner";
@@ -398,7 +399,16 @@ const CarSubmissionForm = () => {
 
       <main className="pt-24 pb-12 px-6">
         <div className="max-w-4xl mx-auto">
-          {/* Progress Steps */}
+          <Helmet>
+            <title>Auto verkaufen in Hannover – Kostenlos einreichen | CashCar Hannover</title>
+            <meta name="description" content="Reichen Sie Ihr Fahrzeug jetzt kostenlos bei CashCar Hannover ein. Wir bewerten Ihr Auto und holen das beste Angebot für Sie ein. Einfach, schnell & fair." />
+            <link rel="canonical" href="https://www.cashcarhannover.de/verkaufen" />
+
+            <meta property="og:title" content="Auto verkaufen in Hannover – Kostenlos einreichen | CashCar Hannover" />
+            <meta property="og:description" content="Reichen Sie Ihr Fahrzeug jetzt kostenlos bei CashCar Hannover ein. Wir bewerten Ihr Auto und holen das beste Angebot für Sie ein." />
+            <meta property="og:url" content="https://www.cashcarhannover.de/verkaufen" />
+          </Helmet>
+          {/* Background Pattern */}
           <div className="mb-8">
             <div className="flex items-center justify-between overflow-x-auto pb-4">
               {STEPS.map((step, index) => (

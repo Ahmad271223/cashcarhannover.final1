@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Car, ArrowLeft } from "lucide-react";
 
 const Datenschutz = () => {
@@ -15,6 +16,12 @@ const Datenschutz = () => {
           </Link>
         </div>
       </header>
+
+      <Helmet>
+        <title>Datenschutzerklärung | CashCar Hannover</title>
+        <meta name="description" content="Datenschutzerklärung von CashCar Hannover. Informationen zur Verarbeitung Ihrer personenbezogenen Daten." />
+        <link rel="canonical" href="https://www.cashcarhannover.de/datenschutz" />
+      </Helmet>
 
       <main className="pt-24 pb-16 px-6">
         <div className="max-w-3xl mx-auto">

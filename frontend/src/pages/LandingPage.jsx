@@ -75,9 +75,15 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>CashCarHannover - Ihr Auto zum besten Preis verkaufen</title>
-        <meta name="description" content="Verkaufen Sie Ihr Auto in Hannover stressfrei und zum Bestpreis. CashCarHannover übernimmt die Verhandlung und Abwicklung für Sie. Kostenlos & unverbindlich." />
+        <title>Auto verkaufen Hannover – CashCar Hannover | Autoankauf & Inzahlungnahme</title>
+        <meta name="description" content="Auto verkaufen in Hannover stressfrei und zum Bestpreis. CashCar Hannover übernimmt Verhandlung & Abwicklung. Kostenlose Bewertung & Inzahlungnahme-Check." />
         <link rel="canonical" href="https://www.cashcarhannover.de/" />
+
+        {/* OpenGraph / Social Media */}
+        <meta property="og:title" content="Auto verkaufen Hannover – CashCar Hannover | Autoankauf & Inzahlungnahme" />
+        <meta property="og:description" content="Auto verkaufen in Hannover stressfrei und zum Bestpreis. CashCar Hannover übernimmt Verhandlung & Abwicklung. Kostenlose Bewertung & Inzahlungnahme-Check." />
+        <meta property="og:url" content="https://www.cashcarhannover.de/" />
+        <meta property="og:type" content="website" />
       </Helmet>
       {/* Header */}
       <header className="glass-header fixed top-0 left-0 right-0 z-50">

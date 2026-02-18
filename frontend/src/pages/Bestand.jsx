@@ -144,9 +144,14 @@ const Bestand = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <Helmet>
-        <title>Fahrzeugbestand - Gebrauchtwaren in Hannover | CashCarHannover</title>
-        <meta name="description" content="Entdecken Sie unseren aktuellen Fahrzeugbestand. Geprüfte Gebrauchtwagen zu fairen Preisen. Finden Sie Ihr Traumauto bei CashCarHannover." />
+        <title>Fahrzeugbestand | CashCar Hannover</title>
+        <meta name="description" content="Aktueller Fahrzeugbestand von CashCar Hannover. Geprüfte Gebrauchtwagen, Top-Preise und faire Konditionen. Finden Sie jetzt Ihr neues Auto in Hannover." />
         <link rel="canonical" href="https://www.cashcarhannover.de/bestand" />
+
+        <meta property="og:title" content="Fahrzeugbestand | CashCar Hannover" />
+        <meta property="og:description" content="Aktueller Fahrzeugbestand von CashCar Hannover. Geprüfte Gebrauchtwagen zu fairen Preisen." />
+        <meta property="og:url" content="https://www.cashcarhannover.de/bestand" />
+        <meta property="og:type" content="website" />
       </Helmet>
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
