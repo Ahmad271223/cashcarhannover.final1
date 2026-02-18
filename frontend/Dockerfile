@@ -20,6 +20,10 @@ FROM nginx:alpine
 # Copy built assets from build stage
 COPY --from=build /app/build /usr/share/nginx/html
 
+# Explicitly copy static SEO files to ensure they exist
+COPY public/sitemap.xml /usr/share/nginx/html/sitemap.xml
+COPY public/robots.txt /usr/share/nginx/html/robots.txt
+
 # Add custom nginx config for React Router
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
