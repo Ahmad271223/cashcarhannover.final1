@@ -739,9 +739,14 @@ const CarSubmissionForm = () => {
                         data-testid="photo-input"
                         type="file"
                         multiple
-                        accept="image/jpeg, image/png, image/webp, image/heic, .jpg, .jpeg, .png, .webp, .heic"
+                        accept="image/jpeg, image/png, image/webp, .jpg, .jpeg, .png, .webp"
                         className="hidden"
-                        onChange={(e) => handleFileUpload(Array.from(e.target.files), "photos")}
+                        onChange={(e) => {
+                          if (e.target.files.length > 0) {
+                            handleFileUpload(Array.from(e.target.files), "photos");
+                            e.target.value = "";
+                          }
+                        }}
                       />
                     </div>
 
@@ -797,9 +802,14 @@ const CarSubmissionForm = () => {
                         data-testid="doc-input"
                         type="file"
                         multiple
-                        accept=".pdf, .doc, .docx, image/jpeg, image/png, image/webp, image/heic, .jpg, .jpeg, .png, .webp, .heic"
+                        accept=".pdf, .doc, .docx, image/jpeg, image/png, image/webp, .jpg, .jpeg, .png, .webp"
                         className="hidden"
-                        onChange={(e) => handleFileUpload(Array.from(e.target.files), "documents")}
+                        onChange={(e) => {
+                          if (e.target.files.length > 0) {
+                            handleFileUpload(Array.from(e.target.files), "documents");
+                            e.target.value = "";
+                          }
+                        }}
                       />
                     </div>
 

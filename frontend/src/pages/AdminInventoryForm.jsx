@@ -659,9 +659,14 @@ const AdminInventoryForm = () => {
                 <label className="aspect-square rounded-lg border-2 border-dashed border-slate-300 hover:border-orange-500 flex flex-col items-center justify-center cursor-pointer transition-colors">
                   <input
                     type="file"
-                    accept="image/jpeg, image/png, image/webp, image/heic, .jpg, .jpeg, .png, .webp, .heic"
+                    accept="image/jpeg, image/png, image/webp, .jpg, .jpeg, .png, .webp"
                     multiple
-                    onChange={handlePhotoUpload}
+                    onChange={(e) => {
+                      if (e.target.files.length > 0) {
+                        handlePhotoUpload(e);
+                        e.target.value = "";
+                      }
+                    }}
                     className="hidden"
                     disabled={uploading}
                   />
