@@ -739,7 +739,7 @@ const CarSubmissionForm = () => {
                         data-testid="photo-input"
                         type="file"
                         multiple
-                        accept="image/*"
+                        accept="image/*,.png,.jpg,.jpeg,.webp,.heic"
                         className="hidden"
                         onChange={(e) => handleFileUpload(Array.from(e.target.files), "photos")}
                       />
@@ -797,7 +797,7 @@ const CarSubmissionForm = () => {
                         data-testid="doc-input"
                         type="file"
                         multiple
-                        accept=".pdf,.doc,.docx,image/*"
+                        accept=".pdf,.doc,.docx,image/*,.png,.jpg,.jpeg,.webp,.heic"
                         className="hidden"
                         onChange={(e) => handleFileUpload(Array.from(e.target.files), "documents")}
                       />
